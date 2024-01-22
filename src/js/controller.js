@@ -10,7 +10,21 @@ const btnCloseNotificationWindow = document.querySelector(
 );
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 const seaFleet = Array.from({ length: 10 }, (_, i) => i + 1);
+const createMyShips = [
+  [["F10"], 1],
+  [["A1", "A2", "A3", "A4"], 4],
+  [["B4", "B5"], 2],
+  [["J3", "I3"], 2],
+  [["e1"], 1],
+];
+const createEnemyShips = [
+  [["B4", "B5"], 2],
+  [["I2"], 1],
+  [["J10"], 1],
+  [["F10"], 1],
+];
 
+let dragged;
 let myShips = [];
 let enemyShips = [];
 // Make sure that I will not destroy my own ship ;)
@@ -26,7 +40,9 @@ const markup = seaFleet
     (item, i) => `
     <tr class="row-${i + 1}">
 <th>${item}</th>
-${letters.map((letter) => `<td class="${letter}${i + 1}"></td>`).join("")}
+ ${letters
+   .map((letter) => `<td><div class="${letter}${i + 1} cell" ></div></td>`)
+   .join("")}
 </tr>
 `
   )
@@ -55,6 +71,7 @@ const markupSeaHead = ` ${seaFleet
 const createFleet = function (fleetPart) {
   const fleet = fleetPart[0];
   const ships = [fleetPart[1]];
+  const newShipsCoords = fleetPart[2];
   console.log(fleet);
   console.log(ships);
   const createShip = function (coords, size) {
@@ -129,20 +146,21 @@ const createFleet = function (fleetPart) {
     // ships.push(ship);
   };
 
-  [
-    [["d4"], 1],
-    [["e7", "e8"], 2],
-    // [["h6", "G6", "I6"], 3],
-    // [["D4"], 1],
-    // [["I2"], 1],
-    // [["J10"], 1],
-    // [["F10"], 1],
-    // [["A1", "A2", "A3", "A4"], 4],
-    // [["B4", "B5"], 2],
-    // [["J3", "I3"], 2],
-    // [["e1"], 1],
-    // [["e2"], 1],
-  ].forEach((ship) => {
+  // [
+  //   [["d4"], 1],
+  //   [["e7", "e8"], 2],
+  //   [["h6", "G6", "I6"], 3],
+  //   [["D4"], 1],
+  //   [["I2"], 1],
+  //   [["J10"], 1],
+  //   [["F10"], 1],
+  //   [["A1", "A2", "A3", "A4"], 4],
+  //   [["B4", "B5"], 2],
+  //   [["J3", "I3"], 2],
+  //   [["e1"], 1],
+  //   [["e2"], 1],
+  // ]
+  newShipsCoords.forEach((ship) => {
     ships.push(createShip(...ship));
   });
   const cleanShips = ships.slice().filter((ship) => ship !== undefined);
@@ -351,13 +369,92 @@ const createFleet = function (fleetPart) {
       }
     });
   });
+
+  const sources = fleet.querySelectorAll(".ship");
+  const source = fleet.querySelector(".F10");
+
+  const targets = [...fleet.querySelectorAll("td")].filter((ship) => {
+    return !ship.classList.contains("ship");
+  });
+
+  console.log(targets);
+  targets.forEach((target) => {
+    target.classList.add("dropzone");
+  });
+
+  sources.forEach((source) => {
+    source.setAttribute("draggable", true);
+  });
+
+  sources.forEach((source) => {
+    source.addEventListener("drag", function (e) {
+      console.log("DRAG");
+    });
+  });
+
+  sources.forEach((source) => {
+    source.addEventListener("dragstart", function (e) {
+      console.log("DRAGSTART");
+      dragged = e.target;
+    });
+  });
+
+  sources.forEach((source) => {
+    source.addEventListener("dragend", function (e) {
+      console.log("DRAGEND");
+    });
+  });
+
+  targets.forEach((target) => {
+    target.addEventListener(
+      "dragover",
+      function (e) {
+        e.preventDefault();
+
+        console.log("DRAGOVER");
+      },
+      false
+    );
+  });
+
+  targets.forEach((target) => {
+    target.addEventListener("dragenter", function (e) {
+      if (e.target.classList.contains("dropzone")) {
+        e.target.classList.add("dragover");
+      }
+
+      console.log("DRAGENTER");
+    });
+  });
+
+  targets.forEach((target) => {
+    target.addEventListener("dragleave", function (e) {
+      if (e.target.classList.contains("dropzone")) {
+        e.target.classList.remove("dragover");
+      }
+
+      console.log("DRAGLEAVE");
+    });
+  });
+
+  targets.forEach((target) => {
+    target.addEventListener("drop", function (e) {
+      e.preventDefault();
+      if (e.target.classList.contains("dropzone")) {
+        e.target.classList.remove("dragover");
+        e.target.appendChild(dragged);
+      }
+
+      console.log("DROP");
+    });
+  });
 };
 
 [
-  [mySideMyFleet, myShips],
-  [mySideEnemyFleet, enemyShips],
-  [enemySideEnemyFleet, enemyShips],
-  [enemySideMyFleet, myShips],
+  [mySideMyFleet, myShips, createMyShips],
+  [mySideEnemyFleet, enemyShips, createEnemyShips],
+  [enemySideEnemyFleet, enemyShips, createEnemyShips],
+  [enemySideMyFleet, myShips, createMyShips],
 ].forEach((container) => createFleet(container));
 
 // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
@@ -376,6 +473,9 @@ const createFleet = function (fleetPart) {
 // Part of the funtionalit is already aplied, now it's time to somehow link 2 fleets together
 // Now I need to make sure that when I shoot mySideEnemyFleet that only will change enemySideEnemyFleet
 // The situaton for now: the last goal is completed, my enemy shoots only affect my side and my shoots only affect his side, now it's time of refactoring
-// At this point everything is nice refactored, now it's time to think about the next feature: I need to create turns. This means that it can be my turn or my enemy turn
+// At this point everything is nice refactored, now it's time to think about the next feature: I need to create turns. This means that it can be my turn or my enemy's turn
 // Turns are created and work like intended, let's figure out the winner of the game
 // The winner is defined, now it's time to do something about ship placing
+// Now ships are not longer the same on both sides, all planned goals untill now are completed, now it's time to think about another feature
+// Now I can create some input form inputting coords for ships
+// Now I don't need any input form or anything like that! Now the ships are draggable, so I can manually do this!
