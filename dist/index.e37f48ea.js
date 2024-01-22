@@ -784,11 +784,12 @@ const createFleet = function(fleetPart) {
         e.preventDefault();
         const miss = "&bull;";
         const addMarkToFleet = function(fleet) {
-            return fleet.querySelector(`.${e.target.classList[0]}`);
+            console.log(e.target.classList[0]);
+            return fleet.querySelector(e.target.classList[0] === "dropzone" ? `.${e.target.querySelector("div").classList[0]}` : `.${e.target.classList[0]}`);
         };
         if (!e.target.closest(".ship") && e.target.textContent === "") {
-            e.target.classList.add("miss");
-            e.target.insertAdjacentHTML("afterbegin", miss);
+            e.target.querySelector("div").classList.add("miss");
+            e.target.querySelector("div").insertAdjacentHTML("afterbegin", miss);
             if (e.target.closest(".enemy-side--my-float")?.querySelector(`.${e.target.classList[0]}`)) {
                 addMarkToFleet(mySideMyFleet).classList.add("miss");
                 addMarkToFleet(mySideMyFleet).insertAdjacentHTML("afterbegin", miss);
@@ -883,62 +884,39 @@ const createFleet = function(fleetPart) {
             if (e.key === "Escape" && !notificatonWindow.classList.contains("hidden")) closeNotificationWindow();
         });
     });
-    const sources = fleet.querySelectorAll(".ship");
-    const source = fleet.querySelector(".F10");
+    /**************************/ /* PLACING SHIPS MANUALLY */ /**************************/ const shipEls = fleet.querySelectorAll(".ship");
     const targets = [
         ...fleet.querySelectorAll("td")
     ].filter((ship)=>{
         return !ship.classList.contains("ship");
     });
-    console.log(targets);
     targets.forEach((target)=>{
         target.classList.add("dropzone");
     });
-    sources.forEach((source)=>{
+    shipEls.forEach((source)=>{
         source.setAttribute("draggable", true);
     });
-    sources.forEach((source)=>{
-        source.addEventListener("drag", function(e) {
-            console.log("DRAG");
-        });
-    });
-    sources.forEach((source)=>{
+    shipEls.forEach((source)=>{
         source.addEventListener("dragstart", function(e) {
             console.log("DRAGSTART");
             dragged = e.target;
         });
     });
-    sources.forEach((source)=>{
-        source.addEventListener("dragend", function(e) {
-            console.log("DRAGEND");
-        });
-    });
-    targets.forEach((target)=>{
-        target.addEventListener("dragover", function(e) {
-            e.preventDefault();
-            console.log("DRAGOVER");
-        }, false);
-    });
-    targets.forEach((target)=>{
-        target.addEventListener("dragenter", function(e) {
-            if (e.target.classList.contains("dropzone")) e.target.classList.add("dragover");
-            console.log("DRAGENTER");
-        });
-    });
-    targets.forEach((target)=>{
-        target.addEventListener("dragleave", function(e) {
-            if (e.target.classList.contains("dropzone")) e.target.classList.remove("dragover");
-            console.log("DRAGLEAVE");
-        });
-    });
-    targets.forEach((target)=>{
-        target.addEventListener("drop", function(e) {
-            e.preventDefault();
-            if (e.target.classList.contains("dropzone")) {
-                e.target.classList.remove("dragover");
-                e.target.appendChild(dragged);
-            }
-            console.log("DROP");
+    [
+        "dragover",
+        "dragenter",
+        "dragleave",
+        "drop"
+    ].forEach((ev)=>{
+        targets.forEach((target)=>{
+            target.addEventListener(ev, function(e) {
+                if (e.target.classList.contains("dropzone")) {
+                    ev === "dragenter" ? e.target.classList.add("dragover") : e.target.classList.remove("dragover");
+                    ev === "drop" && e.preventDefault();
+                    ev === "drop" && e.target.appendChild(dragged);
+                }
+                if (ev === "dragover") e.preventDefault();
+            }, ev === "dragover" && false);
         });
     });
 };
