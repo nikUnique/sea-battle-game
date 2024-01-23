@@ -251,6 +251,7 @@ const createFleet = function (fleetPart) {
   playing = false;
   const startGameBtn = document.querySelector(".start-game");
   startGameBtn.addEventListener("click", function (e) {
+    enemySideMyFleet.style.pointerEvents = "none";
     fleet.querySelectorAll(".ship");
     console.log(cleanShips);
     const newShips = cleanShips.map((ship) => {
@@ -288,9 +289,10 @@ const createFleet = function (fleetPart) {
   /**************************/
   /* GAME CONTROL */
   /**************************/
-
+  const defineFleet =
+    fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
   mySideMyFleet.classList.add("player0");
-  playing && (enemySideMyFleet.style.pointerEvents = "none");
+  playing === true && (enemySideMyFleet.style.pointerEvents = "none");
   [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
     fleet.addEventListener("click", function (e) {
       console.log("---------MEGA BRUMWELL------- 🐖");
@@ -301,7 +303,7 @@ const createFleet = function (fleetPart) {
         playing && fleet === enemySideMyFleet
           ? mySideEnemyFleet
           : enemySideMyFleet;
-      turn.style.pointerEvents = "auto";
+      playing && (turn.style.pointerEvents = "auto");
       playing && (fleet.style.pointerEvents = "none");
     });
   });
@@ -309,8 +311,7 @@ const createFleet = function (fleetPart) {
   /**************************/
   /* SHOOTING LOGIC */
   /**************************/
-  const defineFleet =
-    fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
+
   console.log(playing);
   console.log(
     fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet,
@@ -362,18 +363,20 @@ const createFleet = function (fleetPart) {
         return ship?.coords?.includes(e.target.classList[0]);
       });
 
+      console.log(injuredShipPos, "pos");
+
       e.target.classList.add("injure");
       const injure = "&cross;";
       e.target.insertAdjacentHTML("afterbegin", injure);
 
       const destroyedShipCoords = cleanShips[injuredShipPos].coords.map(
         (_, i) => {
-          return fleet
+          return defineFleet
             .querySelector(`.${cleanShips[injuredShipPos]?.coords[i]}`)
             .classList.contains("injure");
         }
       );
-
+      console.log(destroyedShipCoords, "destr");
       console.log("how often this happens");
 
       if (
@@ -396,7 +399,7 @@ const createFleet = function (fleetPart) {
       if (!destroyedShipCoords.includes(false)) {
         console.log("beny");
         const destroyedShip = cleanShips[injuredShipPos].coords.map((_, i) => {
-          return fleet.querySelector(
+          return defineFleet.querySelector(
             `.${cleanShips[injuredShipPos]?.coords[i]}`
           );
         });
@@ -408,12 +411,13 @@ const createFleet = function (fleetPart) {
             return !cleanShips[injuredShipPos].coords.includes(cell);
           })
           .map((cell, i) => {
-            const cellAround = fleet.querySelector(`.${cell}`);
+            const cellAround = defineFleet.querySelector(`.${cell}`);
 
             // There is also can be an imaginary 11th cell when it comes to side ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
             cellAround && (cellAround.style.fontSize = "4rem");
 
             const surroundDestroyedShip = function (fleet, cellAround) {
+              console.log(fleet, "before round");
               console.log(cellAround, "WHERE ARE YOU?");
               cellAround?.textContent === "" &&
                 fleet
@@ -439,7 +443,7 @@ const createFleet = function (fleetPart) {
             }
 
             // If the cell is empty then a new mark will be inserted, but if there is something inside then nothing will happen
-            surroundDestroyedShip(fleet, cellAround);
+            surroundDestroyedShip(defineFleet, cellAround);
           });
       }
     }
@@ -473,9 +477,9 @@ const createFleet = function (fleetPart) {
         );
       };
 
-      if (fleet === mySideEnemyFleet) addNotification(player0);
+      if (defineFleet === mySideEnemyFleet) addNotification(player0);
 
-      if (fleet !== mySideEnemyFleet) addNotification(player1);
+      if (defineFleet !== mySideEnemyFleet) addNotification(player1);
 
       notificatonWindow.classList.remove("hidden");
       overlay.classList.remove("hidden");
@@ -587,3 +591,4 @@ const createFleet = function (fleetPart) {
 // Now I don't need any input form or anything like that! Now the ships are draggable, so I can manually do this!
 // All code is refactored and this time I should make a feature to first place ships and only then to play
 // In the beginning I place my ships on my side and when I push the start button, then my ships will render on my opponent's side
+// Right now after pushing start button duplicate fleet is rendered and it's playable, everything after duplicating the fleet is working, however, I still cannot  place ships manually, I can drag a ship and drop it somewhere, but it will not be duplicated to another side, so this is what should be fixed, but before let's refactor the code
