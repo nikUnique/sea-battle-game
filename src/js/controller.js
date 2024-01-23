@@ -77,33 +77,27 @@ const createFleet = function (fleetPart) {
   const ships = [fleetPart[1]];
   const newShipsCoords = fleetPart[2];
 
-  if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet) return;
+  // if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet) return;
 
   console.log(fleet);
   console.log(ships);
 
+  console.log("FLEET");
   const createShip = function (coords, size, duplicateFleet = undefined) {
-    console.log(duplicateFleet, "duplicateFleet");
+    // console.log(duplicateFleet, "duplicateFleet");
     console.log(fleet, "fleet");
     console.log(coords);
     const bigCoords = coords?.map((coord) => {
       console.log(coord);
       return coord.toUpperCase();
-      // return typeof coord === "string"
-      //   ? coord.toUpperCase()
-      //   : coord[0].toUpperCase();
     });
 
-    // console.log(bigCoords);
-    // console.log(ships);
-
     if (bigCoords === undefined) return;
-
-    const checkSpace = duplicateFleet
+    const checkSpace = /*  duplicateFleet
       ? ""
-      : ships?.map((ship) => {
-          return ship?.coords?.some((coord) => bigCoords.includes(coord));
-        });
+      : */ ships?.map((ship) => {
+      return ship?.coords?.some((coord) => bigCoords.includes(coord));
+    });
 
     console.log(checkSpace);
 
@@ -113,8 +107,8 @@ const createFleet = function (fleetPart) {
       );
       return;
     }
-    duplicateFleet && console.log(cleanShips, "before duplicate");
-    const checkSpaceAround = (duplicateFleet ? cleanShips : ships).map(
+    // duplicateFleet && console.log(cleanShips, "before duplicate");
+    const checkSpaceAround = /* duplicateFleet ? cleanShips : */ ships.map(
       (ship) => {
         return ship?.unavailabeCells?.some((cell) => {
           if (bigCoords.includes(cell))
@@ -131,10 +125,10 @@ const createFleet = function (fleetPart) {
     if (checkSpaceAround.includes(true)) return;
 
     const cellsAround = bigCoords.reduce((acc, coord) => {
-      console.log(duplicateFleet);
-      duplicateFleet
+      // console.log(duplicateFleet);
+      /* duplicateFleet
         ? duplicateFleet.querySelector(`.${coord}`).classList.add("ship")
-        : fleet.querySelector(`.${coord}`).classList.add("ship");
+        : */ fleet.querySelector(`.${coord}`).classList.add("ship");
       const coordSlice01 = coord.slice(0, 1);
       const coordSlice1 = coord.slice(1);
       const letterAround = letters.indexOf(coordSlice01);
@@ -168,13 +162,13 @@ const createFleet = function (fleetPart) {
       ),
     ];
     console.log(readyCellsAround);
-    console.log(duplicateFleet);
+    // console.log(duplicateFleet)
 
     bigCoords.forEach((pos) => {
-      duplicateFleet
+      /* duplicateFleet
         ? (duplicateFleet.querySelector(`.${pos}`).style.backgroundColor =
             "yellow")
-        : (fleet.querySelector(`.${pos}`).style.backgroundColor = "yellow");
+        :  */ fleet.querySelector(`.${pos}`).style.backgroundColor = "yellow";
     });
     const ship = {
       coords: bigCoords,
@@ -205,33 +199,33 @@ const createFleet = function (fleetPart) {
 
   const cleanShips = ships.slice().filter((ship) => ship !== undefined);
 
-  cleanShips.forEach((ship) => {
-    console.log(ship);
-    if (ship.length === 0) return;
-    ship.unavailabeCells.forEach((cell) => {
-      console.log(cell);
-      console.log(fleet);
-      if (fleet.querySelector(`.${cell}`)?.classList.contains("ship")) {
-        console.log(
-          ship.unavailabeCells.splice(ship.unavailabeCells.indexOf(cell), 1)
-        );
-      }
-    });
-  });
+  // cleanShips.forEach((ship) => {
+  //   console.log(ship);
+  //   if (ship.length === 0) return;
+  //   ship.unavailabeCells.forEach((cell) => {
+  //     console.log(cell);
+  //     console.log(fleet);
+  //     if (fleet.querySelector(`.${cell}`)?.classList.contains("ship")) {
+  //       console.log(
+  //         ship.unavailabeCells.splice(ship.unavailabeCells.indexOf(cell), 1)
+  //       );
+  //     }
+  //   });
+  // });
 
-  cleanShips.forEach((ship) => {
-    console.log(ship);
-    if (ship.length === 0) return;
-    ship.unavailabeCells.forEach((cell) => {
-      console.log(cell);
-      console.log(fleet);
-      if (fleet.querySelector(`.${cell}`)?.classList.contains("ship")) {
-        console.log(
-          ship.unavailabeCells.splice(ship.unavailabeCells.indexOf(cell), 1)
-        );
-      }
-    });
-  });
+  // cleanShips.forEach((ship) => {
+  //   console.log(ship);
+  //   if (ship.length === 0) return;
+  //   ship.unavailabeCells.forEach((cell) => {
+  //     console.log(cell);
+  //     console.log(fleet);
+  //     if (fleet.querySelector(`.${cell}`)?.classList.contains("ship")) {
+  //       console.log(
+  //         ship.unavailabeCells.splice(ship.unavailabeCells.indexOf(cell), 1)
+  //       );
+  //     }
+  //   });
+  // });
 
   console.log(cleanShips, "cleanShips");
 
@@ -246,8 +240,8 @@ const createFleet = function (fleetPart) {
       .querySelector("body")
       .insertAdjacentHTML("afterbegin", startGameBtnMarkup);
   }
-  const contrarySideDuplicateFleet =
-    fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
+  /*  const contrarySideDuplicateFleet =
+    fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet; */
   playing = false;
   const startGameBtn = document.querySelector(".start-game");
   startGameBtn.addEventListener("click", function (e) {
@@ -264,14 +258,14 @@ const createFleet = function (fleetPart) {
     //   return [ship.coords], ship.size;
     // });
 
-    const contrarySideDuplicateFleet =
-      fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
-    console.log(newShips);
-    console.log(enemySideMyFleet);
-    newShips.forEach((ship) => {
-      createShip(ship.coords, ship.size, contrarySideDuplicateFleet);
-    });
-    console.log(contrarySideDuplicateFleet, "contra");
+    // const contrarySideDuplicateFleet =
+    //   fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
+    // console.log(newShips);
+    // console.log(enemySideMyFleet);
+    // newShips.forEach((ship) => {
+    //   createShip(ship.coords, ship.size, contrarySideDuplicateFleet);
+    // });
+    // console.log(contrarySideDuplicateFleet, "contra");
 
     playing = true;
     console.log("Game started 🥰");
@@ -281,16 +275,14 @@ const createFleet = function (fleetPart) {
       console.log(playing, "playing");
       mySideMyFleet.style.pointerEvents = "none";
       enemySideEnemyFleet.style.pointerEvents = "none";
-      // mySideEnemyFleet.style.pointerEvents = "auto";
-      // enemySideMyFleet.style.pointerEvents = "auto";
     }
   });
 
   /**************************/
   /* GAME CONTROL */
   /**************************/
-  const defineFleet =
-    fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
+  // const defineFleet =
+  //   fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
   mySideMyFleet.classList.add("player0");
   playing === true && (enemySideMyFleet.style.pointerEvents = "none");
   [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
@@ -313,14 +305,14 @@ const createFleet = function (fleetPart) {
   /**************************/
 
   console.log(playing);
-  console.log(
-    fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet,
-    "goo"
-  );
-  (fleet === mySideMyFleet
+  // console.log(
+  //   fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet,
+  //   "goo"
+  // );
+  /*  (fleet === mySideMyFleet
     ? enemySideMyFleet
     : mySideEnemyFleet
-  ).addEventListener("click", function (e) {
+  ) */ fleet.addEventListener("click", function (e) {
     e.preventDefault();
     console.log(playing, "lay");
     if (!playing) return;
@@ -443,7 +435,7 @@ const createFleet = function (fleetPart) {
             }
 
             // If the cell is empty then a new mark will be inserted, but if there is something inside then nothing will happen
-            surroundDestroyedShip(defineFleet, cellAround);
+            surroundDestroyedShip(/* defineFleet */ fleet, cellAround);
           });
       }
     }
@@ -477,9 +469,11 @@ const createFleet = function (fleetPart) {
         );
       };
 
-      if (defineFleet === mySideEnemyFleet) addNotification(player0);
+      if (/* defineFleet */ fleet === mySideEnemyFleet)
+        addNotification(player0);
 
-      if (defineFleet !== mySideEnemyFleet) addNotification(player1);
+      if (/* defineFleet */ fleet !== mySideEnemyFleet)
+        addNotification(player1);
 
       notificatonWindow.classList.remove("hidden");
       overlay.classList.remove("hidden");
