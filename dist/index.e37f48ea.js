@@ -614,7 +614,7 @@ const createMyShips = [
             "A1",
             "A2",
             "A3",
-            "A4"
+            "a4"
         ],
         4
     ],
@@ -627,8 +627,9 @@ const createMyShips = [
     ],
     [
         [
-            "J3",
-            "I3"
+            "J4",
+            "I4",
+            "h4"
         ],
         2
     ],
@@ -637,13 +638,20 @@ const createMyShips = [
             "e1"
         ],
         1
+    ],
+    [
+        [
+            "e6",
+            "e7"
+        ],
+        1
     ]
 ];
 const createEnemyShips = [
     [
         [
-            "B4",
-            "B5"
+            "B6",
+            "B7"
         ],
         2
     ],
@@ -661,21 +669,30 @@ const createEnemyShips = [
     ],
     [
         [
-            "F10"
+            "F7"
         ],
         1
+    ],
+    [
+        [
+            "c1",
+            "c2",
+            "c3",
+            "c4"
+        ],
+        4
     ]
 ];
 let dragged;
-let myShips = [];
-let enemyShips = [];
-// Make sure that I will not destroy my own ship ;)
-mySideMyFleet.style.pointerEvents = "none";
-enemySideEnemyFleet.style.pointerEvents = "none";
+let playing;
+let mySideMyShips = [];
+let enemySideEnemyShips = [];
+let mySideEnemyShips = [];
+let enemySideMyShips = [];
 /**************************/ /* CREATING SHIPS */ /**************************/ const markup = seaFleet.map((item, i)=>`
     <tr class="row-${i + 1}">
 <th>${item}</th>
- ${letters.map((letter)=>`<td><div class="${letter}${i + 1} cell" ></div></td>`).join("")}
+ ${letters.map((letter)=>`<td class="dropzone"><div class="${letter}${i + 1} cell" ></div></td>`).join("")}
 </tr>
 `).join("");
 const markupSeaHead = ` ${seaFleet.map((_, i)=>{
@@ -697,26 +714,43 @@ const createFleet = function(fleetPart) {
         fleetPart[1]
     ];
     const newShipsCoords = fleetPart[2];
+    if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet) return;
     console.log(fleet);
     console.log(ships);
-    const createShip = function(coords, size) {
-        const bigCoords = coords?.map((coord)=>coord.toUpperCase());
-        const checkSpace = ships?.map((ship)=>{
+    const createShip = function(coords, size, duplicateFleet) {
+        console.log(duplicateFleet, "duplicateFleet");
+        console.log(fleet, "fleet");
+        console.log(coords);
+        const bigCoords = coords?.map((coord)=>{
+            console.log(coord);
+            return coord.toUpperCase();
+        // return typeof coord === "string"
+        //   ? coord.toUpperCase()
+        //   : coord[0].toUpperCase();
+        });
+        // console.log(bigCoords);
+        // console.log(ships);
+        if (bigCoords === undefined) return;
+        const checkSpace = duplicateFleet ? "" : ships?.map((ship)=>{
             return ship?.coords?.some((coord)=>bigCoords.includes(coord));
         });
+        console.log(checkSpace);
         if (checkSpace.includes(true)) {
             console.log("In such a mood it wouldn't be surprising if you had stepped with you shoe on a dog's poop \uD83C\uDF6D");
             return;
         }
-        const checkSpaceAround = ships.map((ship)=>{
+        duplicateFleet && console.log(cleanShips, "before duplicate");
+        const checkSpaceAround = (duplicateFleet ? cleanShips : ships).map((ship)=>{
             return ship?.unavailabeCells?.some((cell)=>{
                 if (bigCoords.includes(cell)) console.log(`You cannot place your ship on ${cell} because it's around another ship. Find a better place to drop an anchor \u{1F602}`);
                 return bigCoords.includes(cell);
             });
         });
+        console.log(checkSpaceAround, "checkSpaceAround");
         if (checkSpaceAround.includes(true)) return;
         const cellsAround = bigCoords.reduce((acc, coord)=>{
-            fleet.querySelector(`.${coord}`).classList.add("ship");
+            console.log(duplicateFleet);
+            duplicateFleet ? duplicateFleet.querySelector(`.${coord}`).classList.add("ship") : fleet.querySelector(`.${coord}`).classList.add("ship");
             const coordSlice01 = coord.slice(0, 1);
             const coordSlice1 = coord.slice(1);
             const letterAround = letters.indexOf(coordSlice01);
@@ -736,8 +770,10 @@ const createFleet = function(fleetPart) {
         const readyCellsAround = [
             ...new Set(cellsAround.replace(",", "").split(",").map((cell)=>cell.trim()).filter((cell)=>letters.includes(cell.slice(0, 1))))
         ];
+        console.log(readyCellsAround);
+        console.log(duplicateFleet);
         bigCoords.forEach((pos)=>{
-            fleet.querySelector(`.${pos}`).style.backgroundColor = "yellow";
+            duplicateFleet ? duplicateFleet.querySelector(`.${pos}`).style.backgroundColor = "yellow" : fleet.querySelector(`.${pos}`).style.backgroundColor = "yellow";
         });
         const ship = {
             coords: bigCoords,
@@ -765,9 +801,65 @@ const createFleet = function(fleetPart) {
         ships.push(createShip(...ship));
     });
     const cleanShips = ships.slice().filter((ship)=>ship !== undefined);
-    console.log(cleanShips);
+    cleanShips.forEach((ship)=>{
+        console.log(ship);
+        if (ship.length === 0) return;
+        ship.unavailabeCells.forEach((cell)=>{
+            console.log(cell);
+            console.log(fleet);
+            if (fleet.querySelector(`.${cell}`)?.classList.contains("ship")) console.log(ship.unavailabeCells.splice(ship.unavailabeCells.indexOf(cell), 1));
+        });
+    });
+    cleanShips.forEach((ship)=>{
+        console.log(ship);
+        if (ship.length === 0) return;
+        ship.unavailabeCells.forEach((cell)=>{
+            console.log(cell);
+            console.log(fleet);
+            if (fleet.querySelector(`.${cell}`)?.classList.contains("ship")) console.log(ship.unavailabeCells.splice(ship.unavailabeCells.indexOf(cell), 1));
+        });
+    });
+    console.log(cleanShips, "cleanShips");
+    /**************************/ /* GAME START CONTROL */ /**************************/ // if (fleet === enemySideEnemyFleet) return;
+    if (fleet === mySideMyFleet) {
+        const startGameBtnMarkup = `<button class="start-game">Start playing \u{1F639}</button>`;
+        document.querySelector("body").insertAdjacentHTML("afterbegin", startGameBtnMarkup);
+    }
+    const contrarySideDuplicateFleet = fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
+    playing = false;
+    const startGameBtn = document.querySelector(".start-game");
+    startGameBtn.addEventListener("click", function(e) {
+        fleet.querySelectorAll(".ship");
+        console.log(cleanShips);
+        const newShips = cleanShips.map((ship)=>{
+            console.log(ship);
+            console.log(ship.coords);
+            console.log(ship.size);
+            return ship;
+        });
+        // .map((ship, i, arr) => {
+        //   return [ship.coords], ship.size;
+        // });
+        const contrarySideDuplicateFleet = fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
+        console.log(newShips);
+        console.log(enemySideMyFleet);
+        newShips.forEach((ship)=>{
+            createShip(ship.coords, ship.size, contrarySideDuplicateFleet);
+        });
+        console.log(contrarySideDuplicateFleet, "contra");
+        playing = true;
+        console.log("Game started \uD83E\uDD70");
+        // Make sure that I will not destroy my own ship ;)
+        if (playing) {
+            console.log(playing, "playing");
+            mySideMyFleet.style.pointerEvents = "none";
+            enemySideEnemyFleet.style.pointerEvents = "none";
+        // mySideEnemyFleet.style.pointerEvents = "auto";
+        // enemySideMyFleet.style.pointerEvents = "auto";
+        }
+    });
     /**************************/ /* GAME CONTROL */ /**************************/ mySideMyFleet.classList.add("player0");
-    enemySideMyFleet.style.pointerEvents = "none";
+    playing && (enemySideMyFleet.style.pointerEvents = "none");
     [
         mySideEnemyFleet,
         enemySideMyFleet
@@ -775,15 +867,22 @@ const createFleet = function(fleetPart) {
         fleet.addEventListener("click", function(e) {
             console.log("---------MEGA BRUMWELL------- \uD83D\uDC16");
             if (e.target.classList.contains("ship") || e.target.textContent !== "") return;
-            const turn = fleet === enemySideMyFleet ? mySideEnemyFleet : enemySideMyFleet;
+            console.log(fleet, "float");
+            const turn = playing && fleet === enemySideMyFleet ? mySideEnemyFleet : enemySideMyFleet;
             turn.style.pointerEvents = "auto";
-            fleet.style.pointerEvents = "none";
+            playing && (fleet.style.pointerEvents = "none");
         });
     });
-    /**************************/ /* SHOOTING LOGIC */ /**************************/ fleet.addEventListener("click", function(e) {
+    /**************************/ /* SHOOTING LOGIC */ /**************************/ const defineFleet = fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet;
+    console.log(playing);
+    console.log(fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet, "goo");
+    (fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet).addEventListener("click", function(e) {
         e.preventDefault();
+        console.log(playing, "lay");
+        if (!playing) return;
         const miss = "&bull;";
         const addMarkToFleet = function(fleet) {
+            console.log(e.target, "target");
             console.log(e.target.classList[0]);
             return fleet.querySelector(e.target.classList[0] === "dropzone" ? `.${e.target.querySelector("div").classList[0]}` : `.${e.target.classList[0]}`);
         };
@@ -830,13 +929,14 @@ const createFleet = function(fleetPart) {
                     // There is also can be an imaginary 11th cell when it comes to side ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
                     cellAround && (cellAround.style.fontSize = "4rem");
                     const surroundDestroyedShip = function(fleet, cellAround) {
-                        console.log(cellAround);
+                        console.log(cellAround, "WHERE ARE YOU?");
                         cellAround?.textContent === "" && fleet.querySelector(`.${cell}`)?.insertAdjacentHTML("afterbegin", miss);
                         !cellAround?.classList.contains("miss") && cellAround?.classList.add("cell-around");
                         cellAround && (cellAround.style.fontSize = "4rem");
                     };
                     const markContraryFleet = function(fleet) {
                         const cellAroundContrarySide = fleet.querySelector(`.${cell}`);
+                        console.log(cellAroundContrarySide, "STUCK");
                         surroundDestroyedShip(fleet, cellAroundContrarySide);
                     };
                     if (e.target.closest(".ship").closest(".enemy-side--my-float")) markContraryFleet(mySideMyFleet);
@@ -870,7 +970,7 @@ const createFleet = function(fleetPart) {
             [
                 mySideEnemyFleet,
                 enemySideMyFleet
-            ].forEach((fleet)=>fleet.style.pointerEvents = "none");
+            ].forEach((fleet)=>playing && (fleet.style.pointerEvents = "none"));
         };
         const closeNotificationWindow = function() {
             notificatonWindow.classList.add("hidden");
@@ -923,25 +1023,25 @@ const createFleet = function(fleetPart) {
 [
     [
         mySideMyFleet,
-        myShips,
+        mySideMyShips,
         createMyShips
     ],
     [
         mySideEnemyFleet,
-        enemyShips,
+        mySideEnemyShips,
         createEnemyShips
     ],
     [
         enemySideEnemyFleet,
-        enemyShips,
+        enemySideEnemyShips,
         createEnemyShips
     ],
     [
         enemySideMyFleet,
-        myShips,
+        enemySideMyShips,
         createMyShips
     ]
-].forEach((container)=>createFleet(container)); // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
+].forEach((container, i)=>createFleet(container)); // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
  // Now it's time to do some refactoring
  // Refactoring finished, now it's time to think about shooting feature
  // When I click on a cell I need to extract a class of it
@@ -963,6 +1063,8 @@ const createFleet = function(fleetPart) {
  // Now ships are not longer the same on both sides, all planned goals untill now are completed, now it's time to think about another feature
  // Now I can create some input form inputting coords for ships
  // Now I don't need any input form or anything like that! Now the ships are draggable, so I can manually do this!
+ // All code is refactored and this time I should make a feature to first place ships and only then to play
+ // In the beginning I place my ships on my side and when I push the start button, then my ships will render on my opponent's side
 
 },{}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
