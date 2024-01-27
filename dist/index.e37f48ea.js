@@ -618,8 +618,8 @@ createMyShips = [
     ],
     [
         [
-            "e6",
-            "e7"
+            "i7",
+            "j7"
         ],
         2
     ],
@@ -630,6 +630,15 @@ createMyShips = [
             "h4"
         ],
         3
+    ],
+    [
+        [
+            "c9",
+            "d9",
+            "e9",
+            "f9"
+        ],
+        4
     ]
 ];
 createEnemyShips = [
@@ -654,14 +663,15 @@ createEnemyShips = [
     ],
     [
         [
-            "i8",
-            "i9"
+            "i5",
+            "j5"
         ],
         2
     ]
 ];
 let dragged;
 let playing;
+let bothSideShips = [];
 let mySideMyShips = [];
 let enemySideEnemyShips = [];
 let mySideEnemyShips = [];
@@ -724,7 +734,43 @@ const createFleet = function(fleetPart) {
         });
         console.log(checkSpaceAround, "checkSpaceAround");
         if (checkSpaceAround.includes(true)) return;
-        const cellsAround = bigCoords.reduce((acc, coord)=>{
+        // let sameNumberOrLetter = [];
+        const sameLetter = coords.map((coord)=>{
+            return coord[0];
+        });
+        const sameNumber = coords.map((coord)=>{
+            return coord[1];
+        });
+        console.log(sameLetter, "sameLetter");
+        console.log(sameNumber, "sameNumber");
+        const columnShip = [
+            ...new Set(sameLetter)
+        ];
+        const rowShip = [
+            ...new Set(sameNumber)
+        ];
+        if (columnShip.length !== 1 && rowShip.length !== 1) {
+            console.log("Place your ships in the right order, man \uD83D\uDD7A");
+            return;
+        }
+        if (fleet !== mySideMyFleet && fleet !== enemySideEnemyFleet) {
+            const checkWholesomness = coords.map((coord, i)=>{
+                const coordSlice01 = coord.slice(0, 1);
+                const coordSlice1 = coord.slice(1);
+                const letterAround = letters.indexOf(coordSlice01);
+                console.log(letters[letterAround] + (coordSlice1 - 1));
+                console.log(letters[letterAround] + (+coordSlice1 + 1));
+                console.log(letters[letterAround - 1] + coordSlice1);
+                console.log(letters[letterAround + 1] + coordSlice1);
+                if (coords.length > 1 && !coords.includes(letters[letterAround] + (coordSlice1 - 1)) && !coords.includes(letters[letterAround] + (+coordSlice1 + 1)) && !coords.includes(letters[letterAround - 1] + coordSlice1) && !coords.includes(letters[letterAround + 1] + coordSlice1)) return true;
+            });
+            console.log(checkWholesomness, "Whole", fleet);
+            if (checkWholesomness.includes(true)) {
+                console.log("Place your ships in the right order, man ");
+                return;
+            }
+        }
+        const cellsAround = bigCoords.reduce((acc, coord, i)=>{
             // console.log(duplicateFleet);
             /* duplicateFleet
         ? duplicateFleet.querySelector(`.${coord}`).classList.add("ship")
@@ -743,6 +789,19 @@ const createFleet = function(fleetPart) {
             const leftTopCell = diagonalCells(-1, -1);
             const leftBottomCell = diagonalCells(-1, 1);
             const rightBottomCell = diagonalCells(1, 1);
+            // if (
+            //   // console.log(previousCell, nextCell, leftCell, rightCell, "ke") &&
+            //   // console.log(coord, "k") &&
+            //   // console.log(i, "ig") &&
+            //   coords.length > 1 &&
+            //   !fleet.querySelector(`.${nextCell}`)?.classList.contains("ship") &&
+            //   !fleet.querySelector(`.${previousCell}`)?.classList.contains("ship") &&
+            //   !fleet.querySelector(`.${leftCell}`)?.classList.contains("ship") &&
+            //   !fleet.querySelector(`.${rightCell}`)?.classList.contains("ship")
+            // ) {
+            //   console.log("Kabachok");
+            //   return;
+            // }
             return acc += `, ${previousCell}, ${nextCell}, ${leftCell} ,${rightCell} ,${rightTopCell} ,${leftTopCell} ,${leftBottomCell} ,${rightBottomCell}`;
         }, "");
         const readyCellsAround = [
@@ -907,7 +966,7 @@ const createFleet = function(fleetPart) {
             console.log(cell);
             console.log(fleet);
             console.log(mySideMyFleet.querySelector(`.${cell}`));
-            return `${fleetSide.querySelector(`.${cell}`).classList[0]}`;
+            return `${fleetSide.querySelector(`.${cell}`)?.classList[0]}`;
         };
         createFleetShips = [
             [
@@ -932,6 +991,15 @@ const createFleet = function(fleetPart) {
                     findCell("cell4")
                 ],
                 3
+            ],
+            [
+                [
+                    findCell("cell7"),
+                    findCell("cell8"),
+                    findCell("cell9"),
+                    findCell("cell10")
+                ],
+                4
             ]
         ];
         createMoreShips = [
@@ -969,8 +1037,32 @@ const createFleet = function(fleetPart) {
         if (fleet === mySideEnemyFleet) createMoreShips.forEach((ship)=>{
             ships.push(createShip(...ship));
         });
-        playing = true;
-        console.log("Game started \uD83E\uDD70");
+        // let shipsAllRight = true;
+        if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet) {
+            console.log(ships, "beg ships");
+            bothSideShips.push(ships);
+            fleet === mySideEnemyFleet && bothSideShips.push("mySideEnemyFleet");
+            fleet === enemySideMyFleet && bothSideShips.push("enemySideMyFleet");
+            console.log(bothSideShips);
+            console.log(bothSideShips.flat(2), "beg");
+            // shipsAllRight = bothSideShips.flat(2).every((ship) => {
+            //   return ship !== undefined;
+            // });
+            // console.log(shipsAllRight, "each");
+            if (!bothSideShips.flat(2).includes(undefined) && bothSideShips.flat(2).includes("mySideEnemyFleet") && bothSideShips.flat(2).includes("enemySideMyFleet")) {
+                console.log(bothSideShips.flat(2), "plu");
+                console.log(ships, "ships");
+                console.log(bothSideShips, "bothSide", fleet);
+                console.log(bothSideShips);
+                playing = true;
+                console.log("Game started \uD83E\uDD70");
+                console.log("shift");
+            } else {
+                console.log("Place your ships in the right way \uD83D\uDE03");
+                return;
+            }
+        }
+        // console.log(ships, "shhhh");
         // Make sure that I will not destroy my own ship ;)
         if (playing) {
             console.log(playing, "playing");
@@ -1206,7 +1298,8 @@ const createFleet = function(fleetPart) {
  // All code is refactored and this time I should make a feature to first place ships and only then to play
  // In the beginning I place my ships on my side and when I push the start button, then my ships will render on my opponent's side
  // Right now after pushing start button duplicate fleet is rendered and it's playable, everything after duplicating the fleet is working, however, I still cannot  place ships manually, I can drag a ship and drop it somewhere, but it will not be duplicated to another side, so this is what should be fixed, but before let's refactor the code
- // Now I can manually place ships where I want and they will be duplicated and I can play as in the real game, but to set everything properly I first need to place right part of ships together and if they will not be connected in the right way, then there will be a mess, so I need to find a condition which will help me in this situation.
+ // Now I can manually place ships where I want and they will be duplicated and I can play as in the real game, but to set everything properly I first need to place right parts of ships together and if they will not be connected in the right way, then there will be a mess, so I need to find a condition which will help me in this situation.
+ // Everything is working perfectly, there is no way you will start the game when you misplaced any of your ships, it will just not allow it! So, it's playable, but right now there is a big mess, so I need to clean it up and refactor the code :)
 
 },{}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
