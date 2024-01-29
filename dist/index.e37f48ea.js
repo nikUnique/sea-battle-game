@@ -602,17 +602,28 @@ const letters = [
 const seaFleet = Array.from({
     length: 10
 }, (_, i)=>i + 1);
-let createMyShips, createEnemyShips;
-createMyShips = [
-    // [
-    //   [`${mySideMyFleet.querySelector(".F10").classList[0]}`],
-    //   [`${mySideMyFleet.querySelector(".F10")}`].length,
-    // ],
-    // [["A1", "A2", "A3", "a4"], ["A1", "A2", "A3", "a4"].length],
-    // [["B4", "B5"], ["B4", "B5"].length],
+let createMyShips = [
     [
         [
             "e1"
+        ],
+        1
+    ],
+    [
+        [
+            "j1"
+        ],
+        1
+    ],
+    [
+        [
+            "a3"
+        ],
+        1
+    ],
+    [
+        [
+            "h10"
         ],
         1
     ],
@@ -625,33 +636,75 @@ createMyShips = [
     ],
     [
         [
-            "J4",
-            "I4",
-            "h4"
+            "a9",
+            "a10"
+        ],
+        2
+    ],
+    [
+        [
+            "a5",
+            "a6",
+            "a7"
         ],
         3
     ],
     [
         [
-            "c9",
-            "d9",
-            "e9",
-            "f9"
+            "c8",
+            "d8",
+            "e8"
+        ],
+        3
+    ],
+    [
+        [
+            "c10",
+            "d10",
+            "e10",
+            "f10"
         ],
         4
     ]
 ];
-createEnemyShips = [
-    // [["B6", "B7"], ["B6", "B7"].length],
-    // [["I2"], ["I2"].length],
-    // [["J10"], ["J10"].length],
-    // [["F7"], ["F7"].length],
-    // [["c1", "c2", "c3", "c4"], ["c1", "c2", "c3", "c4"].length],
+let createEnemyShips = [
     [
         [
-            "f3"
+            "a1"
         ],
         1
+    ],
+    [
+        [
+            "c1"
+        ],
+        1
+    ],
+    [
+        [
+            "e1"
+        ],
+        1
+    ],
+    [
+        [
+            "g1"
+        ],
+        1
+    ],
+    [
+        [
+            "i5",
+            "j5"
+        ],
+        2
+    ],
+    [
+        [
+            "i7",
+            "j7"
+        ],
+        2
     ],
     [
         [
@@ -663,10 +716,20 @@ createEnemyShips = [
     ],
     [
         [
-            "i5",
-            "j5"
+            "a8",
+            "a9",
+            "a10"
         ],
-        2
+        3
+    ],
+    [
+        [
+            "c10",
+            "d10",
+            "e10",
+            "f10"
+        ],
+        4
     ]
 ];
 let dragged;
@@ -702,31 +765,19 @@ const createFleet = function(fleetPart) {
         fleetPart[1]
     ];
     const newShipsCoords = fleetPart[2];
-    // if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet) return;
-    console.log(fleet);
-    console.log(ships);
-    console.log("FLEET");
-    const createShip = function(coords, size, duplicateFleet) {
-        // console.log(duplicateFleet, "duplicateFleet");
-        console.log(fleet, "fleet");
-        console.log(coords);
+    const createShip = function(coords, size) {
         const bigCoords = coords?.map((coord)=>{
-            console.log(coord);
             return coord.toUpperCase();
         });
         if (bigCoords === undefined) return;
-        const checkSpace = /*  duplicateFleet
-      ? ""
-      : */ ships?.map((ship)=>{
+        const checkSpace = ships?.map((ship)=>{
             return ship?.coords?.some((coord)=>bigCoords.includes(coord));
         });
-        console.log(checkSpace);
         if (checkSpace.includes(true)) {
             console.log("In such a mood it wouldn't be surprising if you had stepped with you shoe on a dog's poop \uD83C\uDF6D");
             return;
         }
-        // duplicateFleet && console.log(cleanShips, "before duplicate");
-        const checkSpaceAround = /* duplicateFleet ? cleanShips : */ ships.map((ship)=>{
+        const checkSpaceAround = ships.map((ship)=>{
             return ship?.unavailabeCells?.some((cell)=>{
                 if (bigCoords.includes(cell)) console.log(`You cannot place your ship on ${cell} because it's around another ship. Find a better place to drop an anchor \u{1F602}`);
                 return bigCoords.includes(cell);
@@ -734,25 +785,20 @@ const createFleet = function(fleetPart) {
         });
         console.log(checkSpaceAround, "checkSpaceAround");
         if (checkSpaceAround.includes(true)) return;
-        // let sameNumberOrLetter = [];
-        const sameLetter = coords.map((coord)=>{
-            return coord[0];
-        });
-        const sameNumber = coords.map((coord)=>{
-            return coord[1];
-        });
-        console.log(sameLetter, "sameLetter");
-        console.log(sameNumber, "sameNumber");
-        const columnShip = [
-            ...new Set(sameLetter)
-        ];
-        const rowShip = [
-            ...new Set(sameNumber)
-        ];
-        if (columnShip.length !== 1 && rowShip.length !== 1) {
-            console.log("Place your ships in the right order, man \uD83D\uDD7A");
-            return;
-        }
+        // const sameLetter = coords.map((coord) => {
+        //   return coord[0];
+        // });
+        // const sameNumber = coords.map((coord) => {
+        //   return coord[1];
+        // });
+        // console.log(sameLetter, "sameLetter");
+        // console.log(sameNumber, "sameNumber");
+        // const columnShip = [...new Set(sameLetter)];
+        // const rowShip = [...new Set(sameNumber)];
+        // if (columnShip.length !== 1 && rowShip.length !== 1) {
+        //   console.log("Place your ships in the right order, man 🕺");
+        //   return;
+        // }
         if (fleet !== mySideMyFleet && fleet !== enemySideEnemyFleet) {
             const checkWholesomness = coords.map((coord, i)=>{
                 const coordSlice01 = coord.slice(0, 1);
@@ -766,7 +812,7 @@ const createFleet = function(fleetPart) {
             });
             console.log(checkWholesomness, "Whole", fleet);
             if (checkWholesomness.includes(true)) {
-                console.log("Place your ships in the right order, man ");
+                console.log("Place your ships in the right order, man \uD83E\uDD38\u200D\u2642\uFE0F");
                 return;
             }
         }
@@ -814,7 +860,7 @@ const createFleet = function(fleetPart) {
             /* duplicateFleet
         ? (duplicateFleet.querySelector(`.${pos}`).style.backgroundColor =
             "yellow")
-        :  */ fleet.querySelector(`.${pos}`).style.backgroundColor = "#fcc419";
+        :  */ fleet.querySelector(`.${pos}`).classList.add("ship-color");
             fleet.querySelector(`.${pos}`).insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);
         });
         const ship = {
@@ -950,6 +996,9 @@ const createFleet = function(fleetPart) {
     fleet === mySideMyFleet ? enemySideMyFleet : mySideEnemyFleet; */ playing = false;
     const startGameBtn = document.querySelector(".start-game");
     startGameBtn.addEventListener("click", function(e) {
+        // [...document.querySelectorAll("td")].forEach((td) => {
+        //   td.firstChild.style.opacity = "0.5";
+        // });
         enemySideMyFleet.style.pointerEvents = "none";
         fleet.querySelectorAll(".ship");
         console.log(cleanShips);
@@ -979,27 +1028,66 @@ const createFleet = function(fleetPart) {
             ],
             [
                 [
-                    findCell("cell5"),
-                    findCell("cell6")
+                    findCell("cell2")
                 ],
-                2
+                [
+                    findCell("cell1")
+                ].length
             ],
             [
                 [
-                    findCell("cell2"),
-                    findCell("cell3"),
-                    findCell("cell4")
+                    findCell("cell3")
+                ],
+                [
+                    findCell("cell1")
+                ].length
+            ],
+            [
+                [
+                    findCell("cell4"),
+                    findCell("cell5"),
+                    findCell("cell6")
                 ],
                 3
             ],
             [
                 [
                     findCell("cell7"),
-                    findCell("cell8"),
+                    findCell("cell8")
+                ],
+                2
+            ],
+            [
+                [
                     findCell("cell9"),
-                    findCell("cell10")
+                    findCell("cell10"),
+                    findCell("cell11")
+                ],
+                3
+            ],
+            [
+                [
+                    findCell("cell12"),
+                    findCell("cell13")
+                ],
+                2
+            ],
+            [
+                [
+                    findCell("cell14"),
+                    findCell("cell15"),
+                    findCell("cell16"),
+                    findCell("cell17")
                 ],
                 4
+            ],
+            [
+                [
+                    findCell("cell18")
+                ],
+                [
+                    findCell("cell1")
+                ].length
             ]
         ];
         createMoreShips = [
@@ -1013,18 +1101,66 @@ const createFleet = function(fleetPart) {
             ],
             [
                 [
+                    findCell("cell2")
+                ],
+                [
+                    findCell("cell1")
+                ].length
+            ],
+            [
+                [
+                    findCell("cell3")
+                ],
+                [
+                    findCell("cell1")
+                ].length
+            ],
+            [
+                [
+                    findCell("cell4")
+                ],
+                [
+                    findCell("cell1")
+                ].length
+            ],
+            [
+                [
                     findCell("cell5"),
-                    findCell("cell6")
+                    findCell("cell6"),
+                    findCell("cell7")
+                ],
+                3
+            ],
+            [
+                [
+                    findCell("cell8"),
+                    findCell("cell9")
                 ],
                 2
             ],
             [
                 [
-                    findCell("cell2"),
-                    findCell("cell3"),
-                    findCell("cell4")
+                    findCell("cell10"),
+                    findCell("cell11")
+                ],
+                2
+            ],
+            [
+                [
+                    findCell("cell12"),
+                    findCell("cell13"),
+                    findCell("cell14")
                 ],
                 3
+            ],
+            [
+                [
+                    findCell("cell15"),
+                    findCell("cell16"),
+                    findCell("cell17"),
+                    findCell("cell18")
+                ],
+                4
             ]
         ];
         console.log(newShipsCoords);
@@ -1100,7 +1236,7 @@ const createFleet = function(fleetPart) {
     ].forEach((fleet)=>{
         fleet.addEventListener("click", function(e) {
             console.log("---------MEGA BRUMWELL------- \uD83D\uDC16");
-            if (e.target.classList.contains("ship") || e.target.textContent !== "") return;
+            if (e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
             console.log(fleet, "float");
             const turn = playing && fleet === enemySideMyFleet ? mySideEnemyFleet : enemySideMyFleet;
             playing && (turn.style.pointerEvents = "auto");
@@ -1117,9 +1253,12 @@ const createFleet = function(fleetPart) {
     : mySideEnemyFleet
   ) */ fleet.addEventListener("click", function(e) {
         e.preventDefault();
-        console.log(e.target);
+        console.log(e.target, "lay");
         console.log(playing, "lay");
-        if (!playing) return;
+        if (!playing || e.target.querySelector(".ship")?.classList.contains("ship")) {
+            console.log("dropzone");
+            return;
+        }
         const miss = "&bull;";
         const addMarkToFleet = function(fleet) {
             console.log(e.target, "target");
@@ -1192,14 +1331,14 @@ const createFleet = function(fleetPart) {
                 }).map((cell, i)=>{
                     const cellAround = /* defineFleet */ fleet.querySelector(`.${cell}`);
                     // There is also can be an imaginary 11th cell when it comes to side ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
-                    cellAround && (cellAround.style.fontSize = "4rem");
+                    cellAround && (cellAround.style.fontSize = "3.9rem");
                     console.log("Bormer");
                     const surroundDestroyedShip = function(fleet, cellAround) {
                         console.log(fleet, "before round");
                         console.log(cellAround, "WHERE ARE YOU?");
                         cellAround?.textContent === "" && fleet.querySelector(`.${cell}`)?.insertAdjacentHTML("afterbegin", miss);
                         !cellAround?.classList.contains("miss") && cellAround?.classList.add("cell-around");
-                        cellAround && (cellAround.style.fontSize = "4rem");
+                        cellAround && (cellAround.style.fontSize = "3.9rem");
                     };
                     const markContraryFleet = function(fleet) {
                         const cellAroundContrarySide = fleet.querySelector(`.${cell}`);

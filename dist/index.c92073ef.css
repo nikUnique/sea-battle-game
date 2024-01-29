@@ -21,22 +21,35 @@ body {
 }
 
 table {
-  width: 48rem;
-  height: 48rem;
+  border-collapse: collapse;
   margin: 0 auto;
 }
 
 th, td {
   text-align: center;
   background-color: #e3fafc;
+  border: 1.5px solid #fff;
   width: 4rem;
   height: 4rem;
   font-size: 1.8rem;
+  overflow: hidden;
+}
+
+td {
+  font-size: 4rem;
+}
+
+td:hover {
+  background-color: #c5f6fa;
 }
 
 th, thead tr, tbody th {
   color: #fff;
   background-color: #087f5b;
+}
+
+th {
+  cursor: auto;
 }
 
 .grid {
@@ -54,6 +67,14 @@ th, thead tr, tbody th {
   height: 100%;
 }
 
+.ship-color {
+  background-color: #fcc419;
+}
+
+.ship:hover {
+  background-color: #ffd43b;
+}
+
 .injure {
   color: #ff6b6b;
   font-size: 4rem;
@@ -61,11 +82,15 @@ th, thead tr, tbody th {
 
 .miss {
   color: #15aabf;
-  font-size: 4rem;
+  font-size: 3.9rem;
 }
 
 .cell-around {
   color: #99e9f2;
+}
+
+.my-side--enemy-float, .enemy-side--my-float {
+  cursor: url("crosshairs-solid.199820cf.svg"), auto;
 }
 
 .show-notification-window {

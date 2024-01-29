@@ -76,7 +76,13 @@ body {
   line-height: 1;
   font-weight: 400;
   color: #555;
+
+  /* cursor: url(../icons) 16 16, auto; */
 }
+
+/* .custom-cursor {
+  cursor: url(../img/sea-icon.ico) 16 16, auto;
+} */
 
 .container {
   max-width: 150rem;
@@ -84,9 +90,10 @@ body {
 }
 
 table {
-  width: 48rem;
-  height: 48rem;
+  /* width: 48rem;
+  height: 48rem; */
   margin: 0 auto;
+  border-collapse: collapse;
 }
 
 th,
@@ -96,12 +103,29 @@ td {
   font-size: 1.8rem;
   text-align: center;
   background-color: #e3fafc;
+  overflow: hidden;
+  /* cursor: pointer; */
+  border: 1.5px solid white;
+
+  /* transition: all 0.1s; */
+}
+
+td {
+  font-size: 4rem;
+}
+
+td:hover {
+  background-color: #c5f6fa;
 }
 th,
 thead tr,
 tbody th {
   background-color: #087f5b;
   color: #fff;
+}
+
+th {
+  cursor: auto;
 }
 
 .grid {
@@ -123,8 +147,19 @@ tbody th {
 } */
 
 .ship {
+  /* width: 4rem;
+  height: 4rem; */
   width: 100%;
   height: 100%;
+}
+
+.ship-color {
+  background-color: #fcc419;
+}
+
+.ship:hover {
+  background-color: #ffd43b;
+  /* cursor: url(http://www.javascriptkit.com/dhtmltutors/cursor-hand.gif), auto; */
 }
 
 .injure {
@@ -134,15 +169,23 @@ tbody th {
 
 .miss {
   color: #15aabf;
-  font-size: 4rem;
+  font-size: 3.9rem;
 }
 
 .cell-around {
   color: #99e9f2;
 }
 
-.cell {
-  /* height: 100%; */
+/* .cell {
+  height: inherit;
+  width: 100%;
+} */
+
+.my-side--enemy-float,
+.enemy-side--my-float {
+  /* cursor: crosshair; */
+
+  cursor: url(../icons/crosshairs-solid.svg), auto;
 }
 
 /**************************/
@@ -217,3 +260,10 @@ p {
 .dragover {
   background-color: #c5f6fa;
 }
+
+/* .cursor {
+  width: 40px;
+  height: 40px;
+  cursor: url("http://upload.wikimedia.org/wikipedia/commons/d/de/POL_apple.jpg"),
+    auto;
+} */
