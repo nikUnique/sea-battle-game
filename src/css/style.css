@@ -158,7 +158,7 @@ th {
 
 .my-side--enemy-float,
 .enemy-side--my-float {
-  cursor: url(../icons/crosshairs-solid.svg), auto;
+  cursor: url(../icons/gun-target.png), auto;
 }
 
 /**************************/

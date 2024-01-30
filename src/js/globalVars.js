@@ -59,7 +59,6 @@ export {
   seaFleet,
   createMyShips,
   createEnemyShips,
-  playing,
   mySideMyShips,
   enemySideEnemyShips,
   mySideEnemyShips,
