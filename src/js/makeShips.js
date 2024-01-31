@@ -2,7 +2,6 @@ import * as GlobalVars from "./globalVars";
 
 export default createShip = function (coords, size, fleetParts) {
   const fleet = fleetParts[0];
-  console.log(fleet, "fleet");
   const bigCoords = coords?.map((coord) => {
     return coord.toUpperCase();
   });
@@ -11,8 +10,6 @@ export default createShip = function (coords, size, fleetParts) {
   const checkSpace = fleetParts[1]?.map((ship, i) => {
     console.log(fleetParts[1]);
     return ship?.coords?.some((coord) => {
-      console.log(bigCoords, "bigCoord");
-      console.log(coord, "coord");
       return bigCoords.includes(coord);
     });
   });
@@ -140,6 +137,4 @@ export default createShip = function (coords, size, fleetParts) {
     unavailabeCells: readyCellsAround,
   };
   fleetParts[1].push(ship);
-  console.log(fleetParts[1], "flo");
-  console.log("is it pushed!");
 };

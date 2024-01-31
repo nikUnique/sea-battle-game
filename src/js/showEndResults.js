@@ -12,6 +12,7 @@ export default function (fleet) {
       if (ship.classList.contains("injure")) return ship;
     })
     .filter((ship) => {
+      // It can be undefined
       if (ship) return ship;
     });
 
@@ -23,9 +24,9 @@ export default function (fleet) {
       resultsMessage.insertAdjacentHTML("afterbegin", `${player} won the game`);
     };
 
-    if (fleet === GlobalVars.mySideEnemyFleet) addNotification(player0);
+    fleet === GlobalVars.mySideEnemyFleet && addNotification(player0);
 
-    if (fleet !== GlobalVars.mySideEnemyFleet) addNotification(player1);
+    fleet !== GlobalVars.mySideEnemyFleet && addNotification(player1);
 
     GlobalVars.notificatonWindow.classList.remove("hidden");
     GlobalVars.overlay.classList.remove("hidden");
@@ -39,7 +40,7 @@ export default function (fleet) {
     GlobalVars.overlay.classList.add("hidden");
   };
 
-  if (areAllShipsInjured) openNotificationWindow();
+  areAllShipsInjured && openNotificationWindow();
 
   GlobalVars.btnCloseNotificationWindow.addEventListener(
     "click",
@@ -50,11 +51,8 @@ export default function (fleet) {
   document.addEventListener("keydown", function (e) {
     // console.log(e.key);
 
-    if (
-      e.key === "Escape" &&
-      !GlobalVars.notificatonWindow.classList.contains("hidden")
-    ) {
+    e.key === "Escape" &&
+      !GlobalVars.notificatonWindow.classList.contains("hidden") &&
       closeNotificationWindow();
-    }
   });
 }

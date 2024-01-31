@@ -16,7 +16,6 @@ export default function (fleet) {
   });
 
   shipEls.forEach((shipEl) => {
-    console.log("bench");
     console.log(fleet, "bow");
     shipEl.setAttribute("draggable", true);
   });
@@ -36,16 +35,15 @@ export default function (fleet) {
     fleet.addEventListener(
       ev,
       function (e) {
-        if (e.target.classList.contains("dropzone")) {
-          console.log(ev);
-          ev === "dragenter"
+        e.target.classList.contains("dropzone") &&
+          (console.log(ev),
+          /*  ev === "dragenter"
             ? e.target.classList.add("dragover")
-            : e.target.classList.remove("dragover");
-          if (ev === "drop") {
-            e.preventDefault();
-            console.log(dragged);
-            e.target.appendChild(dragged);
-
+            :  */ e.target.classList.remove("dragover"),
+          ev === "drop" &&
+            (e.preventDefault(),
+            console.log(dragged),
+            e.target.appendChild(dragged),
             fleet
               .querySelector(
                 `.${dragged.classList[dragged.classList.length - 1]}`
@@ -55,25 +53,28 @@ export default function (fleet) {
                   `.${dragged.classList[dragged.classList.length - 1]}`
                 ).classList[0],
                 e.target.querySelector("div").classList[0]
-              );
-          }
-        }
+              )));
+
         if (ev === "dragover") {
           e.preventDefault();
-          if (e.target.classList.contains("ship")) return;
+          if (
+            e.target.classList.contains("ship") ||
+            e.target.classList.length === 0
+          )
+            return;
           e.target.classList.add("dragover");
         }
 
-        if (ev === "dragleave") {
-          console.log("--------DRAGLEAVE------");
-          console.log(e.target);
-          if (e.target.children) return;
-
-          e.target
-            .querySelector("td")
-            .querySelector("div")
-            .classList.add(`${dragged.classList[0]} cell`);
-        }
+        // if (ev === "dragleave") {
+        //   console.log("--------DRAGLEAVE------");
+        //   console.log(e.target);
+        //   console.log("Was it added");
+        //   // if (e.target.children) return;
+        //   // e.target
+        //   //   .querySelector("td")
+        //   //   ?.querySelector("div")
+        //   //   .classList.add(`${dragged.classList[0]} cell`);
+        // }
       },
       ev === "dragover" && false
     );

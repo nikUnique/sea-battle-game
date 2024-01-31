@@ -2,7 +2,7 @@ import * as GlobalVars from "./globalVars";
 import createShip from "./makeShips";
 import "./fleetEnvironment";
 import placeShipsManually from "./placeShipsManually";
-import { gameStartControl, startNewGame, playing } from "./gameStartControl";
+import { gameStartControl, startNewGame } from "./gameStartControl";
 import gameControl from "./gameControl";
 import shootingLogic from "./shootingLogic";
 
@@ -11,7 +11,6 @@ import shootingLogic from "./shootingLogic";
 /**************************/
 const createFleet = function (fleetParts) {
   const fleet = fleetParts[0];
-  console.log(fleetParts);
   const newShipsCoords = fleetParts[2];
 
   fleet !== GlobalVars.mySideEnemyFleet &&
@@ -22,8 +21,7 @@ const createFleet = function (fleetParts) {
 
   let ships = fleetParts[1];
   console.log(fleetParts[1], "ships");
-
-  console.log(fleet, "fleeet");
+  console.log(fleet, "fleet");
   // const cleanShips = ships.slice().filter((ship) => ship !== undefined);
 
   /**************************/
@@ -108,3 +106,4 @@ const createFleet = function (fleetParts) {
 // Now I will make "New game" button which will reset everything to the initial state
 // While trying to make new game functionality I run into problems connected with the code architecture so, I decided to refactor it again and it worked! Now the controller has only 75 lines of code and also 8 different files of js nicely splitted up and connected successfully. So now it can be the right time finally make the new game button work as intended
 // After long hours(actually quick) of work the new game button works perfectly, it's refactor time
+// Now all code is refactored and from all files there is only 1 if statement which isn't a guard clause because it contains guard clause itself
