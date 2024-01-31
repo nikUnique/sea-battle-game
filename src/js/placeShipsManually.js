@@ -1,6 +1,7 @@
 export default function (fleet) {
   let dragged;
   const shipEls = fleet.querySelectorAll(".ship");
+  console.log(fleet);
 
   shipEls.forEach((shipEl, i) => {
     shipEl.classList.add(`cell${i + 1}`);
@@ -15,6 +16,8 @@ export default function (fleet) {
   });
 
   shipEls.forEach((shipEl) => {
+    console.log("bench");
+    console.log(fleet, "bow");
     shipEl.setAttribute("draggable", true);
   });
 

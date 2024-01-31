@@ -598,13 +598,14 @@ var _shootingLogicDefault = parcelHelpers.interopDefault(_shootingLogic);
     fleet !== _globalVars.mySideEnemyFleet && fleet !== _globalVars.enemySideMyFleet && newShipsCoords.forEach((ship)=>{
         (0, _makeShipsDefault.default)(...ship, fleetParts);
     });
-    const ships = fleetParts[1];
-    console.log(ships);
+    let ships = fleetParts[1];
+    console.log(fleetParts[1], "ships");
     console.log(fleet, "fleeet");
     // const cleanShips = ships.slice().filter((ship) => ship !== undefined);
     /**************************/ /* PLACING SHIPS MANUALLY */ /**************************/ (0, _placeShipsManuallyDefault.default)(fleet);
     /**************************/ /* GAME START CONTROL */ /**************************/ (0, _gameStartControl.gameStartControl)(fleet, fleetParts);
     /**************************/ /* GAME CONTROL */ /**************************/ (0, _gameControlDefault.default)(fleet);
+    /**************************/ /* START NEW GAME */ /**************************/ (fleet === _globalVars.mySideMyFleet || fleet === _globalVars.enemySideEnemyFleet) && (0, _gameStartControl.startNewGame)(fleet, fleetParts);
     /**************************/ /* SHOOTING LOGIC */ /**************************/ (0, _shootingLogicDefault.default)(fleet, ships);
 };
 [
@@ -628,32 +629,7 @@ var _shootingLogicDefault = parcelHelpers.interopDefault(_shootingLogic);
         _globalVars.enemySideMyShips,
         _globalVars.createMyShips
     ]
-].forEach((container, i)=>createFleet(container)); // const newGameBtn = document.querySelector(".new-game-btn");
- // newGameBtn.addEventListener("click", function (e) {
- //   console.log("Beny");
- //   const allCells = [querySelectorAll("td")];
- //   console.log("clearing");
- //   allCells.forEach((cell) => {
- //     cell.innerHTML = "";
- //   });
- //   console.log(GlobalVars.createMyShips);
- //   console.log("boomer");
- //   if (fleet === GlobalVars.mySideMyFleet) {
- //     ships = [];
- //     GlobalVars.bothSideShips = [];
- //     console.log("ship");
- //     GlobalVars.createMyShips.forEach((ship) => {
- //       ships.push(createShip(...ship));
- //     });
- //   }
- //   if (fleet === GlobalVars.enemySideEnemyFleet) {
- //     GlobalVars.createEnemyShips.forEach((ship) => {
- //       ships.push(createShip(...ship));
- //     });
- //     console.log(ships);
- //   }
- // });
- // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
+].forEach((container, i)=>createFleet(container)); // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
  // Now it's time to do some refactoring
  // Refactoring finished, now it's time to think about shooting feature
  // When I click on a cell I need to extract a class of it
@@ -682,9 +658,10 @@ var _shootingLogicDefault = parcelHelpers.interopDefault(_shootingLogic);
  // Everything is working perfectly, there is no way you will start the game when you misplaced any of your ships, it will just not allow it! So, it's playable, but right now there is a big mess, so I need to clean it up and refactor the code :)
  // Current situation: all code in the controller and css is refactored, now the controller file contains about 670 lines of code, now it's time to divide it up to different files
  // Now I will make "New game" button which will reset everything to the initial state
- // While trying to make new game functionality I run into problems connected with the code architecture so, I decided to refactor it again and it worked! Now the controller has only 75 lines of code and also 8 different files of js nicely splitted up and connected successfully
+ // While trying to make new game functionality I run into problems connected with the code architecture so, I decided to refactor it again and it worked! Now the controller has only 75 lines of code and also 8 different files of js nicely splitted up and connected successfully. So now it can be the right time finally make the new game button work as intended
+ // After long hours(actually quick) of work the new game button works perfectly, it's refactor time
 
-},{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw"}],"gb5d6":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "bothSideShips", ()=>bothSideShips);
@@ -845,12 +822,18 @@ parcelHelpers.defineInteropFlag(exports);
 var _globalVars = require("./globalVars");
 exports.default = createShip = function(coords, size, fleetParts) {
     const fleet = fleetParts[0];
+    console.log(fleet, "fleet");
     const bigCoords = coords?.map((coord)=>{
         return coord.toUpperCase();
     });
     if (bigCoords === undefined) return;
-    const checkSpace = fleetParts[1]?.map((ship)=>{
-        return ship?.coords?.some((coord)=>bigCoords.includes(coord));
+    const checkSpace = fleetParts[1]?.map((ship, i)=>{
+        console.log(fleetParts[1]);
+        return ship?.coords?.some((coord)=>{
+            console.log(bigCoords, "bigCoord");
+            console.log(coord, "coord");
+            return bigCoords.includes(coord);
+        });
     });
     console.log(checkSpace);
     if (checkSpace.includes(true)) {
@@ -876,6 +859,7 @@ exports.default = createShip = function(coords, size, fleetParts) {
     const rowShip = [
         ...new Set(sameNumber)
     ];
+    console.log(columnShip);
     if (columnShip.length !== 1 && rowShip.length !== 1) {
         console.log("Place your ships in the right order, man \uD83D\uDD7A");
         return;
@@ -913,8 +897,11 @@ exports.default = createShip = function(coords, size, fleetParts) {
     const readyCellsAround = [
         ...new Set(cellsAround.replace(",", "").split(",").map((cell)=>cell.trim()).filter((cell)=>_globalVars.letters.includes(cell.slice(0, 1))))
     ];
+    console.log(bigCoords, "flu");
     bigCoords.forEach((pos)=>{
         console.log(pos);
+        console.log(fleet);
+        console.log(fleet.querySelector(`.${pos}`));
         fleet.querySelector(`.${pos}`)?.classList.add("ship-color");
         fleet.querySelector(`.${pos}`)?.insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);
     });
@@ -924,6 +911,8 @@ exports.default = createShip = function(coords, size, fleetParts) {
         unavailabeCells: readyCellsAround
     };
     fleetParts[1].push(ship);
+    console.log(fleetParts[1], "flo");
+    console.log("is it pushed!");
 };
 
 },{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iXTJE":[function(require,module,exports) {
@@ -955,6 +944,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet) {
         let dragged;
         const shipEls = fleet.querySelectorAll(".ship");
+        console.log(fleet);
         shipEls.forEach((shipEl, i)=>{
             shipEl.classList.add(`cell${i + 1}`);
         });
@@ -967,6 +957,8 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
             cell.classList.add("dropzone");
         });
         shipEls.forEach((shipEl)=>{
+            console.log("bench");
+            console.log(fleet, "bow");
             shipEl.setAttribute("draggable", true);
         });
         fleet.addEventListener("dragstart", function(e) {
@@ -1015,7 +1007,10 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "playing", ()=>playing);
 parcelHelpers.export(exports, "gameStartControl", ()=>gameStartControl);
+parcelHelpers.export(exports, "startNewGame", ()=>startNewGame);
 var _globalVars = require("./globalVars");
+var _placeShipsManually = require("./placeShipsManually");
+var _placeShipsManuallyDefault = parcelHelpers.interopDefault(_placeShipsManually);
 let playing;
 const gameStartControl = function(fleet, fleetParts) {
     [
@@ -1028,13 +1023,15 @@ const gameStartControl = function(fleet, fleetParts) {
         ship.style.backgroundColor = color;
     });
     if (fleet === _globalVars.mySideMyFleet) {
-        const startGameBtnMarkup = `<button class="start-game">Start Playing \u{1F639}</button>`;
+        const startGameBtnMarkup = `<button class="start-game ${document.querySelector(".start-game") ? "second-btn" : ""}">Start Playing \u{1F639}</button>`;
+        // document.querySelector(".start-game")?.remove();
         document.querySelector("body").insertAdjacentHTML("afterbegin", startGameBtnMarkup);
     }
     playing = false;
     const startGameBtn = document.querySelector(".start-game");
-    startGameBtn.addEventListener("click", function(e) {
+    fleet !== _globalVars.mySideMyFleet && fleet !== _globalVars.enemySideEnemyFleet && startGameBtn.addEventListener("click", function(e) {
         _globalVars.enemySideMyFleet.style.pointerEvents = "none";
+        console.log(fleet, "where");
         const findCell = function(cell) {
             let fleetSide;
             if (fleet === _globalVars.enemySideMyFleet) fleetSide = _globalVars.mySideMyFleet;
@@ -1125,36 +1122,112 @@ const gameStartControl = function(fleet, fleetParts) {
             ]
         ];
         console.log(createFleetShips);
-        if (fleet === _globalVars.enemySideMyFleet) createFleetShips.forEach((ship)=>{
+        // document.querySelector(".second-btn") &&
+        //   ((fleetParts[1] = []), (fleetParts[2] = []));
+        fleet === _globalVars.enemySideMyFleet && (_globalVars.enemySideMyShips.splice(0), createFleetShips.forEach((ship)=>{
+            console.log("Start Playing", fleet);
             createShip(...ship, fleetParts);
-        });
-        if (fleet === _globalVars.mySideEnemyFleet) createMoreShips.forEach((ship)=>{
+        }));
+        // document.querySelector(".second-btn") &&
+        //   ((fleetParts[1] = []), (fleetParts[2] = []));
+        fleet === _globalVars.mySideEnemyFleet && (_globalVars.mySideEnemyShips.splice(0), createMoreShips.forEach((ship)=>{
+            console.log("Continue playing");
             createShip(...ship, fleetParts);
-        });
-        const ships = fleetParts[1];
+        }));
+        let ships = fleetParts[1];
+        console.log(ships, "ships");
         if (fleet === _globalVars.mySideEnemyFleet || fleet === _globalVars.enemySideMyFleet) {
+            console.log("baron");
+            console.log(fleetParts[2]);
             _globalVars.bothSideShips.push(ships);
             fleet === _globalVars.mySideEnemyFleet && _globalVars.bothSideShips.push("mySideEnemyFleet");
             fleet === _globalVars.enemySideMyFleet && _globalVars.bothSideShips.push("enemySideMyFleet");
+            console.log(_globalVars.bothSideShips);
             const flattenedBothSideShips = _globalVars.bothSideShips.flat(2);
-            if (!flattenedBothSideShips.includes(undefined) && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet")) {
+            console.log(flattenedBothSideShips);
+            if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2 && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet")) {
                 playing = true;
                 console.log("Game started \uD83E\uDD70");
+                // Making sure that I will not destroy my own ship ;)
+                if (playing) {
+                    console.log(playing, "playing");
+                    _globalVars.mySideMyFleet.style.pointerEvents = "none";
+                    _globalVars.enemySideEnemyFleet.style.pointerEvents = "none";
+                }
+                _globalVars.mySideEnemyFleet.style.pointerEvents = "auto";
+                return ships;
+            // GlobalVars.enemySideMyFleet.style.pointerEvents = "auto";
             } else {
-                console.log("Place your ships in the right way \uD83D\uDE03");
+                console.log("Place your ships in the right way");
                 return;
             }
         }
-        // Making sure that I will not destroy my own ship ;)
-        if (playing) {
-            console.log(playing, "playing");
-            _globalVars.mySideMyFleet.style.pointerEvents = "none";
-            _globalVars.enemySideEnemyFleet.style.pointerEvents = "none";
+    });
+};
+const startNewGame = function(fleet, fleetParts) {
+    const newGameBtn = document.querySelector(".new-game-btn");
+    newGameBtn.addEventListener("click", function(e) {
+        playing = false;
+        _globalVars.mySideMyFleet.style.pointerEvents = "auto";
+        _globalVars.enemySideEnemyFleet.style.pointerEvents = "auto";
+        _globalVars.mySideEnemyFleet.style.pointerEvents = "none";
+        _globalVars.enemySideMyFleet.style.pointerEvents = "none";
+        console.log("Beny");
+        console.log(_globalVars.createMyShips);
+        console.log("boomer");
+        console.log(fleet, "fleet");
+        if (fleet === _globalVars.mySideMyFleet) {
+            "";
+            const allCells = [
+                ...document.querySelectorAll("td")
+            ];
+            console.log(allCells);
+            allCells.forEach((cell)=>{
+                console.log("clean");
+                cell.querySelector(".ship")?.remove();
+                cell.querySelector(".miss")?.classList.remove("miss");
+                cell.querySelector(".miss")?.classList.remove("miss");
+                cell.querySelector(".cell-around")?.classList.remove("cell-around");
+                cell.querySelector(".cell").textContent = "";
+            });
+            // ships = [];
+            fleetParts[1].splice(0);
+            // fleetParts[2] = [];
+            // GlobalVars.bothSideShips = [];
+            console.log("ship");
+            _globalVars.createMyShips.forEach((ship)=>{
+                createShip(...ship, fleetParts);
+            });
+            console.log(fleetParts[1], "ships");
         }
+        if (fleet === _globalVars.enemySideEnemyFleet) {
+            // ships = [];
+            fleetParts[1].splice(0);
+            // fleetParts[2] = [];
+            // GlobalVars.bothSideShips = [];
+            _globalVars.createEnemyShips.forEach((ship)=>{
+                createShip(...ship, fleetParts);
+            });
+            console.log(fleetParts[1], "ships");
+        }
+        (0, _placeShipsManuallyDefault.default)(fleet);
+        _globalVars.bothSideShips.pop();
+        _globalVars.bothSideShips.pop();
+        console.log(_globalVars.bothSideShips);
+        // (fleet === GlobalVars.mySideEnemyFleet ||
+        //   fleet === GlobalVars.enemySideMyFleet) &&
+        //   gameStartControl(fleet, fleetParts);
+        console.log(fleetParts, "fleetParts");
+    // playing = true;
+    // if (playing) {
+    //   console.log(playing, "playing");
+    //   GlobalVars.mySideMyFleet.style.pointerEvents = "none";
+    //   GlobalVars.enemySideEnemyFleet.style.pointerEvents = "none";
+    // }
     });
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars":"gb5d6"}],"dx0uc":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dx0uc":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet) {
@@ -1176,7 +1249,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
 var _globalVars = require("./globalVars");
 var _gameStartControl = require("./gameStartControl");
 
-},{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./gameStartControl":"fXv0K"}],"6WpIw":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6WpIw":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
@@ -1284,7 +1357,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
             [
                 _globalVars.mySideEnemyFleet,
                 _globalVars.enemySideMyFleet
-            ].forEach((fleet)=>fleet.style.pointerEvents = "none");
+            ].forEach((fleet)=>(0, _gameStartControl.playing) && (fleet.style.pointerEvents = "none"));
         };
         const closeNotificationWindow = function() {
             _globalVars.notificatonWindow.classList.add("hidden");
@@ -1299,7 +1372,8 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
         });
     });
 var _globalVars = require("./globalVars");
+var _gameStartControl = require("./gameStartControl");
 
-},{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
+},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
 //# sourceMappingURL=index.e37f48ea.js.map

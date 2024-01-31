@@ -2,7 +2,7 @@ import * as GlobalVars from "./globalVars";
 import createShip from "./makeShips";
 import "./fleetEnvironment";
 import placeShipsManually from "./placeShipsManually";
-import { gameStartControl } from "./gameStartControl";
+import { gameStartControl, startNewGame, playing } from "./gameStartControl";
 import gameControl from "./gameControl";
 import shootingLogic from "./shootingLogic";
 
@@ -19,8 +19,9 @@ const createFleet = function (fleetParts) {
     newShipsCoords.forEach((ship) => {
       createShip(...ship, fleetParts);
     });
-  const ships = fleetParts[1];
-  console.log(ships);
+
+  let ships = fleetParts[1];
+  console.log(fleetParts[1], "ships");
 
   console.log(fleet, "fleeet");
   // const cleanShips = ships.slice().filter((ship) => ship !== undefined);
@@ -28,25 +29,28 @@ const createFleet = function (fleetParts) {
   /**************************/
   /* PLACING SHIPS MANUALLY */
   /**************************/
-
   placeShipsManually(fleet);
 
   /**************************/
   /* GAME START CONTROL */
   /**************************/
-
   gameStartControl(fleet, fleetParts);
 
   /**************************/
   /* GAME CONTROL */
   /**************************/
-
   gameControl(fleet);
+
+  /**************************/
+  /* START NEW GAME */
+  /**************************/
+  (fleet === GlobalVars.mySideMyFleet ||
+    fleet === GlobalVars.enemySideEnemyFleet) &&
+    startNewGame(fleet, fleetParts);
 
   /**************************/
   /* SHOOTING LOGIC */
   /**************************/
-
   shootingLogic(fleet, ships);
 };
 
@@ -72,38 +76,6 @@ const createFleet = function (fleetParts) {
     GlobalVars.createMyShips,
   ],
 ].forEach((container, i) => createFleet(container));
-
-// const newGameBtn = document.querySelector(".new-game-btn");
-
-// newGameBtn.addEventListener("click", function (e) {
-
-//   console.log("Beny");
-//   const allCells = [querySelectorAll("td")];
-//   console.log("clearing");
-//   allCells.forEach((cell) => {
-//     cell.innerHTML = "";
-//   });
-
-//   console.log(GlobalVars.createMyShips);
-//   console.log("boomer");
-
-//   if (fleet === GlobalVars.mySideMyFleet) {
-
-//     ships = [];
-//     GlobalVars.bothSideShips = [];
-//     console.log("ship");
-//     GlobalVars.createMyShips.forEach((ship) => {
-//       ships.push(createShip(...ship));
-//     });
-//   }
-
-//   if (fleet === GlobalVars.enemySideEnemyFleet) {
-//     GlobalVars.createEnemyShips.forEach((ship) => {
-//       ships.push(createShip(...ship));
-//     });
-//     console.log(ships);
-//   }
-// });
 
 // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
 // Now it's time to do some refactoring
@@ -134,4 +106,5 @@ const createFleet = function (fleetParts) {
 // Everything is working perfectly, there is no way you will start the game when you misplaced any of your ships, it will just not allow it! So, it's playable, but right now there is a big mess, so I need to clean it up and refactor the code :)
 // Current situation: all code in the controller and css is refactored, now the controller file contains about 670 lines of code, now it's time to divide it up to different files
 // Now I will make "New game" button which will reset everything to the initial state
-// While trying to make new game functionality I run into problems connected with the code architecture so, I decided to refactor it again and it worked! Now the controller has only 75 lines of code and also 8 different files of js nicely splitted up and connected successfully
+// While trying to make new game functionality I run into problems connected with the code architecture so, I decided to refactor it again and it worked! Now the controller has only 75 lines of code and also 8 different files of js nicely splitted up and connected successfully. So now it can be the right time finally make the new game button work as intended
+// After long hours(actually quick) of work the new game button works perfectly, it's refactor time

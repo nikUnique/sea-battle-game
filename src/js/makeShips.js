@@ -2,14 +2,19 @@ import * as GlobalVars from "./globalVars";
 
 export default createShip = function (coords, size, fleetParts) {
   const fleet = fleetParts[0];
-
+  console.log(fleet, "fleet");
   const bigCoords = coords?.map((coord) => {
     return coord.toUpperCase();
   });
 
   if (bigCoords === undefined) return;
-  const checkSpace = fleetParts[1]?.map((ship) => {
-    return ship?.coords?.some((coord) => bigCoords.includes(coord));
+  const checkSpace = fleetParts[1]?.map((ship, i) => {
+    console.log(fleetParts[1]);
+    return ship?.coords?.some((coord) => {
+      console.log(bigCoords, "bigCoord");
+      console.log(coord, "coord");
+      return bigCoords.includes(coord);
+    });
   });
 
   console.log(checkSpace);
@@ -43,9 +48,10 @@ export default createShip = function (coords, size, fleetParts) {
 
   const columnShip = [...new Set(sameLetter)];
   const rowShip = [...new Set(sameNumber)];
-
+  console.log(columnShip);
   if (columnShip.length !== 1 && rowShip.length !== 1) {
     console.log("Place your ships in the right order, man 🕺");
+
     return;
   }
 
@@ -117,8 +123,12 @@ export default createShip = function (coords, size, fleetParts) {
     ),
   ];
 
+  console.log(bigCoords, "flu");
+
   bigCoords.forEach((pos) => {
     console.log(pos);
+    console.log(fleet);
+    console.log(fleet.querySelector(`.${pos}`));
     fleet.querySelector(`.${pos}`)?.classList.add("ship-color");
     fleet
       .querySelector(`.${pos}`)
@@ -130,4 +140,6 @@ export default createShip = function (coords, size, fleetParts) {
     unavailabeCells: readyCellsAround,
   };
   fleetParts[1].push(ship);
+  console.log(fleetParts[1], "flo");
+  console.log("is it pushed!");
 };

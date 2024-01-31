@@ -1,4 +1,5 @@
 import * as GlobalVars from "./globalVars";
+import { playing } from "./gameStartControl";
 
 export default function (fleet) {
   const player0 = "Dendy";
@@ -29,7 +30,7 @@ export default function (fleet) {
     GlobalVars.notificatonWindow.classList.remove("hidden");
     GlobalVars.overlay.classList.remove("hidden");
     [GlobalVars.mySideEnemyFleet, GlobalVars.enemySideMyFleet].forEach(
-      (fleet) => (fleet.style.pointerEvents = "none")
+      (fleet) => playing && (fleet.style.pointerEvents = "none")
     );
   };
 
