@@ -660,6 +660,8 @@ var _shootingLogicDefault = parcelHelpers.interopDefault(_shootingLogic);
  // While trying to make new game functionality I run into problems connected with the code architecture so, I decided to refactor it again and it worked! Now the controller has only 75 lines of code and also 8 different files of js nicely splitted up and connected successfully. So now it can be the right time finally make the new game button work as intended
  // After long hours(actually quick) of work the new game button works perfectly, it's refactor time
  // Now all code is refactored and from all files there is only 1 if statement which isn't a guard clause because it contains guard clause itself
+ // It would be a nice idea if the first player was choosed randomly, let's implement this
+ // The first player will be chosen randomly and also some borders were added to the sea and nice animation effect was added to cells around a destroyed ship
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -681,10 +683,10 @@ parcelHelpers.export(exports, "mySideMyShips", ()=>mySideMyShips);
 parcelHelpers.export(exports, "enemySideEnemyShips", ()=>enemySideEnemyShips);
 parcelHelpers.export(exports, "mySideEnemyShips", ()=>mySideEnemyShips);
 parcelHelpers.export(exports, "enemySideMyShips", ()=>enemySideMyShips);
-const mySideMyFleet = document.querySelector(".my-side--my-float");
-const mySideEnemyFleet = document.querySelector(".my-side--enemy-float");
-const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-float");
-const enemySideMyFleet = document.querySelector(".enemy-side--my-float");
+const mySideMyFleet = document.querySelector(".my-side--my-fleet");
+const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
+const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
+const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
 const seas = document.querySelectorAll(".sea");
 const notificatonWindow = document.querySelector(".notification-window");
 const overlay = document.querySelector(".overlay");
@@ -718,26 +720,26 @@ let createMyShips = [
     // [["a9", "a10"], ["e6", "e7"].length],
     [
         [
-            "j9",
-            "j10"
+            "b3",
+            "c3",
+            "d3"
         ],
-        2
+        3
     ],
     [
         [
-            "a5",
-            "a6",
-            "a7"
+            "g4",
+            "h4"
         ],
-        3
+        2
     ],
     // [["c8", "d8", "e8"], ["J4", "I4", "h4"].length],
     [
         [
-            "c10",
-            "d10",
-            "e10",
-            "f10"
+            "c9",
+            "d9",
+            "e9",
+            "f9"
         ],
         4
     ]
@@ -756,28 +758,27 @@ let createEnemyShips = [
     // [["i7", "j7"], ["e6", "e7"].length],
     [
         [
-            "i10",
-            "h10"
+            "d4",
+            "e4",
+            "f4",
+            "g4"
         ],
-        2
+        4
     ],
-    // [["b4", "c4", "d4"], ["J4", "I4", "h4"].length],
     [
         [
-            "a8",
-            "a9",
-            "a10"
+            "d2",
+            "e2",
+            "f2"
         ],
         3
     ],
     [
         [
-            "c10",
-            "d10",
-            "e10",
-            "f10"
+            "e9",
+            "f9"
         ],
-        4
+        2
     ]
 ];
 let mySideMyShips = [];
@@ -834,7 +835,7 @@ exports.default = createShip = function(coords, size, fleetParts) {
     });
     console.log(checkSpace);
     if (checkSpace.includes(true)) {
-        console.log("In such a mood it wouldn't be surprising if you had stepped with you shoe on a dog's poop \uD83C\uDF6D");
+        console.log("In such a mood it wouldn't be surprising if you stepped with you shoe on a dog's poop \uD83C\uDF6D");
         return;
     }
     const checkSpaceAround = fleetParts[1].map((ship)=>{
@@ -902,24 +903,32 @@ exports.default = createShip = function(coords, size, fleetParts) {
         fleet.querySelector(`.${pos}`)?.classList.add("ship-color");
         fleet.querySelector(`.${pos}`)?.insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);
     });
+    console.log(sameNumber.length);
+    console.log(sameLetter.length);
     const ship = {
         coords: bigCoords,
         size: size,
-        unavailabeCells: readyCellsAround
+        unavailabeCells: readyCellsAround,
+        direction: [
+            ...new Set(sameNumber)
+        ].length > [
+            ...new Set(sameLetter)
+        ].length ? "column" : "row"
     };
     fleetParts[1].push(ship);
 };
 
 },{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iXTJE":[function(require,module,exports) {
 var _globalVars = require("./globalVars");
-const markup = _globalVars.seaFleet.map((item, i)=>`
+let markup = _globalVars.seaFleet.map((item, i)=>`
+ 
     <tr class="row-${i + 1}">
 <th>${item}</th>
- ${_globalVars.letters.map((letter)=>`<td class=" dropzone"><div class="${letter}${i + 1} cell" ></div></td>`).join("")}
+ ${_globalVars.letters.map((letter)=>`<td class="dropzone"><div class="${letter}${i + 1} cell" ></div></td>`).join("")}
 </tr>
 `).join("");
-const markupSeaHead = ` ${_globalVars.seaFleet.map((_, i)=>{
-    return i > 0 ? `<th>${_globalVars.letters[i]}</th>` : `<th></th> 
+let markupSeaHead = ` ${_globalVars.seaFleet.map((_, i)=>{
+    return i > 0 ? `<th>${_globalVars.letters[i]}</th>` : `<th class='empty-cell'></th> 
         <th>${_globalVars.letters[i]}</th>`;
 }).join("")}`;
 [
@@ -932,6 +941,31 @@ console.log(`${_globalVars.mySideMyFleet.querySelector(".F10").classList[0]}`, "
 [
     ..._globalVars.seas
 ].forEach((sea)=>sea.querySelector("tr").insertAdjacentHTML("afterbegin", markupSeaHead));
+const seas = [
+    ...document.querySelectorAll(".sea")
+];
+const selectAllThs = function(el, borderSide) {
+    seas.map((sea)=>{
+        return [
+            ...sea.querySelector(`${el}`)?.querySelectorAll("th")
+        ];
+    }).flat().filter((th)=>{
+        return th.textContent !== "";
+    }).forEach((th)=>{
+        th.style[borderSide] = "1px solid #fcc419";
+    });
+};
+selectAllThs("thead", "borderBottom");
+selectAllThs("tbody", "borderRight"); // allFleetTds = [...document.querySelectorAll("td")];
+ // const topTds = allFleetTds
+ //   .filter((td) => {
+ //     console.log(td.classList[0], "top");
+ //     return td.querySelector(".cell").classList[0].slice(1) === "1";
+ //   })
+ //   .forEach((cell) => {
+ //     cell.closest(".dropzone").style.paddingTop = "3px";
+ //   });
+ // console.log(topTds, "top");
 
 },{"./globalVars":"gb5d6"}],"3iktl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1002,8 +1036,8 @@ parcelHelpers.export(exports, "startNewGame", ()=>startNewGame);
 var _globalVars = require("./globalVars");
 var _placeShipsManually = require("./placeShipsManually");
 var _placeShipsManuallyDefault = parcelHelpers.interopDefault(_placeShipsManually);
-let playing;
-let startGameBtn;
+let playing, startGameBtn;
+let firstTurn = Math.random();
 const allowForbidClick = function(fleet, state) {
     fleet.style.pointerEvents = state;
 };
@@ -1025,6 +1059,7 @@ const gameStartControl = function(fleet, fleetParts) {
     playing = false;
     startGameBtn = document.querySelector(".start-game");
     fleet !== _globalVars.mySideMyFleet && fleet !== _globalVars.enemySideEnemyFleet && startGameBtn.addEventListener("click", function(e) {
+        fleet === _globalVars.mySideEnemyFleet && (firstTurn = Math.random());
         allowForbidClick(startGameBtn, "none");
         allowForbidClick(fleet, "none");
         const findCell = function(cell) {
@@ -1059,20 +1094,19 @@ const gameStartControl = function(fleet, fleetParts) {
             // [[findCell("cell12"), findCell("cell14")], [0, 0].length],
             [
                 [
-                    findCell("cell6"),
-                    findCell("cell7"),
-                    findCell("cell8"),
-                    findCell("cell9")
-                ],
-                4
-            ],
-            // [[findCell("cell19")], [0].length],
-            [
-                [
                     findCell("cell5"),
-                    findCell("cell10")
+                    findCell("cell6")
                 ],
                 2
+            ],
+            [
+                [
+                    findCell("cell7"),
+                    findCell("cell8"),
+                    findCell("cell9"),
+                    findCell("cell10")
+                ],
+                4
             ]
         ];
         let createMoreShips = [
@@ -1087,6 +1121,15 @@ const gameStartControl = function(fleet, fleetParts) {
             // [[findCell("cell4")], [0].length],
             [
                 [
+                    findCell("cell5"),
+                    findCell("cell6"),
+                    findCell("cell7"),
+                    findCell("cell8")
+                ],
+                4
+            ],
+            [
+                [
                     findCell("cell2"),
                     findCell("cell3"),
                     findCell("cell4")
@@ -1099,15 +1142,6 @@ const gameStartControl = function(fleet, fleetParts) {
             //   [findCell("cell12"), findCell("cell13"), findCell("cell14")],
             //   [0, 0, 0].length,
             // ],
-            [
-                [
-                    findCell("cell5"),
-                    findCell("cell6"),
-                    findCell("cell7"),
-                    findCell("cell8")
-                ],
-                4
-            ],
             [
                 [
                     findCell("cell9"),
@@ -1129,8 +1163,9 @@ const gameStartControl = function(fleet, fleetParts) {
         fleet === _globalVars.mySideEnemyFleet && _globalVars.bothSideShips.push("mySideEnemyFleet");
         fleet === _globalVars.enemySideMyFleet && _globalVars.bothSideShips.push("enemySideMyFleet");
         const flattenedBothSideShips = _globalVars.bothSideShips.flat(2);
-        flattenedBothSideShips.length === createFleetShips.length * 2 + 2 && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet") && (playing = true, console.log("Game started \uD83E\uDD70"), // Making sure that I will not destroy my own ship ;)
-        console.log(playing, "playing"), allowForbidClick(_globalVars.mySideMyFleet, "none"), allowForbidClick(_globalVars.enemySideEnemyFleet, "none"), allowForbidClick(_globalVars.mySideEnemyFleet, "auto"));
+        flattenedBothSideShips.length === createFleetShips.length * 2 + 2 && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet") && (playing = true, console.log("Game started \uD83E\uDD70"), console.log(playing, "playing"), // Making sure that I will not destroy my own ship ;)
+        allowForbidClick(_globalVars.mySideMyFleet, "none"), allowForbidClick(_globalVars.enemySideEnemyFleet, "none"));
+        _globalVars.mySideEnemyFleet && (firstTurn < 0.5 && allowForbidClick(_globalVars.mySideEnemyFleet, "auto"), firstTurn > 0.5 && allowForbidClick(_globalVars.enemySideMyFleet, "auto"));
         fleet === _globalVars.enemySideMyFleet && flattenedBothSideShips.length / 2 - 1 !== createFleetShips.length && console.log("Place your ships in the right way, \uD83D\uDC12");
     });
 };
@@ -1162,6 +1197,7 @@ const startNewGame = function(fleet, fleetParts) {
         ].forEach((cell)=>{
             cell.querySelector(".ship")?.remove();
             cell.querySelector(".miss")?.classList.remove("miss");
+            cell.removeAttribute("style");
             cell.querySelector(".cell-around")?.classList.remove("cell-around");
             cell.querySelector(".cell").textContent = "";
         }), fleetParts[1].splice(0), _globalVars.createMyShips.forEach((ship)=>{
@@ -1214,7 +1250,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 if (e.target.classList[0] === "dropzone") return fleet.querySelector(`.${e.target.querySelector("div").classList[0]}`);
                 if (e.target.classList[0] !== "dropzone") return fleet.querySelector(`.${e.target.classList[0]}`);
             };
-            !e.target.closest(".ship") && e.target.textContent === "" && (e.target.querySelector("div").classList.add("miss"), e.target.querySelector("div").insertAdjacentHTML("afterbegin", miss), e.target.closest(".enemy-side--my-float")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet(_globalVars.mySideMyFleet).classList.add("miss"), addMarkToFleet(_globalVars.mySideMyFleet).insertAdjacentHTML("afterbegin", miss)), !e.target.closest(".enemy-side--my-float")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet(_globalVars.enemySideEnemyFleet).classList.add("miss"), addMarkToFleet(_globalVars.enemySideEnemyFleet).insertAdjacentHTML("afterbegin", miss)));
+            !e.target.closest(".ship") && e.target.textContent === "" && (e.target.querySelector("div").classList.add("miss"), e.target.querySelector("div").insertAdjacentHTML("afterbegin", miss), e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet(_globalVars.mySideMyFleet).classList.add("miss"), addMarkToFleet(_globalVars.mySideMyFleet).insertAdjacentHTML("afterbegin", miss)), !e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet(_globalVars.enemySideEnemyFleet).classList.add("miss"), addMarkToFleet(_globalVars.enemySideEnemyFleet).insertAdjacentHTML("afterbegin", miss)));
             if (e.target.closest(".ship")?.textContent !== "") return;
             const injuredShipPos = ships.findIndex((ship)=>{
                 return ship?.coords?.includes(e.target.classList[0]);
@@ -1226,32 +1262,60 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             const destroyedShipCoords = ships[injuredShipPos].coords.map((_, i)=>{
                 return fleet.querySelector(`.${ships[injuredShipPos]?.coords[i]}`).nextElementSibling.classList.contains("injure");
             });
-            e.target.closest(".enemy-side--my-float")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet(_globalVars.mySideMyFleet).nextElementSibling.insertAdjacentHTML("afterbegin", injure), addMarkToFleet(_globalVars.mySideMyFleet).nextElementSibling.classList.add("injure"));
-            !e.target.closest(".enemy-side--my-float")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet(_globalVars.enemySideEnemyFleet).nextElementSibling.insertAdjacentHTML("afterbegin", injure), addMarkToFleet(_globalVars.enemySideEnemyFleet).nextElementSibling.classList.add("injure"));
+            e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet(_globalVars.mySideMyFleet).nextElementSibling.insertAdjacentHTML("afterbegin", injure), addMarkToFleet(_globalVars.mySideMyFleet).nextElementSibling.classList.add("injure"));
+            !e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet(_globalVars.enemySideEnemyFleet).nextElementSibling.insertAdjacentHTML("afterbegin", injure), addMarkToFleet(_globalVars.enemySideEnemyFleet).nextElementSibling.classList.add("injure"));
             if (destroyedShipCoords.includes(false)) return;
+            const sortedCoordNumbers = ships[injuredShipPos].coords.map((coord)=>{
+                return coord.slice(1);
+            }).sort((a, b)=>a - b);
+            const sortedCoordLetters = ships[injuredShipPos].coords.map((letter, i)=>{
+                return letter.slice(0, 1);
+            }).sort();
+            const sortedCoords = ships[injuredShipPos].coords.map((ship, i)=>{
+                return sortedCoordLetters[i] + sortedCoordNumbers[i];
+            });
+            const addBorder = function(borderSide, coord) {
+                fleet.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = "2px solid #ff6f6f";
+            };
+            sortedCoords.map((coord, i, arr)=>{
+                // Columns:
+                // 1. Add top to the first cell
+                ships[injuredShipPos].direction === "column" ? i === 0 && addBorder("borderTop", coord) : i === 0 && addBorder("borderLeft", coord);
+                // 2. Add the bottom to the last cell
+                ships[injuredShipPos].direction === "column" ? i === arr.length - 1 && addBorder("borderBottom", coord) : i === arr.length - 1 && addBorder("borderRight", coord);
+                // 3. Right and left
+                ships[injuredShipPos].direction === "column" ? addBorder("borderLeft", coord) : addBorder("borderTop", coord);
+                ships[injuredShipPos].direction === "column" ? addBorder("borderRight", coord) : addBorder("borderBottom", coord);
+            });
             const destroyedShip = ships[injuredShipPos].coords.map((_, i)=>{
                 return fleet.querySelector(`.${ships[injuredShipPos]?.coords[i]}`);
             });
             const filledAreaAroundShip = ships[injuredShipPos].unavailabeCells.filter((cell)=>{
                 // Filtering out coords on which the ship inself is placed, because unavailableCells also included them
                 return !ships[injuredShipPos].coords.includes(cell);
+            }).filter((cell)=>{
+                return fleet.querySelector(`.${cell}`)?.textContent === "";
             }).map((cell, i)=>{
-                const cellAround = fleet.querySelector(`.${cell}`);
-                // There is also can be an imaginary 11th cell when it comes to side ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
-                cellAround && (cellAround.style.fontSize = "3.9rem");
-                const surroundDestroyedShip = function(fleet, cellAround) {
-                    cellAround?.textContent === "" && fleet.querySelector(`.${cell}`)?.insertAdjacentHTML("afterbegin", miss);
-                    !cellAround?.classList.contains("miss") && cellAround?.classList.add("cell-around");
-                    cellAround && (cellAround.style.fontSize = "3.9rem");
-                };
-                const markContraryFleet = function(fleet) {
-                    const cellAroundContrarySide = fleet.querySelector(`.${cell}`);
-                    surroundDestroyedShip(fleet, cellAroundContrarySide);
-                };
-                e.target.closest(".ship").closest(".enemy-side--my-float") && markContraryFleet(_globalVars.mySideMyFleet);
-                e.target.closest(".ship").closest(".my-side--enemy-float") && markContraryFleet(_globalVars.enemySideEnemyFleet);
-                // If the cell is empty then a new mark will be inserted, but if there is something inside then nothing will happen
-                surroundDestroyedShip(fleet, cellAround);
+                setTimeout(function() {
+                    const cellAround = fleet.querySelector(`.${cell}`);
+                    // There is also can be an imaginary 11th cell when it comes to side ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
+                    cellAround && (cellAround.style.fontSize = "3.2rem");
+                    const surroundDestroyedShip = function(fleet, cellAround) {
+                        console.log(new Date());
+                        cellAround?.textContent === "" && fleet.querySelector(`.${cell}`)?.insertAdjacentHTML("afterbegin", miss);
+                        !cellAround?.classList.contains("miss") && cellAround?.classList.add("cell-around");
+                        cellAround && (cellAround.style.fontSize = "3.2rem");
+                        cellAround.classList.contains("injure") && (cellAround.style.fontSize = "4rem");
+                    };
+                    const markContraryFleet = function(fleet) {
+                        const cellAroundContrarySide = fleet.querySelector(`.${cell}`);
+                        surroundDestroyedShip(fleet, cellAroundContrarySide);
+                    };
+                    e.target.closest(".ship").closest(".enemy-side--my-fleet") && markContraryFleet(_globalVars.mySideMyFleet);
+                    e.target.closest(".ship").closest(".my-side--enemy-fleet") && markContraryFleet(_globalVars.enemySideEnemyFleet);
+                    // If the cell is empty then a new mark will be inserted, but if there is something inside then nothing will happen
+                    surroundDestroyedShip(fleet, cellAround);
+                }, 100 * i);
             });
             /**************************/ /* CONTROLLING THE END OF THE GAME */ /**************************/ (0, _showEndResultsDefault.default)(fleet);
         });
@@ -1281,6 +1345,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
         // Show notification window
         const openNotificationWindow = function() {
             const addNotification = function(player) {
+                resultsMessage.textContent !== "" && (resultsMessage.textContent = "");
                 resultsMessage.insertAdjacentHTML("afterbegin", `${player} won the game`);
             };
             fleet === _globalVars.mySideEnemyFleet && addNotification(player0);

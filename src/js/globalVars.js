@@ -1,7 +1,7 @@
-const mySideMyFleet = document.querySelector(".my-side--my-float");
-const mySideEnemyFleet = document.querySelector(".my-side--enemy-float");
-const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-float");
-const enemySideMyFleet = document.querySelector(".enemy-side--my-float");
+const mySideMyFleet = document.querySelector(".my-side--my-fleet");
+const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
+const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
+const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
 const seas = document.querySelectorAll(".sea");
 const notificatonWindow = document.querySelector(".notification-window");
 const overlay = document.querySelector(".overlay");
@@ -19,11 +19,11 @@ let createMyShips = [
 
   // [["i7", "j7"], ["e6", "e7"].length],
   // [["a9", "a10"], ["e6", "e7"].length],
-  [["j9", "j10"], ["e6", "e7"].length],
-  [["a5", "a6", "a7"], ["J4", "I4", "h4"].length],
+  [["b3", "c3", "d3"], ["J4", "I4", "h4"].length],
+  [["g4", "h4"], ["e6", "e7"].length],
 
   // [["c8", "d8", "e8"], ["J4", "I4", "h4"].length],
-  [["c10", "d10", "e10", "f10"], ["J4", "I4", "h4", "e4"].length],
+  [["c9", "d9", "e9", "f9"], ["J4", "I4", "h4", "e4"].length],
 ];
 let createEnemyShips = [
   [["a1"], ["d10"].length],
@@ -33,10 +33,10 @@ let createEnemyShips = [
 
   // [["i5", "j5"], ["e6", "e7"].length],
   // [["i7", "j7"], ["e6", "e7"].length],
-  [["i10", "h10"], ["e6", "e7"].length],
+  [["d4", "e4", "f4", "g4"], ["J4", "I4", "h4", "e4"].length],
+  [["d2", "e2", "f2"], ["J4", "I4", "h4"].length],
+  [["e9", "f9"], ["e6", "e7"].length],
   // [["b4", "c4", "d4"], ["J4", "I4", "h4"].length],
-  [["a8", "a9", "a10"], ["J4", "I4", "h4"].length],
-  [["c10", "d10", "e10", "f10"], ["J4", "I4", "h4", "e4"].length],
 ];
 
 let mySideMyShips = [];

@@ -21,6 +21,7 @@ export default function (fleet) {
   // Show notification window
   const openNotificationWindow = function () {
     const addNotification = function (player) {
+      resultsMessage.textContent !== "" && (resultsMessage.textContent = "");
       resultsMessage.insertAdjacentHTML("afterbegin", `${player} won the game`);
     };
 

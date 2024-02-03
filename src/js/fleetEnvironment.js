@@ -1,13 +1,14 @@
 import * as GlobalVars from "./globalVars";
-const markup = GlobalVars.seaFleet
+let markup = GlobalVars.seaFleet
   .map(
     (item, i) => `
+ 
     <tr class="row-${i + 1}">
 <th>${item}</th>
  ${GlobalVars.letters
    .map(
      (letter) =>
-       `<td class=" dropzone"><div class="${letter}${i + 1} cell" ></div></td>`
+       `<td class="dropzone"><div class="${letter}${i + 1} cell" ></div></td>`
    )
    .join("")}
 </tr>
@@ -15,13 +16,14 @@ const markup = GlobalVars.seaFleet
   )
   .join("");
 
-const markupSeaHead = ` ${GlobalVars.seaFleet
+let markupSeaHead = ` ${GlobalVars.seaFleet
   .map((_, i) => {
     return i > 0
       ? `<th>${GlobalVars.letters[i]}</th>`
-      : `<th></th> 
+      : `<th class='empty-cell'></th> 
         <th>${GlobalVars.letters[i]}</th>`;
   })
+
   .join("")}`;
 
 [
@@ -39,3 +41,34 @@ console.log(
 [...GlobalVars.seas].forEach((sea) =>
   sea.querySelector("tr").insertAdjacentHTML("afterbegin", markupSeaHead)
 );
+
+const seas = [...document.querySelectorAll(".sea")];
+
+const selectAllThs = function (el, borderSide) {
+  seas
+    .map((sea) => {
+      return [...sea.querySelector(`${el}`)?.querySelectorAll("th")];
+    })
+    .flat()
+    .filter((th) => {
+      return th.textContent !== "";
+    })
+    .forEach((th) => {
+      th.style[borderSide] = "1px solid #fcc419";
+    });
+};
+
+selectAllThs("thead", "borderBottom");
+selectAllThs("tbody", "borderRight");
+
+// allFleetTds = [...document.querySelectorAll("td")];
+// const topTds = allFleetTds
+//   .filter((td) => {
+//     console.log(td.classList[0], "top");
+//     return td.querySelector(".cell").classList[0].slice(1) === "1";
+//   })
+//   .forEach((cell) => {
+//     cell.closest(".dropzone").style.paddingTop = "3px";
+//   });
+
+// console.log(topTds, "top");

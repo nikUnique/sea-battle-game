@@ -107,3 +107,5 @@ const createFleet = function (fleetParts) {
 // While trying to make new game functionality I run into problems connected with the code architecture so, I decided to refactor it again and it worked! Now the controller has only 75 lines of code and also 8 different files of js nicely splitted up and connected successfully. So now it can be the right time finally make the new game button work as intended
 // After long hours(actually quick) of work the new game button works perfectly, it's refactor time
 // Now all code is refactored and from all files there is only 1 if statement which isn't a guard clause because it contains guard clause itself
+// It would be a nice idea if the first player was choosed randomly, let's implement this
+// The first player will be chosen randomly and also some borders were added to the sea and nice animation effect was added to cells around a destroyed ship

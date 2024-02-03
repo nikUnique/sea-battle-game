@@ -1,8 +1,9 @@
 import * as GlobalVars from "./globalVars";
 import placeShipsManually from "./placeShipsManually";
 
-export let playing;
-let startGameBtn;
+let playing, startGameBtn;
+export { playing };
+let firstTurn = Math.random();
 
 const allowForbidClick = function (fleet, state) {
   fleet.style.pointerEvents = state;
@@ -32,6 +33,7 @@ export const gameStartControl = function (fleet, fleetParts) {
   fleet !== GlobalVars.mySideMyFleet &&
     fleet !== GlobalVars.enemySideEnemyFleet &&
     startGameBtn.addEventListener("click", function (e) {
+      fleet === GlobalVars.mySideEnemyFleet && (firstTurn = Math.random());
       allowForbidClick(startGameBtn, "none");
       allowForbidClick(fleet, "none");
 
@@ -63,19 +65,18 @@ export const gameStartControl = function (fleet, fleetParts) {
           [0, 0, 0].length,
         ],
         // [[findCell("cell12"), findCell("cell14")], [0, 0].length],
-
+        [[findCell("cell5"), findCell("cell6")], [0, 0].length],
         [
           [
-            findCell("cell6"),
             findCell("cell7"),
             findCell("cell8"),
             findCell("cell9"),
+            findCell("cell10"),
           ],
 
           [0, 0, 0, 0].length,
         ],
         // [[findCell("cell19")], [0].length],
-        [[findCell("cell5"), findCell("cell10")], [0, 0].length],
       ];
 
       let createMoreShips = [
@@ -83,6 +84,16 @@ export const gameStartControl = function (fleet, fleetParts) {
         // [[findCell("cell2")], [0].length],
         // [[findCell("cell3")], [0].length],
         // [[findCell("cell4")], [0].length],
+        [
+          [
+            findCell("cell5"),
+            findCell("cell6"),
+            findCell("cell7"),
+            findCell("cell8"),
+          ],
+
+          [0, 0, 0, 0].length,
+        ],
         [
           [findCell("cell2"), findCell("cell3"), findCell("cell4")],
           [0, 0, 0].length,
@@ -95,16 +106,7 @@ export const gameStartControl = function (fleet, fleetParts) {
 
         //   [0, 0, 0].length,
         // ],
-        [
-          [
-            findCell("cell5"),
-            findCell("cell6"),
-            findCell("cell7"),
-            findCell("cell8"),
-          ],
 
-          [0, 0, 0, 0].length,
-        ],
         [[findCell("cell9"), findCell("cell10")], [0, 0].length],
       ];
 
@@ -143,12 +145,16 @@ export const gameStartControl = function (fleet, fleetParts) {
         flattenedBothSideShips.includes("enemySideMyFleet") &&
         ((playing = true),
         console.log("Game started 🥰"),
-        // Making sure that I will not destroy my own ship ;)
-
         console.log(playing, "playing"),
+        // Making sure that I will not destroy my own ship ;)
         allowForbidClick(GlobalVars.mySideMyFleet, "none"),
-        allowForbidClick(GlobalVars.enemySideEnemyFleet, "none"),
-        allowForbidClick(GlobalVars.mySideEnemyFleet, "auto"));
+        allowForbidClick(GlobalVars.enemySideEnemyFleet, "none"));
+
+      GlobalVars.mySideEnemyFleet &&
+        (firstTurn < 0.5 &&
+          allowForbidClick(GlobalVars.mySideEnemyFleet, "auto"),
+        firstTurn > 0.5 &&
+          allowForbidClick(GlobalVars.enemySideMyFleet, "auto"));
 
       fleet === GlobalVars.enemySideMyFleet &&
         flattenedBothSideShips.length / 2 - 1 !== createFleetShips.length &&
@@ -173,6 +179,7 @@ export const startNewGame = function (fleet, fleetParts) {
       ([...document.querySelectorAll("td")].forEach((cell) => {
         cell.querySelector(".ship")?.remove();
         cell.querySelector(".miss")?.classList.remove("miss");
+        cell.removeAttribute("style");
 
         cell.querySelector(".cell-around")?.classList.remove("cell-around");
         cell.querySelector(".cell").textContent = "";

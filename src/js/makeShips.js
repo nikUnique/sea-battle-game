@@ -18,7 +18,7 @@ export default createShip = function (coords, size, fleetParts) {
 
   if (checkSpace.includes(true)) {
     console.log(
-      "In such a mood it wouldn't be surprising if you had stepped with you shoe on a dog's poop 🍭"
+      "In such a mood it wouldn't be surprising if you stepped with you shoe on a dog's poop 🍭"
     );
     return;
   }
@@ -131,10 +131,16 @@ export default createShip = function (coords, size, fleetParts) {
       .querySelector(`.${pos}`)
       ?.insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);
   });
+  console.log(sameNumber.length);
+  console.log(sameLetter.length);
   const ship = {
     coords: bigCoords,
     size: size,
     unavailabeCells: readyCellsAround,
+    direction:
+      [...new Set(sameNumber)].length > [...new Set(sameLetter)].length
+        ? "column"
+        : "row",
   };
   fleetParts[1].push(ship);
 };
