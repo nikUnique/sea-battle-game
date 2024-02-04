@@ -3,6 +3,7 @@ import * as GlobalVars from "./globalVars";
 export default createShip = function (coords, size, fleetParts) {
   const fleet = fleetParts[0];
   const ships = fleetParts[1];
+  const letters = GlobalVars.letters;
   const bigCoords = coords?.map((coord) => {
     return coord.toUpperCase();
   });
@@ -58,18 +59,14 @@ export default createShip = function (coords, size, fleetParts) {
       const coordSlice01 = coord.slice(0, 1);
       const coordSlice1 = coord.slice(1);
 
-      const letterAround = GlobalVars.letters.indexOf(coordSlice01);
+      const letterAround = letters.indexOf(coordSlice01);
 
       if (
         coords.length > 1 &&
-        !coords.includes(
-          GlobalVars.letters[letterAround] + (coordSlice1 - 1)
-        ) &&
-        !coords.includes(
-          GlobalVars.letters[letterAround] + (+coordSlice1 + 1)
-        ) &&
-        !coords.includes(GlobalVars.letters[letterAround - 1] + coordSlice1) &&
-        !coords.includes(GlobalVars.letters[letterAround + 1] + coordSlice1)
+        !coords.includes(letters[letterAround] + (coordSlice1 - 1)) &&
+        !coords.includes(letters[letterAround] + (+coordSlice1 + 1)) &&
+        !coords.includes(letters[letterAround - 1] + coordSlice1) &&
+        !coords.includes(letters[letterAround + 1] + coordSlice1)
       ) {
         return true;
       }
@@ -85,19 +82,17 @@ export default createShip = function (coords, size, fleetParts) {
     fleet.querySelector(`.${coord}`)?.classList.add("ship");
     const coordSlice01 = coord.slice(0, 1);
     const coordSlice1 = coord.slice(1);
-    const letterAround = GlobalVars.letters.indexOf(coordSlice01);
+    const letterAround = letters.indexOf(coordSlice01);
 
     const previousCell = coordSlice01 + (+coordSlice1 - 1);
     const nextCell = coordSlice01 + (+coordSlice1 + 1);
 
-    const rightCell = GlobalVars.letters[letterAround + 1] + coordSlice1;
+    const rightCell = letters[letterAround + 1] + coordSlice1;
 
-    const leftCell = GlobalVars.letters[letterAround - 1] + coordSlice1;
+    const leftCell = letters[letterAround - 1] + coordSlice1;
 
     const diagonalCells = function (number1, number2) {
-      return (
-        GlobalVars.letters[letterAround + number1] + (+coordSlice1 + number2)
-      );
+      return letters[letterAround + number1] + (+coordSlice1 + number2);
     };
 
     const rightTopCell = diagonalCells(1, -1);
@@ -114,14 +109,16 @@ export default createShip = function (coords, size, fleetParts) {
         .replace(",", "")
         .split(",")
         .map((cell) => cell.trim())
-        .filter((cell) => GlobalVars.letters.includes(cell.slice(0, 1)))
+        .filter((cell) => letters.includes(cell.slice(0, 1)))
     ),
   ];
 
   console.log(bigCoords, "flu");
 
   bigCoords.forEach((pos) => {
-    fleet.querySelector(`.${pos}`)?.classList.add("ship-color");
+    const cellEl = fleet.querySelector(`.${pos}`);
+    cellEl?.classList.add("ship-color");
+    cellEl && (cellEl.textContent = size);
     fleet
       .querySelector(`.${pos}`)
       ?.insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);

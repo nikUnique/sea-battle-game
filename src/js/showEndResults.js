@@ -1,4 +1,10 @@
-import * as GlobalVars from "./globalVars";
+import {
+  mySideEnemyFleet,
+  enemySideMyFleet,
+  notificatonWindow,
+  overlay,
+  btnCloseNotificationWindow,
+} from "./globalVars";
 import { playing } from "./gameStartControl";
 
 export default function (fleet) {
@@ -25,35 +31,32 @@ export default function (fleet) {
       resultsMessage.insertAdjacentHTML("afterbegin", `${player} won the game`);
     };
 
-    fleet === GlobalVars.mySideEnemyFleet && addNotification(player0);
+    fleet === mySideEnemyFleet && addNotification(player0);
 
-    fleet !== GlobalVars.mySideEnemyFleet && addNotification(player1);
+    fleet !== mySideEnemyFleet && addNotification(player1);
 
-    GlobalVars.notificatonWindow.classList.remove("hidden");
-    GlobalVars.overlay.classList.remove("hidden");
-    [GlobalVars.mySideEnemyFleet, GlobalVars.enemySideMyFleet].forEach(
+    notificatonWindow.classList.remove("hidden");
+    overlay.classList.remove("hidden");
+    [mySideEnemyFleet, enemySideMyFleet].forEach(
       (fleet) => playing && (fleet.style.pointerEvents = "none")
     );
   };
 
   const closeNotificationWindow = function () {
-    GlobalVars.notificatonWindow.classList.add("hidden");
-    GlobalVars.overlay.classList.add("hidden");
+    notificatonWindow.classList.add("hidden");
+    overlay.classList.add("hidden");
   };
 
   areAllShipsInjured && openNotificationWindow();
 
-  GlobalVars.btnCloseNotificationWindow.addEventListener(
-    "click",
-    closeNotificationWindow
-  );
-  GlobalVars.overlay.addEventListener("click", closeNotificationWindow);
+  btnCloseNotificationWindow.addEventListener("click", closeNotificationWindow);
+  overlay.addEventListener("click", closeNotificationWindow);
 
   document.addEventListener("keydown", function (e) {
     // console.log(e.key);
 
     e.key === "Escape" &&
-      !GlobalVars.notificatonWindow.classList.contains("hidden") &&
+      !notificatonWindow.classList.contains("hidden") &&
       closeNotificationWindow();
   });
 }

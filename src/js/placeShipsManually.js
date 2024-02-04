@@ -26,7 +26,7 @@ export default function (fleet) {
 
   fleet.addEventListener("dragend", function (e) {
     console.log("DRAGEND", e.target);
-    fleet.querySelector(`.${dragged.classList[dragged.classList.length - 1]}`);
+    fleet.querySelector(`.${dragged?.classList[dragged.classList.length - 1]}`);
   });
 
   ["dragover", "dragenter", "dragleave", "drop"].forEach((ev) => {

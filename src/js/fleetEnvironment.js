@@ -1,13 +1,23 @@
-import * as GlobalVars from "./globalVars";
-let markup = GlobalVars.seaFleet
+import {
+  seaFleet,
+  letters,
+  seaFleet,
+  mySideMyFleet,
+  mySideEnemyFleet,
+  enemySideEnemyFleet,
+  enemySideMyFleet,
+  seas,
+} from "./globalVars";
+
+let markup = seaFleet
   .map(
     (item, i) => `
      <tr class="row-${i + 1}">
 <th>${item}</th>
- ${GlobalVars.letters
+ ${letters
    .map(
      (letter) =>
-       `<td class="dropzone"><div class="${letter}${i + 1} cell" ></div></td>`
+       `<td class="dropzone"><div class="${letter}${i + 1} cell"></div></td>`
    )
    .join("")}
 </tr>
@@ -15,31 +25,29 @@ let markup = GlobalVars.seaFleet
   )
   .join("");
 
-let markupSeaHead = ` ${GlobalVars.seaFleet
+let markupSeaHead = ` ${seaFleet
   .map((_, i) => {
     return i > 0
-      ? `<th>${GlobalVars.letters[i]}</th>`
+      ? `<th>${letters[i]}</th>`
       : `<th class='empty-cell'></th> 
-        <th>${GlobalVars.letters[i]}</th>`;
+        <th>${letters[i]}</th>`;
   })
 
   .join("")}`;
 
 [
-  GlobalVars.mySideMyFleet,
-  GlobalVars.mySideEnemyFleet,
-  GlobalVars.enemySideEnemyFleet,
-  GlobalVars.enemySideMyFleet,
+  mySideMyFleet,
+  mySideEnemyFleet,
+  enemySideEnemyFleet,
+  enemySideMyFleet,
 ].forEach((container) => container.insertAdjacentHTML("afterbegin", markup));
 
-[...GlobalVars.seas].forEach((sea) =>
+[...seas].forEach((sea) =>
   sea.querySelector("tr").insertAdjacentHTML("afterbegin", markupSeaHead)
 );
 
-const seas = [...document.querySelectorAll(".sea")];
-
 const selectAllThs = function (el, borderSide) {
-  seas
+  const seas = [...document.querySelectorAll(".sea")]
     .map((sea) => {
       return [...sea.querySelector(`${el}`)?.querySelectorAll("th")];
     })

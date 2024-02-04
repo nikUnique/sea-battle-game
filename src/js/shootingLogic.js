@@ -1,4 +1,8 @@
-import * as GlobalVars from "./globalVars";
+import {
+  mySideMyFleet,
+  enemySideEnemyFleet,
+  enemySideMyFleet,
+} from "./globalVars";
 import showEndResults from "./showEndResults";
 import { playing } from "./gameStartControl";
 import { buildShipBorder } from "./buildShipBorder";
@@ -32,16 +36,13 @@ export default function (fleet, ships) {
       e.target
         .closest(".enemy-side--my-fleet")
         ?.querySelector(`.${e.target.classList[0]}`) &&
-        (addMarkToFleet(GlobalVars.mySideMyFleet).classList.add("miss"),
-        addMarkToFleet(GlobalVars.mySideMyFleet).insertAdjacentHTML(
-          "afterbegin",
-          miss
-        )),
+        (addMarkToFleet(mySideMyFleet).classList.add("miss"),
+        addMarkToFleet(mySideMyFleet).insertAdjacentHTML("afterbegin", miss)),
         !e.target
           .closest(".enemy-side--my-fleet")
           ?.querySelector(`.${e.target.classList[0]}`) &&
-          (addMarkToFleet(GlobalVars.enemySideEnemyFleet).classList.add("miss"),
-          addMarkToFleet(GlobalVars.enemySideEnemyFleet).insertAdjacentHTML(
+          (addMarkToFleet(enemySideEnemyFleet).classList.add("miss"),
+          addMarkToFleet(enemySideEnemyFleet).insertAdjacentHTML(
             "afterbegin",
             miss
           ));
@@ -70,22 +71,21 @@ export default function (fleet, ships) {
     e.target
       .closest(".enemy-side--my-fleet")
       ?.querySelector(`.${e.target.classList[0]}`) &&
-      (addMarkToFleet(
-        GlobalVars.mySideMyFleet
-      ).nextElementSibling.insertAdjacentHTML("afterbegin", injure),
-      addMarkToFleet(GlobalVars.mySideMyFleet).nextElementSibling.classList.add(
-        "injure"
-      ));
+      (addMarkToFleet(mySideMyFleet).nextElementSibling.insertAdjacentHTML(
+        "afterbegin",
+        injure
+      ),
+      addMarkToFleet(mySideMyFleet).nextElementSibling.classList.add("injure"));
 
     !e.target
       .closest(".enemy-side--my-fleet")
       ?.querySelector(`.${e.target.classList[0]}`) &&
       (addMarkToFleet(
-        GlobalVars.enemySideEnemyFleet
+        enemySideEnemyFleet
       ).nextElementSibling.insertAdjacentHTML("afterbegin", injure),
-      addMarkToFleet(
-        GlobalVars.enemySideEnemyFleet
-      ).nextElementSibling.classList.add("injure"));
+      addMarkToFleet(enemySideEnemyFleet).nextElementSibling.classList.add(
+        "injure"
+      ));
 
     if (destroyedShipCoords.includes(false)) return;
 
@@ -98,14 +98,11 @@ export default function (fleet, ships) {
 
       selectTd(fleet);
       selectTd(
-        fleet === GlobalVars.enemySideMyFleet
-          ? GlobalVars.mySideMyFleet
-          : GlobalVars.enemySideEnemyFleet
+        fleet === enemySideMyFleet ? mySideMyFleet : enemySideEnemyFleet
       );
     };
 
     ships[injuredShipPos].coords.map((coord, i, arr) => {
-      console.log(ships[injuredShipPos]);
       buildShipBorder([ships[injuredShipPos], coord, i, arr, addBorder]);
     });
 
@@ -122,10 +119,10 @@ export default function (fleet, ships) {
         return fleet.querySelector(`.${cell}`)?.textContent === "";
       })
 
-      .map((cell, i) => {
+      .map((cell, i, arr) => {
         console.log(new Date());
         const cellAround = fleet.querySelector(`.${cell}`);
-
+        console.log(cellAround, "cellAround");
         // There is also can be an imaginary 11th cell when it comes to side ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
         cellAround && (cellAround.style.fontSize = "3.2rem");
 
@@ -140,7 +137,7 @@ export default function (fleet, ships) {
             cellAround?.classList.add("cell-around");
           cellAround && (cellAround.style.fontSize = "3.2rem");
           cellAround.classList.contains("injure") &&
-            (cellAround.style.fontSize = "4rem");
+            (cellAround.style.fontSize = "3.9rem");
           cellAround.style.visibility = "hidden";
           setTimeout(function () {
             cellAround.style.visibility = "visible";
@@ -154,10 +151,10 @@ export default function (fleet, ships) {
         };
 
         e.target.closest(".ship").closest(".enemy-side--my-fleet") &&
-          markContraryFleet(GlobalVars.mySideMyFleet);
+          markContraryFleet(mySideMyFleet);
 
         e.target.closest(".ship").closest(".my-side--enemy-fleet") &&
-          markContraryFleet(GlobalVars.enemySideEnemyFleet);
+          markContraryFleet(enemySideEnemyFleet);
 
         // If the cell is empty then a new mark will be inserted, but if there is something inside then nothing will happen
 

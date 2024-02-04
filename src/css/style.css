@@ -6,20 +6,11 @@
 
 - Font weights
 Default: 400
-Medium: 500
-Semi-bold: 600
-Bold: 700
+
 
 - Line heights
 Default: 1
-Small: 1.05
-Medium: 1.2
-Paragraph default: 1.6
-Large: 1.8
 
-- Letter spacing
--0.5px
-0.75px
 
 --- 02 COLORS
 
@@ -87,8 +78,8 @@ body {
 table {
   margin: 0 auto;
   border-collapse: collapse;
-  overflow: hidden;
-  transition: all 2s ease-in;
+
+  transition: all 1s ease-in;
   background-color: #c5f6fa;
 }
 
@@ -99,35 +90,18 @@ th {
   font-size: 1.8rem;
   text-align: center;
   background-color: #e3fafc;
-  overflow: hidden;
 }
-
-.row-10 th {
-  border-bottom: 2px solid #fcc419;
-  border-right: none;
-}
-
-/* .empty-cell {
-  border-bottom: 1px solid #fcc419;
-} */
 
 .sea {
   border: 2px solid #fcc419;
 }
-
-.in-between-border {
-  height: 5px;
-}
-
-/* tbody tr:first-child td {
-  border-top: 3px solid #e3fafc;
-} */
 
 td {
   font-size: 4rem;
 
   height: 4rem;
   width: 4rem;
+  user-select: none;
 }
 
 td:hover {
@@ -139,21 +113,12 @@ tbody th {
   background-color: #087f5b;
   color: #fff;
   cursor: auto;
-
-  /* border: 2px solid orange; */
 }
-
-/* tbody th {
-  border-right: 3px solid #c5f6fa;
-}
-
-thead {
-  border-bottom: 3px solid #c5f6fa;
-} */
 
 th {
   cursor: "auto";
   user-select: none;
+  overflow: hidden;
 }
 
 .grid {
@@ -172,15 +137,13 @@ th {
   height: 100%;
 
   z-index: 1000;
+  user-select: none;
+  color: #654e0a;
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-/* .cell:first-child {
-  z-index: -1000;
-}
-
-.cell:nth-child(2) {
-  z-index: 1000;
-} */
 
 .ship-color {
   background-color: #fcc419;
@@ -202,6 +165,7 @@ th {
 
 .cell-around {
   color: #99e9f2;
+  border-top: none;
 }
 
 .my-side--enemy-fleet,
@@ -230,20 +194,11 @@ th {
 }
 
 .dropzone {
-  border-top-width: 1px;
-  border-bottom-width: 1px;
-  border-left-width: 1px;
-  border-right-width: 1px;
-  border-top-color: white;
-  border-bottom-color: white;
-  border-left-color: white;
-  border-right-color: white;
-  border-top-style: solid;
-  border-bottom-style: solid;
-  border-left-style: solid;
-  border-right-style: solid;
+  border: 1px solid white;
+}
 
-  /* border: 1px solid white; */
+.dropzone .ship.injure {
+  font-size: 3.9rem !important;
 }
 
 .dragover {

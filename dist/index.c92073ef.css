@@ -25,8 +25,7 @@ table {
   border-collapse: collapse;
   background-color: #c5f6fa;
   margin: 0 auto;
-  transition: all 2s ease-in;
-  overflow: hidden;
+  transition: all 1s ease-in;
 }
 
 td, th {
@@ -35,23 +34,15 @@ td, th {
   width: 4rem;
   height: 4rem;
   font-size: 1.8rem;
-  overflow: hidden;
-}
-
-.row-10 th {
-  border-bottom: 2px solid #fcc419;
-  border-right: none;
 }
 
 .sea {
   border: 2px solid #fcc419;
 }
 
-.in-between-border {
-  height: 5px;
-}
-
 td {
+  -webkit-user-select: none;
+  user-select: none;
   width: 4rem;
   height: 4rem;
   font-size: 4rem;
@@ -71,6 +62,7 @@ th {
   cursor: "auto";
   -webkit-user-select: none;
   user-select: none;
+  overflow: hidden;
 }
 
 .grid {
@@ -85,8 +77,15 @@ th {
 
 .ship {
   z-index: 1000;
+  -webkit-user-select: none;
+  user-select: none;
+  color: #654e0a;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
+  font-size: 3rem;
+  display: flex;
 }
 
 .ship-color {
@@ -109,6 +108,7 @@ th {
 
 .cell-around {
   color: #99e9f2;
+  border-top: none;
 }
 
 .my-side--enemy-fleet, .enemy-side--my-fleet {
@@ -133,6 +133,10 @@ th {
 
 .dropzone {
   border: 1px solid #fff;
+}
+
+.dropzone .ship.injure {
+  font-size: 3.9rem !important;
 }
 
 .dragover {

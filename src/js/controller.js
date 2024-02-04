@@ -1,4 +1,15 @@
-import * as GlobalVars from "./globalVars";
+import {
+  mySideMyFleet,
+  mySideEnemyFleet,
+  enemySideEnemyFleet,
+  enemySideMyFleet,
+  createMyShips,
+  createEnemyShips,
+  mySideMyShips,
+  mySideEnemyShips,
+  enemySideEnemyShips,
+  enemySideMyShips,
+} from "./globalVars";
 import createShip from "./makeShips";
 import "./fleetEnvironment";
 import placeShipsManually from "./placeShipsManually";
@@ -13,8 +24,8 @@ const createFleet = function (fleetParts) {
   const fleet = fleetParts[0];
   const newShipsCoords = fleetParts[2];
 
-  fleet !== GlobalVars.mySideEnemyFleet &&
-    fleet !== GlobalVars.enemySideMyFleet &&
+  fleet !== mySideEnemyFleet &&
+    fleet !== enemySideMyFleet &&
     newShipsCoords.forEach((ship) => {
       createShip(...ship, fleetParts);
     });
@@ -41,8 +52,7 @@ const createFleet = function (fleetParts) {
   /**************************/
   /* START NEW GAME */
   /**************************/
-  (fleet === GlobalVars.mySideMyFleet ||
-    fleet === GlobalVars.enemySideEnemyFleet) &&
+  (fleet === mySideMyFleet || fleet === enemySideEnemyFleet) &&
     startNewGame(fleet, fleetParts);
 
   /**************************/
@@ -52,26 +62,10 @@ const createFleet = function (fleetParts) {
 };
 
 [
-  [
-    GlobalVars.mySideMyFleet,
-    GlobalVars.mySideMyShips,
-    GlobalVars.createMyShips,
-  ],
-  [
-    GlobalVars.mySideEnemyFleet,
-    GlobalVars.mySideEnemyShips,
-    GlobalVars.createEnemyShips,
-  ],
-  [
-    GlobalVars.enemySideEnemyFleet,
-    GlobalVars.enemySideEnemyShips,
-    GlobalVars.createEnemyShips,
-  ],
-  [
-    GlobalVars.enemySideMyFleet,
-    GlobalVars.enemySideMyShips,
-    GlobalVars.createMyShips,
-  ],
+  [mySideMyFleet, mySideMyShips, createMyShips],
+  [mySideEnemyFleet, mySideEnemyShips, createEnemyShips],
+  [enemySideEnemyFleet, enemySideEnemyShips, createEnemyShips],
+  [enemySideMyFleet, enemySideMyShips, createMyShips],
 ].forEach((container, i) => createFleet(container));
 
 // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
