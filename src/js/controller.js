@@ -22,7 +22,6 @@ const createFleet = function (fleetParts) {
   let ships = fleetParts[1];
   console.log(fleetParts[1], "ships");
   console.log(fleet, "fleet");
-  // const cleanShips = ships.slice().filter((ship) => ship !== undefined);
 
   /**************************/
   /* PLACING SHIPS MANUALLY */
@@ -109,3 +108,6 @@ const createFleet = function (fleetParts) {
 // Now all code is refactored and from all files there is only 1 if statement which isn't a guard clause because it contains guard clause itself
 // It would be a nice idea if the first player was choosed randomly, let's implement this
 // The first player will be chosen randomly and also some borders were added to the sea and nice animation effect was added to cells around a destroyed ship
+// Now I need the ships on all sides to look the same while playing
+// Try to refactor all big logical operators with helper function
+// All big groupings with logical operator are replaced with helper functions(which contain statements) and ternary operators

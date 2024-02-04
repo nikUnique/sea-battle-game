@@ -2,19 +2,17 @@ import * as GlobalVars from "./globalVars";
 
 export default createShip = function (coords, size, fleetParts) {
   const fleet = fleetParts[0];
+  const ships = fleetParts[1];
   const bigCoords = coords?.map((coord) => {
     return coord.toUpperCase();
   });
 
   if (bigCoords === undefined) return;
   const checkSpace = fleetParts[1]?.map((ship, i) => {
-    console.log(fleetParts[1]);
     return ship?.coords?.some((coord) => {
       return bigCoords.includes(coord);
     });
   });
-
-  console.log(checkSpace);
 
   if (checkSpace.includes(true)) {
     console.log(
@@ -123,16 +121,12 @@ export default createShip = function (coords, size, fleetParts) {
   console.log(bigCoords, "flu");
 
   bigCoords.forEach((pos) => {
-    console.log(pos);
-    console.log(fleet);
-    console.log(fleet.querySelector(`.${pos}`));
     fleet.querySelector(`.${pos}`)?.classList.add("ship-color");
     fleet
       .querySelector(`.${pos}`)
       ?.insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);
   });
-  console.log(sameNumber.length);
-  console.log(sameLetter.length);
+
   const ship = {
     coords: bigCoords,
     size: size,
@@ -142,5 +136,5 @@ export default createShip = function (coords, size, fleetParts) {
         ? "column"
         : "row",
   };
-  fleetParts[1].push(ship);
+  ships.push(ship);
 };

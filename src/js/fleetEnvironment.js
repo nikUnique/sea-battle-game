@@ -2,8 +2,7 @@ import * as GlobalVars from "./globalVars";
 let markup = GlobalVars.seaFleet
   .map(
     (item, i) => `
- 
-    <tr class="row-${i + 1}">
+     <tr class="row-${i + 1}">
 <th>${item}</th>
  ${GlobalVars.letters
    .map(
@@ -33,11 +32,6 @@ let markupSeaHead = ` ${GlobalVars.seaFleet
   GlobalVars.enemySideMyFleet,
 ].forEach((container) => container.insertAdjacentHTML("afterbegin", markup));
 
-console.log(
-  `${GlobalVars.mySideMyFleet.querySelector(".F10").classList[0]}`,
-  "bomba"
-);
-
 [...GlobalVars.seas].forEach((sea) =>
   sea.querySelector("tr").insertAdjacentHTML("afterbegin", markupSeaHead)
 );
@@ -60,15 +54,3 @@ const selectAllThs = function (el, borderSide) {
 
 selectAllThs("thead", "borderBottom");
 selectAllThs("tbody", "borderRight");
-
-// allFleetTds = [...document.querySelectorAll("td")];
-// const topTds = allFleetTds
-//   .filter((td) => {
-//     console.log(td.classList[0], "top");
-//     return td.querySelector(".cell").classList[0].slice(1) === "1";
-//   })
-//   .forEach((cell) => {
-//     cell.closest(".dropzone").style.paddingTop = "3px";
-//   });
-
-// console.log(topTds, "top");
