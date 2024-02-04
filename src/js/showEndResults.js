@@ -5,8 +5,9 @@ import {
   overlay,
   btnCloseNotificationWindow,
 } from "./globalVars";
-import { playing } from "./gameStartControl";
 
+import { playing } from "./gameStartControl";
+import { getSeaOpacityBack } from "./helpers";
 export default function (fleet) {
   const player0 = "Dendy";
   const player1 = "Many";
@@ -38,7 +39,9 @@ export default function (fleet) {
     notificatonWindow.classList.remove("hidden");
     overlay.classList.remove("hidden");
     [mySideEnemyFleet, enemySideMyFleet].forEach(
-      (fleet) => playing && (fleet.style.pointerEvents = "none")
+      (fleet) => playing && (fleet.style.pointerEvents = "none"),
+
+      getSeaOpacityBack()
     );
   };
 

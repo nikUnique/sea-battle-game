@@ -664,6 +664,8 @@ var _shootingLogicDefault = parcelHelpers.interopDefault(_shootingLogic);
  // Now I need the ships on all sides to look the same while playing
  // Try to refactor all big logical operators with helper function
  // All big groupings with logical operator are replaced with helper functions(which contain statements) and ternary operators
+ // All imported variables are imported directly and not as an object which makes it more convenient to work with
+ // Now the fleet which is waiting for the opponent is partly transparent which shows that it's your opponent turn
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1009,7 +1011,7 @@ parcelHelpers.export(exports, "playing", ()=>playing);
 parcelHelpers.export(exports, "gameStartControl", ()=>gameStartControl);
 parcelHelpers.export(exports, "startNewGame", ()=>startNewGame);
 var _globalVars = require("./globalVars");
-var _buildShipBorder = require("./buildShipBorder");
+var _helpers = require("./helpers");
 var _placeShipsManually = require("./placeShipsManually");
 var _placeShipsManuallyDefault = parcelHelpers.interopDefault(_placeShipsManually);
 let playing, startGameBtn;
@@ -1145,7 +1147,7 @@ const gameStartControl = function(fleet, fleetParts) {
         });
         ships.map((ship, i)=>{
             ship.coords.map((coord, i, arr)=>{
-                (0, _buildShipBorder.buildShipBorder)([
+                (0, _helpers.buildShipBorder)([
                     ship,
                     coord,
                     i,
@@ -1161,7 +1163,7 @@ const gameStartControl = function(fleet, fleetParts) {
         const flattenedBothSideShips = (0, _globalVars.bothSideShips).flat(2);
         flattenedBothSideShips.length === createFleetShips.length * 2 + 2 && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet") && (playing = true, console.log("Game started \uD83E\uDD70"), console.log(playing, "playing"), // Making sure that I will not destroy my own ship ;)
         allowForbidClick((0, _globalVars.mySideMyFleet), "none"), allowForbidClick((0, _globalVars.enemySideEnemyFleet), "none"));
-        (0, _globalVars.mySideEnemyFleet) && (firstTurn < 0.5 && allowForbidClick((0, _globalVars.mySideEnemyFleet), "auto"), firstTurn > 0.5 && allowForbidClick((0, _globalVars.enemySideMyFleet), "auto"));
+        (0, _globalVars.mySideEnemyFleet) && (firstTurn < 0.5 && allowForbidClick((0, _globalVars.mySideEnemyFleet), "auto", (0, _globalVars.enemySideMyFleet).closest(".sea").style.opacity = "0.7"), firstTurn > 0.5 && allowForbidClick((0, _globalVars.enemySideMyFleet), "auto", (0, _globalVars.mySideEnemyFleet).closest(".sea").style.opacity = "0.7"));
         fleet === (0, _globalVars.enemySideMyFleet) && flattenedBothSideShips.length / 2 - 1 !== createFleetShips.length && console.log("Place your ships in the right way, \uD83D\uDC12");
     });
 };
@@ -1169,6 +1171,7 @@ const startNewGame = function(fleet, fleetParts) {
     const ships = fleetParts[1];
     const newGameBtn = document.querySelector(".new-game-btn");
     newGameBtn.addEventListener("click", function(e) {
+        (0, _helpers.getSeaOpacityBack)();
         allowForbidClick(startGameBtn, "auto");
         playing = false;
         [
@@ -1208,10 +1211,11 @@ const startNewGame = function(fleet, fleetParts) {
     });
 };
 
-},{"./buildShipBorder":"jMD7p","./globalVars":"gb5d6","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jMD7p":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./helpers":"hGI1E"}],"hGI1E":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "buildShipBorder", ()=>buildShipBorder);
+parcelHelpers.export(exports, "getSeaOpacityBack", ()=>getSeaOpacityBack);
 const buildShipBorder = function(borderParts) {
     const ship = borderParts[0];
     const coord = borderParts[1];
@@ -1225,6 +1229,13 @@ const buildShipBorder = function(borderParts) {
     // 3. Right and left
     ship.direction === "column" ? addBorder("borderLeft", coord) : addBorder("borderTop", coord);
     ship.direction === "column" ? addBorder("borderRight", coord) : addBorder("borderBottom", coord);
+};
+const getSeaOpacityBack = function() {
+    [
+        ...document.querySelectorAll(".sea")
+    ].forEach((sea)=>{
+        sea.style.opacity = "1";
+    });
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dx0uc":[function(require,module,exports) {
@@ -1241,8 +1252,8 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
                 if (e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
                 console.log(fleet, "float");
                 const turn = (0, _gameStartControl.playing) && fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideEnemyFleet) : (0, _globalVars.enemySideMyFleet);
-                (0, _gameStartControl.playing) && (turn.style.pointerEvents = "auto");
-                (0, _gameStartControl.playing) && (fleet.style.pointerEvents = "none");
+                (0, _gameStartControl.playing) && (turn.style.pointerEvents = "auto", fleet.closest(".sea").style.opacity = "0.7");
+                (0, _gameStartControl.playing) && (fleet.style.pointerEvents = "none"), turn.closest(".sea").style.opacity = "1";
             });
         });
     });
@@ -1293,7 +1304,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 selectTd(fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet));
             };
             ships[injuredShipPos].coords.map((coord, i, arr)=>{
-                (0, _buildShipBorder.buildShipBorder)([
+                (0, _helpers.buildShipBorder)([
                     ships[injuredShipPos],
                     coord,
                     i,
@@ -1342,9 +1353,9 @@ var _globalVars = require("./globalVars");
 var _showEndResults = require("./showEndResults");
 var _showEndResultsDefault = parcelHelpers.interopDefault(_showEndResults);
 var _gameStartControl = require("./gameStartControl");
-var _buildShipBorder = require("./buildShipBorder");
+var _helpers = require("./helpers");
 
-},{"./globalVars":"gb5d6","./showEndResults":"2csmh","./gameStartControl":"fXv0K","./buildShipBorder":"jMD7p","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./showEndResults":"2csmh","./gameStartControl":"fXv0K","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./helpers":"hGI1E"}],"2csmh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet) {
@@ -1374,7 +1385,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
             [
                 (0, _globalVars.mySideEnemyFleet),
                 (0, _globalVars.enemySideMyFleet)
-            ].forEach((fleet)=>(0, _gameStartControl.playing) && (fleet.style.pointerEvents = "none"));
+            ].forEach((fleet)=>(0, _gameStartControl.playing) && (fleet.style.pointerEvents = "none"), (0, _helpers.getSeaOpacityBack)());
         };
         const closeNotificationWindow = function() {
             (0, _globalVars.notificatonWindow).classList.add("hidden");
@@ -1390,7 +1401,8 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
     });
 var _globalVars = require("./globalVars");
 var _gameStartControl = require("./gameStartControl");
+var _helpers = require("./helpers");
 
-},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
+},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./helpers":"hGI1E"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
 //# sourceMappingURL=index.e37f48ea.js.map

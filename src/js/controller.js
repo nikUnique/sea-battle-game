@@ -105,3 +105,5 @@ const createFleet = function (fleetParts) {
 // Now I need the ships on all sides to look the same while playing
 // Try to refactor all big logical operators with helper function
 // All big groupings with logical operator are replaced with helper functions(which contain statements) and ternary operators
+// All imported variables are imported directly and not as an object which makes it more convenient to work with
+// Now the fleet which is waiting for the opponent is partly transparent which shows that it's your opponent turn

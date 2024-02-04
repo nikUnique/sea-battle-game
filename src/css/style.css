@@ -79,7 +79,7 @@ table {
   margin: 0 auto;
   border-collapse: collapse;
 
-  transition: all 1s ease-in;
+  transition: all 0.3s ease-in;
   background-color: #c5f6fa;
 }
 

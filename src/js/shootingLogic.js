@@ -3,9 +3,10 @@ import {
   enemySideEnemyFleet,
   enemySideMyFleet,
 } from "./globalVars";
+
 import showEndResults from "./showEndResults";
 import { playing } from "./gameStartControl";
-import { buildShipBorder } from "./buildShipBorder";
+import { buildShipBorder } from "./helpers";
 export default function (fleet, ships) {
   fleet.addEventListener("click", function (e) {
     e.preventDefault();

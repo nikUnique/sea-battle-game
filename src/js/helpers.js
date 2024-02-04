@@ -24,3 +24,9 @@ export const buildShipBorder = function (borderParts) {
     ? addBorder("borderRight", coord)
     : addBorder("borderBottom", coord);
 };
+
+export const getSeaOpacityBack = function () {
+  [...document.querySelectorAll(".sea")].forEach((sea) => {
+    sea.style.opacity = "1";
+  });
+};

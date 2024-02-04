@@ -20,8 +20,11 @@ export default function (fleet) {
         playing && fleet === enemySideMyFleet
           ? mySideEnemyFleet
           : enemySideMyFleet;
-      playing && (turn.style.pointerEvents = "auto");
-      playing && (fleet.style.pointerEvents = "none");
+      playing &&
+        ((turn.style.pointerEvents = "auto"),
+        (fleet.closest(".sea").style.opacity = "0.7"));
+      playing && (fleet.style.pointerEvents = "none"),
+        (turn.closest(".sea").style.opacity = "1");
     });
   });
 }

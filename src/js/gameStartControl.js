@@ -9,7 +9,8 @@ import {
   createEnemyShips,
   createMyShips,
 } from "./globalVars";
-import { buildShipBorder } from "./buildShipBorder";
+import { buildShipBorder, getSeaOpacityBack } from "./helpers";
+
 import placeShipsManually from "./placeShipsManually";
 
 let playing, startGameBtn;
@@ -177,8 +178,18 @@ export const gameStartControl = function (fleet, fleetParts) {
         allowForbidClick(enemySideEnemyFleet, "none"));
 
       mySideEnemyFleet &&
-        (firstTurn < 0.5 && allowForbidClick(mySideEnemyFleet, "auto"),
-        firstTurn > 0.5 && allowForbidClick(enemySideMyFleet, "auto"));
+        (firstTurn < 0.5 &&
+          allowForbidClick(
+            mySideEnemyFleet,
+            "auto",
+            (enemySideMyFleet.closest(".sea").style.opacity = "0.7")
+          ),
+        firstTurn > 0.5 &&
+          allowForbidClick(
+            enemySideMyFleet,
+            "auto",
+            (mySideEnemyFleet.closest(".sea").style.opacity = "0.7")
+          ));
 
       fleet === enemySideMyFleet &&
         flattenedBothSideShips.length / 2 - 1 !== createFleetShips.length &&
@@ -191,6 +202,7 @@ export const startNewGame = function (fleet, fleetParts) {
   const newGameBtn = document.querySelector(".new-game-btn");
 
   newGameBtn.addEventListener("click", function (e) {
+    getSeaOpacityBack();
     allowForbidClick(startGameBtn, "auto");
     playing = false;
     [
