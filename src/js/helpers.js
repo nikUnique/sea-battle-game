@@ -1,3 +1,5 @@
+import { notificatonWindow, notificatonWindow2 } from "./globalVars";
+
 export const buildShipBorder = function (borderParts) {
   const ship = borderParts[0];
   const coord = borderParts[1];
@@ -29,4 +31,18 @@ export const getSeaOpacityBack = function () {
   [...document.querySelectorAll(".sea")].forEach((sea) => {
     sea.style.opacity = "1";
   });
+};
+
+export const closeNotificationWindow = function () {
+  notificatonWindow.classList.add("hidden");
+
+  // overlay.classList.add("hidden");
+};
+export const closeNotificationWindow2 = function () {
+  notificatonWindow2.classList.add("hidden");
+  // overlay.classList.add("hidden");
+};
+
+export const allowForbidClick = function (fleet, state) {
+  fleet.style.pointerEvents = state;
 };

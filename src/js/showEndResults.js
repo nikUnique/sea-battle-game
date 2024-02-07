@@ -9,7 +9,11 @@ import {
 } from "./globalVars";
 
 import { playing } from "./gameStartControl";
-import { getSeaOpacityBack } from "./helpers";
+import {
+  closeNotificationWindow,
+  closeNotificationWindow2,
+  getSeaOpacityBack,
+} from "./helpers";
 export default function (fleet) {
   const resultsMessage = document.querySelector(".results-message");
   const resultsMessage2 = document.querySelector(".results-message-2");
@@ -28,28 +32,21 @@ export default function (fleet) {
   console.log(fleet);
   const areAllShipsInjured = injuredShips.length === allShips.length;
 
+  const composeMessage = function (messageEl, fleetSide) {
+    messageEl.textContent !== "" && (messageEl.textContent = "");
+    messageEl.insertAdjacentHTML(
+      "afterbegin",
+      `You ${fleet === fleetSide ? "won" : "lost"} the battle! ${
+        fleet === fleetSide ? "Congratulations! 🎊" : "Get lucky other time 😐"
+      }`
+    );
+  };
+
   // Show notification window
   const openNotificationWindow = function () {
     const addNotification = function (player) {
-      resultsMessage.textContent !== "" && (resultsMessage.textContent = "");
-      resultsMessage.insertAdjacentHTML(
-        "afterbegin",
-        `You ${fleet === enemySideMyFleet ? "won" : "lost"} the battle! ${
-          fleet === enemySideMyFleet
-            ? "Congratulations!"
-            : "Get lucky other time 😐"
-        }`
-      );
-
-      resultsMessage2.textContent !== "" && (resultsMessage2.textContent = "");
-      resultsMessage2.insertAdjacentHTML(
-        "afterbegin",
-        `You ${fleet === mySideEnemyFleet ? "won" : "lost"} the battle! ${
-          fleet === mySideEnemyFleet
-            ? "Congratulations!"
-            : "Get lucky other time 😐"
-        }`
-      );
+      composeMessage(resultsMessage, enemySideMyFleet);
+      composeMessage(resultsMessage2, mySideEnemyFleet);
     };
 
     fleet === mySideEnemyFleet && addNotification(player1);
@@ -58,24 +55,13 @@ export default function (fleet) {
 
     notificatonWindow.classList.remove("hidden");
     notificatonWindow2.classList.remove("hidden");
-    // notificatonWindow.style.position = "absolute";
-    // notificatonWindow.style.left = "0";
+
     // overlay.classList.remove("hidden");
     [mySideEnemyFleet, enemySideMyFleet].forEach(
       (fleet) => playing && (fleet.style.pointerEvents = "none"),
 
       getSeaOpacityBack()
     );
-  };
-
-  const closeNotificationWindow = function () {
-    notificatonWindow.classList.add("hidden");
-
-    // overlay.classList.add("hidden");
-  };
-  const closeNotificationWindow2 = function () {
-    notificatonWindow2.classList.add("hidden");
-    // overlay.classList.add("hidden");
   };
 
   areAllShipsInjured && openNotificationWindow();

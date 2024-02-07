@@ -98,14 +98,6 @@ th {
   border: 2px solid #fcc419;
 }
 
-/* .player-1 {
-  position: relative;
-}
-
-.player-2 {
-  position: relative;
-} */
-
 td {
   font-size: 4rem;
 
@@ -248,14 +240,6 @@ th {
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
   z-index: 5;
-}
-
-.notification-window.player-1 {
-  /* transform: translate(13%, -50%); */
-  /* left: 14%; */
-}
-.notification-window.player-2 {
-  /* transform: translate(-161%, -50%); */
 }
 
 /* -------------------------- */

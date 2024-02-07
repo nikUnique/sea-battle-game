@@ -9,8 +9,7 @@ export default function (fleet) {
   playing === true && (enemySideMyFleet.style.pointerEvents = "none");
   [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
     console.log(playing);
-    // playing === true &&
-    // console.log("bur") &&
+
     fleet.addEventListener("click", function (e) {
       if (
         e.target.classList.contains("ship") ||
@@ -18,7 +17,7 @@ export default function (fleet) {
         e.target.querySelector(".ship")?.classList.contains("ship")
       )
         return;
-      console.log(fleet, "float");
+
       const turn =
         playing && fleet === enemySideMyFleet
           ? mySideEnemyFleet
