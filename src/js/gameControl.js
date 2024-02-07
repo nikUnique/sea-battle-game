@@ -8,6 +8,9 @@ export default function (fleet) {
   mySideMyFleet.classList.add("player0");
   playing === true && (enemySideMyFleet.style.pointerEvents = "none");
   [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
+    console.log(playing);
+    // playing === true &&
+    // console.log("bur") &&
     fleet.addEventListener("click", function (e) {
       if (
         e.target.classList.contains("ship") ||

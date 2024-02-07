@@ -18,6 +18,7 @@ body {
 
 .container {
   max-width: 150rem;
+  margin: 0 auto;
   padding: 3.2rem;
 }
 
@@ -26,6 +27,7 @@ table {
   background-color: #c5f6fa;
   margin: 0 auto;
   transition: all .3s ease-in;
+  position: relative;
 }
 
 td, th {
@@ -43,6 +45,7 @@ td, th {
 td {
   -webkit-user-select: none;
   user-select: none;
+  border: 1px solid #fff;
   width: 4rem;
   height: 4rem;
   font-size: 4rem;
@@ -120,7 +123,6 @@ th {
 }
 
 .my-side--enemy-fleet .ship, .enemy-side--my-fleet .ship {
-  opacity: 0;
   background-color: #e3fafc;
 }
 
@@ -143,6 +145,36 @@ th {
   background-color: #c5f6fa;
 }
 
+.sea-container {
+  position: relative;
+}
+
+.notification-window {
+  z-index: 10;
+  background-color: #fff;
+  border-radius: 5px;
+  width: 100%;
+  height: 50%;
+  padding: 6rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(0, 50%);
+  box-shadow: 0 3rem 5rem #0000004d;
+}
+
+.overlay {
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  z-index: 5;
+  background-color: #0009;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .show-notification-window {
   color: #444;
   cursor: pointer;
@@ -155,7 +187,7 @@ th {
   font-weight: 600;
 }
 
-.close-notification-window {
+.close-notification-window, .close-notification-window-2 {
   color: #333;
   cursor: pointer;
   background: none;
@@ -177,31 +209,6 @@ p {
 
 .hidden {
   display: none;
-}
-
-.notification-window {
-  z-index: 10;
-  background-color: #fff;
-  border-radius: 5px;
-  width: 70%;
-  padding: 6rem;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 3rem 5rem #0000004d;
-}
-
-.overlay {
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
-  z-index: 5;
-  background-color: #0009;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 /*# sourceMappingURL=index.c92073ef.css.map */

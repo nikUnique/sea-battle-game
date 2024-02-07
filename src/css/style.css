@@ -73,6 +73,7 @@ body {
 .container {
   max-width: 150rem;
   padding: 3.2rem;
+  margin: 0 auto;
 }
 
 table {
@@ -81,6 +82,7 @@ table {
 
   transition: all 0.3s ease-in;
   background-color: #c5f6fa;
+  position: relative;
 }
 
 td,
@@ -96,12 +98,21 @@ th {
   border: 2px solid #fcc419;
 }
 
+/* .player-1 {
+  position: relative;
+}
+
+.player-2 {
+  position: relative;
+} */
+
 td {
   font-size: 4rem;
 
   height: 4rem;
   width: 4rem;
   user-select: none;
+  border: 1px solid white;
 }
 
 td:hover {
@@ -180,7 +191,7 @@ th {
 
 .my-side--enemy-fleet .ship,
 .enemy-side--my-fleet .ship {
-  opacity: 0;
+  /* opacity: 0; */
   background-color: #e3fafc;
 }
 
@@ -205,10 +216,51 @@ th {
   background-color: #c5f6fa;
 }
 
+.sea-container {
+  position: relative;
+}
+
 /**************************/
 /* NOTIFICATION WINDOW */
 /**************************/
 
+.notification-window {
+  position: absolute;
+  top: 0;
+  /* left: 0; */
+  right: 0;
+  transform: translate(0, 50%);
+  width: 100%;
+  height: 50%;
+  background-color: white;
+  padding: 6rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  z-index: 5;
+}
+
+.notification-window.player-1 {
+  /* transform: translate(13%, -50%); */
+  /* left: 14%; */
+}
+.notification-window.player-2 {
+  /* transform: translate(-161%, -50%); */
+}
+
+/* -------------------------- */
+/* CLASSES TO MAKE NOTIFICATION WINDOW WORK */
+/* -------------------------- */
 .show-notification-window {
   font-size: 2rem;
   font-weight: 600;
@@ -221,7 +273,8 @@ th {
   cursor: pointer;
 }
 
-.close-notification-window {
+.close-notification-window,
+.close-notification-window-2 {
   position: absolute;
   top: 1.2rem;
   right: 2rem;
@@ -241,35 +294,6 @@ p {
   font-size: 1.8rem;
 }
 
-/* -------------------------- */
-/* CLASSES TO MAKE NOTIFICATION WINDOW WORK */
-/* -------------------------- */
-
 .hidden {
   display: none;
-}
-
-.notification-window {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
-
-  background-color: white;
-  padding: 6rem;
-  border-radius: 5px;
-  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
-  z-index: 10;
-}
-
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(3px);
-  z-index: 5;
 }

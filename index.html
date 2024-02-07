@@ -15,42 +15,84 @@
     <title>Sea Battle</title>
   </head>
   <body>
-    <button class="new-game-btn">New Game</button>
+    <button class="start-game fleet-1">Ready to start 😹</button>
+    <button class="start-game fleet-2">Ready to start 😹</button>
+    <button class="new-game-btn player-1" disabled>New game</button>
+    <button class="new-game-btn player-2" disabled>New game</button>
+
+    <form class="player-data">
+      <label>Your name</label>
+      <input
+        value=""
+        type="text"
+        placeholder="John"
+        class="fill-username--player-1"
+        minlength="2"
+        required
+      />
+      <button class="submit-username--fleet-1">Submit</button>
+    </form>
+    <form class="player-data">
+      <label>Your name</label>
+      <input
+        value=""
+        type="text"
+        placeholder="Beny"
+        class="fill-username--player-2"
+        minlength="2"
+        required
+      />
+      <button class="submit-username--fleet-2">Submit</button>
+    </form>
+    <p class="username-1">Player-1</p>
+    <p class="username-2">Player-2</p>
+    <p class="player-1--pronoun">You</p>
+    <p class="player-2--pronoun">You</p>
     <div class="container grid grid--2-cols">
-      <table class="sea">
-        <thead>
-          <tr></tr>
-        </thead>
-        <tbody class="my-side--my-fleet"></tbody>
-      </table>
-
-      <table class="sea">
-        <thead>
-          <tr></tr>
-        </thead>
-        <tbody class="enemy-side--my-fleet"></tbody>
-      </table>
-
-      <table class="sea">
-        <thead>
-          <tr></tr>
-        </thead>
-        <tbody class="enemy-side--enemy-fleet"></tbody>
-      </table>
-
-      <table class="sea">
-        <thead>
-          <tr></tr>
-        </thead>
-        <tbody class="my-side--enemy-fleet"></tbody>
-      </table>
+      <div class="sea-container">
+        <table class="sea player-1">
+          <thead>
+            <tr></tr>
+          </thead>
+          <tbody class="my-side--my-fleet"></tbody>
+        </table>
+      </div>
+      <div class="sea-container">
+        <table class="sea">
+          <thead>
+            <tr></tr>
+          </thead>
+          <tbody class="enemy-side--my-fleet"></tbody>
+        </table>
+        <div class="notification-window hidden player-1">
+          <button class="close-notification-window">&times;</button>
+          <h1>The results of the battle are: 😍</h1>
+          <p class="results-message">🔥</p>
+        </div>
+      </div>
+      <div class="sea-container">
+        <table class="sea player-2">
+          <thead>
+            <tr></tr>
+          </thead>
+          <tbody class="enemy-side--enemy-fleet"></tbody>
+        </table>
+      </div>
+      <div class="sea-container">
+        <table class="sea">
+          <thead>
+            <tr></tr>
+          </thead>
+          <tbody class="my-side--enemy-fleet"></tbody>
+        </table>
+        <div class="notification-window hidden player-2">
+          <button class="close-notification-window-2">&times;</button>
+          <h1>The results of the battle are: 😍</h1>
+          <p class="results-message-2">🔥</p>
+        </div>
+      </div>
     </div>
 
-    <div class="notification-window hidden">
-      <button class="close-notification-window">&times;</button>
-      <h1>The results of the battle are: 😍</h1>
-      <p class="results-message">🔥</p>
-    </div>
-    <div class="overlay hidden"></div>
+    <!-- <div class="overlay hidden"></div> -->
   </body>
 </html>

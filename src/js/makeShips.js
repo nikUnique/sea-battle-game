@@ -19,7 +19,7 @@ export default createShip = function (coords, size, fleetParts) {
     console.log(
       "In such a mood it wouldn't be surprising if you stepped with you shoe on a dog's poop 🍭"
     );
-    return;
+    return false;
   }
 
   const checkSpaceAround = fleetParts[1].map((ship) => {
@@ -28,11 +28,12 @@ export default createShip = function (coords, size, fleetParts) {
         console.log(
           `You cannot place your ship on ${cell} because it's around another ship. Find a better place to drop an anchor 😂`
         );
+
       return bigCoords.includes(cell);
     });
   });
 
-  if (checkSpaceAround.includes(true)) return;
+  if (checkSpaceAround.includes(true)) return false;
 
   const sameLetter = coords.map((coord) => {
     return coord[0];
@@ -48,7 +49,7 @@ export default createShip = function (coords, size, fleetParts) {
   if (columnShip.length !== 1 && rowShip.length !== 1) {
     console.log("Place your ships in the right order, man 🕺");
 
-    return;
+    return false;
   }
 
   if (
@@ -68,13 +69,14 @@ export default createShip = function (coords, size, fleetParts) {
         !coords.includes(letters[letterAround - 1] + coordSlice1) &&
         !coords.includes(letters[letterAround + 1] + coordSlice1)
       ) {
-        return true;
+        return false;
       }
     });
 
-    if (checkWholesomness.includes(true)) {
+    if (checkWholesomness.includes(false)) {
+      console.log(ships, "sho");
       console.log("Place your ships in the right order, man 🤸‍♂️");
-      return;
+      return false;
     }
   }
 
@@ -119,6 +121,7 @@ export default createShip = function (coords, size, fleetParts) {
     const cellEl = fleet.querySelector(`.${pos}`);
     cellEl?.classList.add("ship-color");
     cellEl && (cellEl.textContent = size);
+
     fleet
       .querySelector(`.${pos}`)
       ?.insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);

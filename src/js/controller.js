@@ -37,7 +37,7 @@ const createFleet = function (fleetParts) {
   /**************************/
   /* PLACING SHIPS MANUALLY */
   /**************************/
-  placeShipsManually(fleet);
+  placeShipsManually(fleet, fleetParts);
 
   /**************************/
   /* GAME START CONTROL */
@@ -107,3 +107,5 @@ const createFleet = function (fleetParts) {
 // All big groupings with logical operator are replaced with helper functions(which contain statements) and ternary operators
 // All imported variables are imported directly and not as an object which makes it more convenient to work with
 // Now the fleet which is waiting for the opponent is partly transparent which shows that it's your opponent turn
+// There can be added a feature of writing opponent names which will may be a nice touch to the game
+// Now opponents name can written or if not then a default name will be used instead. Right now players can offer start a new game and if both agreed then the new game will start, this work both as in the game and also after the game finished. There are also 2 button of ready to start action when you built your fleet and waiting when your opponent will be ready to play

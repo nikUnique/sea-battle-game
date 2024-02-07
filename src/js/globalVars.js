@@ -3,11 +3,24 @@ const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
 const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
 const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
 const seas = document.querySelectorAll(".sea");
-const notificatonWindow = document.querySelector(".notification-window");
-const overlay = document.querySelector(".overlay");
+const notificatonWindow = document.querySelector(
+  ".notification-window.player-1"
+);
+const notificatonWindow2 = document.querySelector(
+  ".notification-window.player-2"
+);
+
+// const overlay = document.querySelector(".overlay");
 const btnCloseNotificationWindow = document.querySelector(
   ".close-notification-window"
 );
+const btnCloseNotificationWindow2 = document.querySelector(
+  ".close-notification-window-2"
+);
+const newGameBtn = document.querySelector(".new-game-btn.player-1");
+const newGameBtn2 = document.querySelector(".new-game-btn.player-2");
+const startGameBtn = document.querySelector(".fleet-1");
+const startGameBtn2 = document.querySelector(".fleet-2");
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 const seaFleet = Array.from({ length: 10 }, (_, i) => i + 1);
 
@@ -53,8 +66,14 @@ export {
   enemySideMyFleet,
   seas,
   notificatonWindow,
-  overlay,
+  notificatonWindow2,
+  // overlay,
   btnCloseNotificationWindow,
+  btnCloseNotificationWindow2,
+  newGameBtn,
+  newGameBtn2,
+  startGameBtn,
+  startGameBtn2,
   letters,
   seaFleet,
   createMyShips,
