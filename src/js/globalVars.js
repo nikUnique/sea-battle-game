@@ -26,7 +26,7 @@ const seaFleet = Array.from({ length: 10 }, (_, i) => i + 1);
 
 let createMyShips = [
   [["e1"], ["e1"].length],
-  // [["j1"], ["e1"].length],
+  [["j1"], ["e1"].length],
   // [["a3"], ["e1"].length],
   // [["h10"], ["e1"].length],
 
@@ -40,14 +40,14 @@ let createMyShips = [
 ];
 let createEnemyShips = [
   [["a1"], ["d10"].length],
-  // [["c1"], ["d10"].length],
+  [["c1"], ["d10"].length],
   // [["e1"], ["d10"].length],
   // [["g1"], ["d10"].length],
 
   // [["i5", "j5"], ["e6", "e7"].length],
   // [["i7", "j7"], ["e6", "e7"].length],
   [["d4", "e4", "f4", "g4"], ["J4", "I4", "h4", "e4"].length],
-  [["d2", "e2", "f2"], ["J4", "I4", "h4"].length],
+  [["e2", "f2", "g2"], ["J4", "I4", "h4"].length],
   [["e9", "f9"], ["e6", "e7"].length],
   // [["b4", "c4", "d4"], ["J4", "I4", "h4"].length],
 ];

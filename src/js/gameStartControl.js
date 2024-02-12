@@ -50,6 +50,7 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     let createFleetShips = [
       [[findCell("cell1")], [0].length],
+      [[findCell("cell2")], [0].length],
       // [[findCell("cell2")], [0].length],
       // [[findCell("cell3")], [0].length],
       // [
@@ -58,18 +59,18 @@ export const gameStartControl = function (fleet, fleetParts) {
       // ],
       // [[findCell("cell7"), findCell("cell8")], [0, 0].length],
       [
-        [findCell("cell2"), findCell("cell3"), findCell("cell4")],
+        [findCell("cell3"), findCell("cell4"), findCell("cell5")],
 
         [0, 0, 0].length,
       ],
       // [[findCell("cell12"), findCell("cell14")], [0, 0].length],
-      [[findCell("cell5"), findCell("cell6")], [0, 0].length],
+      [[findCell("cell6"), findCell("cell7")], [0, 0].length],
       [
         [
-          findCell("cell7"),
           findCell("cell8"),
           findCell("cell9"),
           findCell("cell10"),
+          findCell("cell11"),
         ],
 
         [0, 0, 0, 0].length,
@@ -79,21 +80,22 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     let createMoreShips = [
       [[findCell("cell1")], [0].length],
+      [[findCell("cell2")], [0].length],
       // [[findCell("cell2")], [0].length],
       // [[findCell("cell3")], [0].length],
       // [[findCell("cell4")], [0].length],
       [
         [
-          findCell("cell5"),
           findCell("cell6"),
           findCell("cell7"),
           findCell("cell8"),
+          findCell("cell9"),
         ],
 
         [0, 0, 0, 0].length,
       ],
       [
-        [findCell("cell2"), findCell("cell3"), findCell("cell4")],
+        [findCell("cell3"), findCell("cell4"), findCell("cell5")],
         [0, 0, 0].length,
       ],
       // [[findCell("cell8"), findCell("cell9")], [0, 0].length],
@@ -105,7 +107,7 @@ export const gameStartControl = function (fleet, fleetParts) {
       //   [0, 0, 0].length,
       // ],
 
-      [[findCell("cell9"), findCell("cell10")], [0, 0].length],
+      [[findCell("cell10"), findCell("cell11")], [0, 0].length],
     ];
 
     const createManuallyPlacedShips = function (createSource, ships) {
@@ -149,7 +151,8 @@ export const gameStartControl = function (fleet, fleetParts) {
           cell.removeAttribute("style");
           cell.querySelector(".cell").textContent = "";
         }),
-          fleetParts[1].splice(0);
+          console.log(fleetParts[1]);
+        fleetParts[1].splice(0);
 
         return false;
       };
@@ -179,6 +182,23 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     const ships = fleetParts[1];
 
+    const submarines = ships.filter((ship) => {
+      const shipEl = fleet.querySelector(`.${ship.coords[0]}`);
+      console.log(shipEl.classList[0]);
+      return ship.coords.length === 1;
+    });
+
+    const rewardSubmarine = Math.trunc(Math.random() * 2) + 1;
+    console.log(rewardSubmarine);
+    console.log(submarines);
+    submarines.forEach((submarine, i) => {
+      i + 1 === rewardSubmarine
+        ? fleet
+            .querySelector(`.${submarine.coords[0]}`)
+            .nextElementSibling.classList.add("reward")
+        : "";
+    });
+
     bothSideShips.push(ships);
 
     const addBorder = function (borderSide, coord) {
@@ -202,7 +222,7 @@ export const gameStartControl = function (fleet, fleetParts) {
     bothFleetsReady.length === 2 &&
       [mySideMyFleet, enemySideEnemyFleet].forEach((fleet) => {
         fleet.querySelectorAll(`.ship`).forEach((ship) => {
-          ship.style.backgroundColor = "#e3fafc";
+          ship.style.backgroundColor = "#e6fcf5";
         });
       });
 
@@ -220,19 +240,39 @@ export const gameStartControl = function (fleet, fleetParts) {
     const flattenedBothSideShips = bothSideShips.flat(2);
 
     console.log(flattenedBothSideShips);
-    flattenedBothSideShips.length === createFleetShips.length * 2 + 2 &&
+    if (
+      flattenedBothSideShips.length === createFleetShips.length * 2 + 2 &&
       flattenedBothSideShips.includes("mySideEnemyFleet") &&
-      flattenedBothSideShips.includes("enemySideMyFleet") &&
-      ((playing = true),
-      console.log("Game started 🥰"),
-      console.log(playing, "playing"),
+      flattenedBothSideShips.includes("enemySideMyFleet")
+    ) {
+      playing = true;
+      console.log("Game started 🥰");
+      console.log(playing, "playing");
+      // Disable right-click
+      // document.addEventListener("contextmenu", (e) => e.preventDefault());
+      // function ctrlShiftKey(e, key) {
+      //   return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
+      // }
+      // (document.onkeydown = (e) => {
+      //   // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+      //   if (
+      //     e.key === 123 ||
+      //     ctrlShiftKey(e, "I") ||
+      //     ctrlShiftKey(e, "J") ||
+      //     ctrlShiftKey(e, "C") ||
+      //     (e.ctrlKey && e.key === "U".charCodeAt(0))
+      //   )
+      //     return false;
+      // }),
+
       // Making sure that I will not destroy my own ship ;)
       allowForbidClick(mySideMyFleet, "none"),
-      allowForbidClick(
-        enemySideEnemyFleet,
+        allowForbidClick(
+          enemySideEnemyFleet,
 
-        "none"
-      ));
+          "none"
+        );
+    }
 
     console.log(firstTurn);
 
@@ -262,3 +302,8 @@ export const gameStartControl = function (fleet, fleetParts) {
 };
 
 // Nice idea about making binoculars for 10 seconds to find more ships
+
+// Binoculars feature:
+// 1. When you destroyed a ship for which destruction there should be an award in kind of binoculars then for 10 seconds hovering effect on ships will be different from hovering state on empty cells
+// If destroyed ship has reward class then add binoculars to the fleet on which that ship was destroyed, but before I need randomly add this reward class to the ship in the beginning of the game
+// Take all ship's classes and assign one of them to the ship

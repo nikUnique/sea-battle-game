@@ -39,11 +39,12 @@ export default function (fleet, fleetParts) {
           ? (console.log(ev), e.target.classList.remove("dragover"))
           : "";
 
-        ev === "drop"
-          ? (e.preventDefault(),
-            console.log(dragged),
-            !e.target.classList.contains("ship") &&
-              e.target.appendChild(dragged),
+        if (ev === "drop") {
+          e.preventDefault(), console.log(dragged, e.target);
+
+          if (e.target.classList.contains("ship")) return;
+          // !e.target.classList.contains("ship") &&
+          e.target.appendChild(dragged),
             fleet
               .querySelector(
                 `.${dragged.classList[dragged.classList.length - 1]}`
@@ -53,8 +54,8 @@ export default function (fleet, fleetParts) {
                   `.${dragged.classList[dragged.classList.length - 1]}`
                 ).classList[0],
                 e.target.querySelector("div")?.classList[0]
-              ))
-          : "";
+              );
+        }
 
         const checkDragoverE = function () {
           e.preventDefault();

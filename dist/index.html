@@ -27,51 +27,63 @@
       <input value="" type="text" placeholder="Beny" class="fill-username--player-2" minlength="2" required="">
       <button class="submit-username--fleet-2">Submit</button>
     </form>
-    <p class="username-1">Player-1</p>
-    <p class="username-2">Player-2</p>
-    <p class="player-1--pronoun">You</p>
-    <p class="player-2--pronoun">You</p>
-    <div class="container grid grid--2-cols">
-      <div class="sea-container">
-        <table class="sea player-1">
-          <thead>
-            <tr></tr>
-          </thead>
-          <tbody class="my-side--my-fleet"></tbody>
-        </table>
-      </div>
-      <div class="sea-container">
-        <table class="sea">
-          <thead>
-            <tr></tr>
-          </thead>
-          <tbody class="enemy-side--my-fleet"></tbody>
-        </table>
-        <div class="notification-window hidden player-1">
-          <button class="close-notification-window">&times;</button>
-          <h1>The results of the battle are: 😍</h1>
-          <p class="results-message">🔥</p>
+
+    <div class="container grid grid--3-cols">
+      <div class="grid grid--2-cols">
+        <div class="sea-container">
+          <table class="sea player-1">
+            <thead>
+              <tr></tr>
+            </thead>
+            <tbody class="my-side--my-fleet"></tbody>
+          </table>
+          <p class="username-1">Player-1's ships</p>
+        </div>
+        <div class="sea-container">
+          <table class="sea">
+            <thead>
+              <tr></tr>
+            </thead>
+            <tbody class="enemy-side--my-fleet"></tbody>
+          </table>
+          <div class="notification-window hidden player-1">
+            <button class="close-notification-window">&times;</button>
+            <h1>The results of the battle are: 😍</h1>
+            <p class="results-message">🔥</p>
+          </div>
+          <p class="player-1--pronoun">Your ships</p>
+          <p class="binoculars-reward-label">
+            Video camera reward 📹 time left:&nbsp;<span class="timer"></span>
+          </p>
         </div>
       </div>
-      <div class="sea-container">
-        <table class="sea player-2">
-          <thead>
-            <tr></tr>
-          </thead>
-          <tbody class="enemy-side--enemy-fleet"></tbody>
-        </table>
-      </div>
-      <div class="sea-container">
-        <table class="sea">
-          <thead>
-            <tr></tr>
-          </thead>
-          <tbody class="my-side--enemy-fleet"></tbody>
-        </table>
-        <div class="notification-window hidden player-2">
-          <button class="close-notification-window-2">&times;</button>
-          <h1>The results of the battle are: 😍</h1>
-          <p class="results-message-2">🔥</p>
+      <div class="grid-helper"></div>
+      <div class="grid grid--2-cols">
+        <div class="sea-container">
+          <table class="sea player-2">
+            <thead>
+              <tr></tr>
+            </thead>
+            <tbody class="enemy-side--enemy-fleet"></tbody>
+          </table>
+          <p class="username-2">Player-2's ships</p>
+        </div>
+        <div class="sea-container mrg-right">
+          <table class="sea">
+            <thead>
+              <tr></tr>
+            </thead>
+            <tbody class="my-side--enemy-fleet"></tbody>
+          </table>
+          <div class="notification-window hidden player-2">
+            <button class="close-notification-window-2">&times;</button>
+            <h1>The results of the battle are: 😍</h1>
+            <p class="results-message-2">🔥</p>
+          </div>
+          <p class="player-2--pronoun">Your ships</p>
+          <p class="binoculars-reward-label">
+            Video camera reward 📹 time left:&nbsp;<span class="timer"></span>
+          </p>
         </div>
       </div>
     </div>

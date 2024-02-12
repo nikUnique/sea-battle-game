@@ -52,6 +52,7 @@ Medium: 11px
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  /* overflow: hidden; */
 }
 
 html {
@@ -67,82 +68,132 @@ body {
   line-height: 1;
   font-weight: 400;
   color: #555;
-  background-color: #fdf2e9;
+  background-color: #fff9e8;
 }
+
+/**************************/
+/* GRID AND CONTAINERS */
+/**************************/
 
 .container {
-  max-width: 150rem;
-  padding: 3.2rem;
+  max-width: 335rem;
+  /* min-width: 210rem; */
+  /* padding: 2.4rem; */
   margin: 0 auto;
 }
 
-table {
-  margin: 0 auto;
-  border-collapse: collapse;
-
-  transition: all 0.3s ease-in;
-  background-color: #c5f6fa;
+.sea-container {
   position: relative;
-}
-
-td,
-th {
-  height: 4rem;
-  width: 4rem;
-  font-size: 1.8rem;
-  text-align: center;
-  background-color: #e3fafc;
 }
 
 .sea {
   border: 2px solid #fcc419;
 }
 
-td {
-  font-size: 4rem;
-
-  height: 4rem;
-  width: 4rem;
-  user-select: none;
-  border: 1px solid white;
-}
-
-td:hover {
-  background-color: #c5f6fa;
-}
-th,
-thead tr,
-tbody th {
-  background-color: #087f5b;
-  color: #fff;
-  cursor: auto;
-}
-
-th {
-  cursor: "auto";
-  user-select: none;
-  overflow: hidden;
-}
-
 .grid {
   display: grid;
-  column-gap: 4.8rem;
+  column-gap: 2.4rem;
   row-gap: 4.8rem;
   margin-bottom: 9.6rem;
 }
 
 .grid--2-cols {
   grid-template-columns: repeat(2, 1fr);
+  align-self: center;
+  justify-self: center;
+  margin-top: 8rem;
 }
+
+.grid--3-cols {
+  grid-template-columns: 49.9fr 0.2fr 49.9fr;
+}
+
+.grid-helper {
+  display: grid;
+  /* column-gap: 0.2rem; */
+  background-color: #fcc419;
+}
+
+/**************************/
+/* TABLE ELEMENTS */
+/**************************/
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  display: block;
+  transition: all 0.3s ease-in;
+  background-color: #c5f6fa;
+  position: relative;
+  box-sizing: border-box;
+}
+
+th,
+thead tr {
+  background-color: #087f5b;
+  color: #fff;
+  cursor: auto;
+}
+
+th {
+  cursor: auto;
+  user-select: none;
+  overflow: hidden;
+}
+
+td,
+th {
+  height: 3.6rem;
+  width: 3.6rem;
+  font-size: 1.6rem;
+  text-align: center;
+  user-select: none;
+}
+
+td {
+  font-size: 2.4rem;
+  background-color: #e6fcf5;
+  border: 1px solid #fff;
+  overflow: hidden;
+}
+
+td:hover {
+  background-color: #c3fae8;
+}
+
+/* Class of td */
+.dropzone {
+  border: 1px solid #fff;
+
+  /* border-color: rgba(255, 255, 255, 0.5); */
+}
+
+.dropzone:focus {
+  border: 2px solid red;
+}
+
+/**************************/
+/* GENERAL */
+/**************************/
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+p {
+  font-size: 1.8rem;
+}
+
+/**************************/
+/* FLEET ENVIRONMENT */
+/**************************/
 
 .ship {
   width: 100%;
   height: 100%;
-
-  z-index: 1000;
   user-select: none;
   color: #654e0a;
-  font-size: 3rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -156,19 +207,66 @@ th {
   background-color: #ffd43b;
 }
 
+.my-side--enemy-fleet .ship.injure:hover,
+.enemy-side--my-fleet .ship.injure:hover {
+  background-color: #e6fcf5;
+}
+
+.my-side--enemy-fleet.binoculars .ship:hover,
+.enemy-side--my-fleet.binoculars .ship:hover {
+  background-color: #e6fcf5;
+}
+
+.my-side--enemy-fleet .ship:hover,
+.enemy-side--my-fleet .ship:hover {
+  background-color: #c3fae8;
+}
+
+.binoculars-reward-label {
+  position: absolute;
+  left: 8%;
+  transform: translate(0, 40%);
+  transition: all 0.5s;
+  opacity: 0;
+}
+
 .injure {
   color: #ff6b6b;
-  font-size: 3.9rem;
 }
 
 .miss {
-  color: #15aabf;
+  color: #20c997;
   font-size: 3.2rem;
+  background-color: #e6fcf5;
+  height: 100%;
 }
 
 .cell-around {
-  color: #99e9f2;
-  border-top: none;
+  color: #96f2d7;
+  background-color: #e6fcf5;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+}
+
+.ship.injure {
+  opacity: 100%;
+  display: flex;
+  justify-content: center;
+
+  align-items: center;
+
+  /* box-shadow: inset 0 0 0 3px #66d9e8; */
+}
+.dropzone .ship.injure {
+  font-size: 3.2rem !important;
+  background-color: #e6fcf5;
+}
+
+.dragover {
+  background-color: #c3fae8;
 }
 
 .my-side--enemy-fleet,
@@ -184,33 +282,12 @@ th {
 .my-side--enemy-fleet .ship,
 .enemy-side--my-fleet .ship {
   /* opacity: 0; */
-  background-color: #e3fafc;
+  background-color: #e6fcf5;
 }
 
-.ship.injure {
-  opacity: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  /* box-shadow: inset 0 0 0 3px #66d9e8; */
-}
-
-.dropzone {
-  border: 1px solid white;
-}
-
-.dropzone .ship.injure {
-  font-size: 3.9rem !important;
-}
-
-.dragover {
-  background-color: #c5f6fa;
-}
-
-.sea-container {
-  position: relative;
-}
+/* .border-75 {
+  border-color: rgba(255, 255, 255, 0.75);
+} */
 
 /**************************/
 /* NOTIFICATION WINDOW */
@@ -219,19 +296,19 @@ th {
 .notification-window {
   position: absolute;
   top: 0;
-  /* left: 0; */
-  right: 0;
-  transform: translate(0, 50%);
-  width: 100%;
+  left: 0;
+
+  transform: translate(-50%, 50%);
+  width: 150%;
   height: 50%;
-  background-color: white;
+  background-color: #fff;
   padding: 6rem;
   border-radius: 5px;
   box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
 
-.overlay {
+/* .overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -240,11 +317,8 @@ th {
   background-color: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(3px);
   z-index: 5;
-}
+} */
 
-/* -------------------------- */
-/* CLASSES TO MAKE NOTIFICATION WINDOW WORK */
-/* -------------------------- */
 .show-notification-window {
   font-size: 2rem;
   font-weight: 600;
@@ -269,15 +343,25 @@ th {
   background: none;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-}
-
-p {
-  font-size: 1.8rem;
-}
-
 .hidden {
   display: none;
+}
+
+/**************************/
+/* INPUT DATA, BUTTONS, LABELS */
+/**************************/
+
+.username-1,
+.player-1--pronoun {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -150%);
+}
+.username-2,
+.player-2--pronoun {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -150%);
 }

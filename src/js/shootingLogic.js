@@ -2,15 +2,20 @@ import {
   mySideMyFleet,
   enemySideEnemyFleet,
   enemySideMyFleet,
+  enemySideMyShips,
+  mySideMyShips,
+  enemySideEnemyShips,
 } from "./globalVars";
 
 import showEndResults from "./showEndResults";
 import { playing } from "./gameStartControl";
 import { buildShipBorder } from "./helpers";
+
 export default function (fleet, ships) {
-  fleet.addEventListener("click", function (e) {
+  const shootingLogic = function (e) {
     e.preventDefault();
 
+    console.log(e.target, "target");
     if (
       !playing ||
       e.target.querySelector(".ship")?.classList.contains("ship")
@@ -90,11 +95,11 @@ export default function (fleet, ships) {
 
     if (destroyedShipCoords.includes(false)) return;
 
-    const addBorder = function (borderSide, coord) {
+    const addBorder = function (borderSide, coord, color = "#ff6f6f") {
       const selectTd = function (fleetSide) {
         fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[
           borderSide
-        ] = "2px solid #ff6f6f";
+        ] = `2px solid ${color} `;
       };
 
       selectTd(fleet);
@@ -105,6 +110,34 @@ export default function (fleet, ships) {
 
     ships[injuredShipPos].coords.map((coord, i, arr) => {
       buildShipBorder([ships[injuredShipPos], coord, i, arr, addBorder]);
+      if (ships[injuredShipPos].coords.length !== 1) return;
+      const rewardShip = fleet
+        .querySelector(`.${coord}`)
+        .nextElementSibling.classList.contains("reward");
+      if (!rewardShip) return;
+      fleet.classList.add("binoculars");
+      const labelBinocularsReward = fleet
+        .closest(".sea-container")
+        .querySelector(".binoculars-reward-label");
+      let labelTimer = fleet.closest(".sea-container").querySelector(".timer");
+      labelBinocularsReward.style.opacity = "100";
+      const tick = function () {
+        const min = String(Math.trunc(time / 60)).padStart(2, 0);
+        const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+
+        labelTimer.textContent = `${min}:${sec}`;
+
+        if (time === 0) {
+          clearInterval(timer);
+          labelBinocularsReward.style.opacity = "0";
+          fleet.classList.remove("binoculars");
+          console.log("Magic item removed");
+        }
+        time--;
+      };
+      let time = 3;
+      tick();
+      const timer = setInterval(tick, 1000);
     });
 
     const destroyedShip = ships[injuredShipPos].coords.map((cell, i) => {
@@ -138,7 +171,7 @@ export default function (fleet, ships) {
             cellAround?.classList.add("cell-around");
           cellAround && (cellAround.style.fontSize = "3.2rem");
           cellAround.classList.contains("injure") &&
-            (cellAround.style.fontSize = "3.9rem");
+            (cellAround.style.fontSize = "3.2rem");
           cellAround.style.visibility = "hidden";
           setTimeout(function () {
             cellAround.style.visibility = "visible";
@@ -167,5 +200,20 @@ export default function (fleet, ships) {
     /**************************/
 
     showEndResults(fleet);
+  };
+
+  fleet.addEventListener("click", function (e) {
+    shootingLogic(e);
   });
+
+  // document.addEventListener("keydown", function (e) {
+  //   if (e.key === "Enter") {
+  //     if (fleet.querySelector(".focused")?.querySelector(".ship")) {
+  //       fleet.querySelector(".focused")?.querySelector(".ship").click();
+  //     }
+  //     if (!fleet.querySelector(".focused")?.querySelector(".ship")) {
+  //       fleet.querySelector(".focused")?.click();
+  //     }
+  //   }
+  // });
 }

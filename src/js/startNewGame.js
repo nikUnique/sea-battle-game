@@ -47,7 +47,8 @@ export const startNewGame = function (fleet, fleetParts) {
       const checkUsernameCase = function (input) {
         return (
           input.value.toLowerCase().slice(0, 1).toUpperCase() +
-          input.value.slice(1).toLowerCase()
+          input.value.slice(1).toLowerCase() +
+          "'s ships"
         );
       };
 
