@@ -208,7 +208,7 @@ export const gameStartControl = function (fleet, fleetParts) {
       fleetSide &&
         (fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[
           borderSide
-        ] = "2px solid #15aabf");
+        ] = "2px solid #3bc9db");
     };
 
     bothFleetsReady.length === 1 &&

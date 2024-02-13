@@ -3,6 +3,7 @@ const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
 const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
 const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
 const seas = document.querySelectorAll(".sea");
+const seaContainers = document.querySelectorAll(".sea-container");
 const notificatonWindow = document.querySelector(
   ".notification-window.player-1"
 );
@@ -65,6 +66,7 @@ export {
   enemySideEnemyFleet,
   enemySideMyFleet,
   seas,
+  seaContainers,
   notificatonWindow,
   notificatonWindow2,
   // overlay,

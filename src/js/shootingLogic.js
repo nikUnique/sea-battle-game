@@ -205,15 +205,4 @@ export default function (fleet, ships) {
   fleet.addEventListener("click", function (e) {
     shootingLogic(e);
   });
-
-  // document.addEventListener("keydown", function (e) {
-  //   if (e.key === "Enter") {
-  //     if (fleet.querySelector(".focused")?.querySelector(".ship")) {
-  //       fleet.querySelector(".focused")?.querySelector(".ship").click();
-  //     }
-  //     if (!fleet.querySelector(".focused")?.querySelector(".ship")) {
-  //       fleet.querySelector(".focused")?.click();
-  //     }
-  //   }
-  // });
 }

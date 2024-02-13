@@ -26,11 +26,13 @@ body {
 }
 
 .sea {
-  border: 2px solid #fcc419;
+  border-bottom: 7px solid #087f5b;
+  border-left: 3.6rem solid #087f5b;
+  border-right: 7px solid #087f5b;
 }
 
 .grid {
-  gap: 4.8rem 2.4rem;
+  gap: 4.8rem 2rem;
   margin-bottom: 9.6rem;
   display: grid;
 }
@@ -73,6 +75,56 @@ th {
   overflow: hidden;
 }
 
+.row-number {
+  color: #fff;
+  -webkit-user-select: none;
+  user-select: none;
+  font-weight: 500;
+  position: absolute;
+  left: -26px;
+}
+
+.row-number-1 {
+  top: 50px;
+}
+
+.row-number-2 {
+  top: 90px;
+}
+
+.row-number-3 {
+  top: 133px;
+}
+
+.row-number-4 {
+  top: 173px;
+}
+
+.row-number-5 {
+  top: 213px;
+}
+
+.row-number-6 {
+  top: 253px;
+}
+
+.row-number-7 {
+  top: 294px;
+}
+
+.row-number-8 {
+  top: 334px;
+}
+
+.row-number-9 {
+  top: 374px;
+}
+
+.row-number-10 {
+  top: 414px;
+  left: -30px;
+}
+
 td, th {
   text-align: center;
   -webkit-user-select: none;
@@ -95,10 +147,6 @@ td:hover {
 
 .dropzone {
   border: 1px solid #fff;
-}
-
-.dropzone:focus {
-  border: 2px solid red;
 }
 
 h1 {

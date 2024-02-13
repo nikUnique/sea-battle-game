@@ -84,15 +84,20 @@ body {
 
 .sea-container {
   position: relative;
+  /* margin-left: 1.5rem; */
 }
 
 .sea {
-  border: 2px solid #fcc419;
+  border-right: 7px solid #087f5b;
+  border-bottom: 7px solid #087f5b;
+  border-left: 3.6rem solid #087f5b;
+  /* border-bottom: none;
+  border-right: none; */
 }
 
 .grid {
   display: grid;
-  column-gap: 2.4rem;
+  column-gap: 2rem;
   row-gap: 4.8rem;
   margin-bottom: 9.6rem;
 }
@@ -141,6 +146,84 @@ th {
   overflow: hidden;
 }
 
+.row-number {
+  position: absolute;
+  left: -26;
+  color: #fff;
+  user-select: none;
+  font-weight: 500;
+}
+
+.row-number-1 {
+  top: 50;
+}
+.row-number-2 {
+  top: 90;
+}
+.row-number-3 {
+  top: 133;
+}
+.row-number-4 {
+  top: 173;
+}
+.row-number-5 {
+  top: 213;
+}
+.row-number-6 {
+  top: 253;
+}
+.row-number-7 {
+  top: 294;
+}
+.row-number-8 {
+  top: 334;
+}
+.row-number-9 {
+  top: 374;
+}
+.row-number-10 {
+  left: -30;
+  top: 414;
+}
+
+/* .column-letter {
+  top: -25;
+  position: absolute;
+  user-select: none;
+  transform: translate(0, -150%);
+}
+
+.column-letter-1 {
+  left: 23;
+}
+.column-letter-2 {
+  left: 64;
+}
+.column-letter-3 {
+  left: 104;
+}
+.column-letter-4 {
+  left: 145;
+}
+.column-letter-5 {
+  left: 186;
+}
+.column-letter-6 {
+  left: 226;
+}
+.column-letter-7 {
+  left: 266;
+}
+.column-letter-8 {
+  left: 306;
+}
+.column-letter-9 {
+  left: 350;
+}
+.column-letter-10 {
+  left: 388;
+} */
+
 td,
 th {
   height: 3.6rem;
@@ -166,10 +249,6 @@ td:hover {
   border: 1px solid #fff;
 
   /* border-color: rgba(255, 255, 255, 0.5); */
-}
-
-.dropzone:focus {
-  border: 2px solid red;
 }
 
 /**************************/

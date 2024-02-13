@@ -7,13 +7,16 @@ import {
   enemySideEnemyFleet,
   enemySideMyFleet,
   seas,
+  seaContainers,
 } from "./globalVars";
 
+{
+  /* <th>${item}</th> */
+}
 let markup = seaFleet
   .map(
     (item, i) => `
      <tr class="row-${i + 1}">
-<th>${item}</th>
  ${letters
    .map(
      (letter) =>
@@ -24,13 +27,29 @@ let markup = seaFleet
 `
   )
   .join("");
-
+{
+  /* <th class='empty-cell'></th> */
+}
 let markupSeaHead = ` ${seaFleet
   .map((_, i) => {
     return i > 0
       ? `<th>${letters[i]}</th>`
-      : `<th class='empty-cell'></th> 
+      : ` 
         <th>${letters[i]}</th>`;
+  })
+
+  .join("")}`;
+
+let markupLetters = ` ${seaFleet
+  .map((item, i) => {
+    return `<p class="column-letter column-letter-${i + 1}">${letters[i]}</p>`;
+  })
+
+  .join("")}`;
+
+let markupNumbers = ` ${seaFleet
+  .map((item, i) => {
+    return `<p class="row-number row-number-${i + 1}">${i + 1}</p>`;
   })
 
   .join("")}`;
@@ -40,25 +59,17 @@ let markupSeaHead = ` ${seaFleet
   mySideEnemyFleet,
   enemySideEnemyFleet,
   enemySideMyFleet,
-].forEach((container) => container.insertAdjacentHTML("afterbegin", markup));
+].forEach((container) => {
+  container.insertAdjacentHTML("afterbegin", markup);
+});
 
-[...seas].forEach((sea) =>
-  sea.querySelector("tr").insertAdjacentHTML("afterbegin", markupSeaHead)
-);
+[...seas].forEach((sea) => {
+  sea.querySelector("tr").insertAdjacentHTML("afterbegin", markupSeaHead);
+  // sea.insertAdjacentHTML("afterbegin", markupLetters);
+  sea.insertAdjacentHTML("afterbegin", markupNumbers);
+});
 
-const selectAllThs = function (el, borderSide) {
-  const seas = [...document.querySelectorAll(".sea")]
-    .map((sea) => {
-      return [...sea.querySelector(`${el}`)?.querySelectorAll("th")];
-    })
-    .flat()
-    .filter((th) => {
-      return th.textContent !== "";
-    })
-    .forEach((th) => {
-      th.style[borderSide] = "1px solid #fcc419";
-    });
-};
-
-selectAllThs("thead", "borderBottom");
-selectAllThs("tbody", "borderRight");
+// [...seaContainers].forEach((seaContainer) => {
+//   seaContainer.insertAdjacentHTML("afterbegin", markupLetters);
+//   seaContainer.insertAdjacentHTML("afterbegin", markupNumbers);
+// });

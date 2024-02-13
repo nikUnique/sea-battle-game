@@ -670,6 +670,7 @@ var _startNewGame = require("./startNewGame");
  // There can be added a feature of writing opponent names which will may be a nice touch to the game
  // Now opponents name can written or if not then a default name will be used instead. Right now players can offer start a new game and if both agreed then the new game will start, this work both as in the game and also after the game finished. There are also 2 button of ready to start action when you built your fleet and waiting when your opponent will be ready to play. Right now there is a big mess, so let's refactor it another time
  // All code is refactored, a lot of things are tested, and probably somewhere something isn't right, but when I start to test it again and again and then I change one thing which can be a reason and after that I cannot find that bug
+ // Binoculars feature implemented, the secret bug from previous writing is found and fixed, gameplay with arrow keys was done but then removed(too much control of another opponent with just a keyboard)
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./startNewGame":"hGRP7"}],"gb5d6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -680,6 +681,7 @@ parcelHelpers.export(exports, "mySideEnemyFleet", ()=>mySideEnemyFleet);
 parcelHelpers.export(exports, "enemySideEnemyFleet", ()=>enemySideEnemyFleet);
 parcelHelpers.export(exports, "enemySideMyFleet", ()=>enemySideMyFleet);
 parcelHelpers.export(exports, "seas", ()=>seas);
+parcelHelpers.export(exports, "seaContainers", ()=>seaContainers);
 parcelHelpers.export(exports, "notificatonWindow", ()=>notificatonWindow);
 parcelHelpers.export(exports, "notificatonWindow2", ()=>notificatonWindow2);
 parcelHelpers.export(exports, "btnCloseNotificationWindow", ()=>// overlay,
@@ -702,6 +704,7 @@ const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
 const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
 const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
 const seas = document.querySelectorAll(".sea");
+const seaContainers = document.querySelectorAll(".sea-container");
 const notificatonWindow = document.querySelector(".notification-window.player-1");
 const notificatonWindow2 = document.querySelector(".notification-window.player-2");
 // const overlay = document.querySelector(".overlay");
@@ -950,38 +953,37 @@ exports.default = createShip = function(coords, size, fleetParts) {
 var _globalVars = require("./globalVars");
 let markup = (0, _globalVars.seaFleet).map((item, i)=>`
      <tr class="row-${i + 1}">
-<th>${item}</th>
  ${(0, _globalVars.letters).map((letter)=>`<td class="dropzone"><div class="${letter}${i + 1} cell"></div></td>`).join("")}
 </tr>
 `).join("");
 let markupSeaHead = ` ${(0, _globalVars.seaFleet).map((_, i)=>{
-    return i > 0 ? `<th>${(0, _globalVars.letters)[i]}</th>` : `<th class='empty-cell'></th> 
+    return i > 0 ? `<th>${(0, _globalVars.letters)[i]}</th>` : ` 
         <th>${(0, _globalVars.letters)[i]}</th>`;
+}).join("")}`;
+let markupLetters = ` ${(0, _globalVars.seaFleet).map((item, i)=>{
+    return `<p class="column-letter column-letter-${i + 1}">${(0, _globalVars.letters)[i]}</p>`;
+}).join("")}`;
+let markupNumbers = ` ${(0, _globalVars.seaFleet).map((item, i)=>{
+    return `<p class="row-number row-number-${i + 1}">${i + 1}</p>`;
 }).join("")}`;
 [
     (0, _globalVars.mySideMyFleet),
     (0, _globalVars.mySideEnemyFleet),
     (0, _globalVars.enemySideEnemyFleet),
     (0, _globalVars.enemySideMyFleet)
-].forEach((container)=>container.insertAdjacentHTML("afterbegin", markup));
+].forEach((container)=>{
+    container.insertAdjacentHTML("afterbegin", markup);
+});
 [
     ...(0, _globalVars.seas)
-].forEach((sea)=>sea.querySelector("tr").insertAdjacentHTML("afterbegin", markupSeaHead));
-const selectAllThs = function(el, borderSide) {
-    const seas = [
-        ...document.querySelectorAll(".sea")
-    ].map((sea)=>{
-        return [
-            ...sea.querySelector(`${el}`)?.querySelectorAll("th")
-        ];
-    }).flat().filter((th)=>{
-        return th.textContent !== "";
-    }).forEach((th)=>{
-        th.style[borderSide] = "1px solid #fcc419";
-    });
-};
-selectAllThs("thead", "borderBottom");
-selectAllThs("tbody", "borderRight");
+].forEach((sea)=>{
+    sea.querySelector("tr").insertAdjacentHTML("afterbegin", markupSeaHead);
+    // sea.insertAdjacentHTML("afterbegin", markupLetters);
+    sea.insertAdjacentHTML("afterbegin", markupNumbers);
+}); // [...seaContainers].forEach((seaContainer) => {
+ //   seaContainer.insertAdjacentHTML("afterbegin", markupLetters);
+ //   seaContainer.insertAdjacentHTML("afterbegin", markupNumbers);
+ // });
 
 },{"./globalVars":"gb5d6"}],"3iktl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1218,7 +1220,7 @@ const gameStartControl = function(fleet, fleetParts) {
         (0, _globalVars.bothSideShips).push(ships);
         const addBorder = function(borderSide, coord) {
             const fleetSide = fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
-            fleetSide && (fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = "2px solid #15aabf");
+            fleetSide && (fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = "2px solid #3bc9db");
         };
         bothFleetsReady.length === 1 && (fleet === (0, _globalVars.mySideEnemyFleet) ? (0, _globalVars.enemySideEnemyFleet) : (0, _globalVars.mySideMyFleet)).querySelectorAll(".ship").forEach((ship)=>{
             ship.classList.remove("ship-color");
@@ -1348,18 +1350,15 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
             fleet.addEventListener("click", function(e) {
                 if (e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
                 const turn = (0, _gameStartControl.playing) && fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideEnemyFleet) : (0, _globalVars.enemySideMyFleet);
-                if (0, _gameStartControl.playing) turn.style.pointerEvents = "auto", /*    turn.querySelector("td").setAttribute("tabindex", 10000),
-        turn.querySelector("td").focus() */ fleet.closest(".sea").style.opacity = "0.7";
+                if (0, _gameStartControl.playing) turn.style.pointerEvents = "auto", fleet.closest(".sea").style.opacity = "0.7";
                 (0, _gameStartControl.playing) && (fleet.style.pointerEvents = "none"), turn.closest(".sea").style.opacity = "1";
             });
         });
     });
 var _globalVars = require("./globalVars");
 var _gameStartControl = require("./gameStartControl");
-var _shootingLogic = require("./shootingLogic");
-var _shootingLogicDefault = parcelHelpers.interopDefault(_shootingLogic);
 
-},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./shootingLogic":"6WpIw"}],"6WpIw":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6WpIw":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
@@ -1473,16 +1472,6 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
         fleet.addEventListener("click", function(e) {
             shootingLogic(e);
         });
-    // document.addEventListener("keydown", function (e) {
-    //   if (e.key === "Enter") {
-    //     if (fleet.querySelector(".focused")?.querySelector(".ship")) {
-    //       fleet.querySelector(".focused")?.querySelector(".ship").click();
-    //     }
-    //     if (!fleet.querySelector(".focused")?.querySelector(".ship")) {
-    //       fleet.querySelector(".focused")?.click();
-    //     }
-    //   }
-    // });
     });
 var _globalVars = require("./globalVars");
 var _showEndResults = require("./showEndResults");
