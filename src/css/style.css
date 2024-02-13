@@ -301,12 +301,24 @@ p {
   background-color: #c3fae8;
 }
 
-.binoculars-reward-label {
+.binoculars-reward-label,
+.timer-label {
   position: absolute;
   left: 8%;
-  transform: translate(0, 40%);
+
+  transform: translate(0, 180%);
   transition: all 0.5s;
   opacity: 0;
+}
+
+.timer-label {
+  opacity: 0;
+  left: 14%;
+  transform: translate(0, 40%);
+}
+
+.opponent-timer {
+  left: 6%;
 }
 
 .injure {

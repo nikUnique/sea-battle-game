@@ -9,7 +9,7 @@ import {
 
 import showEndResults from "./showEndResults";
 import { playing } from "./gameStartControl";
-import { buildShipBorder } from "./helpers";
+import { buildShipBorder, startTimer } from "./helpers";
 
 export default function (fleet, ships) {
   const shootingLogic = function (e) {
@@ -81,7 +81,8 @@ export default function (fleet, ships) {
         "afterbegin",
         injure
       ),
-      addMarkToFleet(mySideMyFleet).nextElementSibling.classList.add("injure"));
+      addMarkToFleet(mySideMyFleet).nextElementSibling.classList.add("injure"),
+      startTimer(fleet));
 
     !e.target
       .closest(".enemy-side--my-fleet")
@@ -91,7 +92,8 @@ export default function (fleet, ships) {
       ).nextElementSibling.insertAdjacentHTML("afterbegin", injure),
       addMarkToFleet(enemySideEnemyFleet).nextElementSibling.classList.add(
         "injure"
-      ));
+      ),
+      startTimer(fleet));
 
     if (destroyedShipCoords.includes(false)) return;
 

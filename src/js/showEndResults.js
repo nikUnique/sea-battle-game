@@ -6,6 +6,7 @@ import {
   // overlay,
   btnCloseNotificationWindow,
   btnCloseNotificationWindow2,
+  allTimers,
 } from "./globalVars";
 
 import { playing } from "./gameStartControl";
@@ -14,7 +15,7 @@ import {
   closeNotificationWindow2,
   getSeaOpacityBack,
 } from "./helpers";
-export default function (fleet) {
+export default function (fleet, noTime = false) {
   const resultsMessage = document.querySelector(".results-message");
   const resultsMessage2 = document.querySelector(".results-message-2");
   const allShips = [...fleet.querySelectorAll(".ship")];
@@ -31,7 +32,13 @@ export default function (fleet) {
     });
   console.log(fleet);
   const areAllShipsInjured = injuredShips.length === allShips.length;
+  const runOutOfTime = noTime ? true : false;
 
+  if (!areAllShipsInjured && !runOutOfTime) {
+    return;
+  }
+  console.log(areAllShipsInjured, "areAll");
+  console.log(runOutOfTime, "areAll");
   const composeMessage = function (messageEl, fleetSide) {
     messageEl.textContent !== "" && (messageEl.textContent = "");
     messageEl.insertAdjacentHTML(
@@ -64,7 +71,11 @@ export default function (fleet) {
     );
   };
 
-  areAllShipsInjured && openNotificationWindow();
+  (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
+  (areAllShipsInjured || runOutOfTime) &&
+    allTimers.forEach((timerEl) => {
+      timerEl.style.opacity = "0";
+    });
 
   btnCloseNotificationWindow.addEventListener("click", closeNotificationWindow);
   // overlay.addEventListener("click", closeNotificationWindow);

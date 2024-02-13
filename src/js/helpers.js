@@ -1,4 +1,13 @@
-import { notificatonWindow, notificatonWindow2 } from "./globalVars";
+import { playing } from "./gameStartControl";
+import {
+  enemySideEnemyFleet,
+  enemySideMyFleet,
+  mySideMyFleet,
+  notificatonWindow,
+  notificatonWindow2,
+} from "./globalVars";
+import showEndResults from "./showEndResults";
+let timer, labelContraryTimer;
 
 export const buildShipBorder = function (borderParts) {
   const ship = borderParts[0];
@@ -46,4 +55,50 @@ export const closeNotificationWindow2 = function () {
 
 export const allowForbidClick = function (fleet, state) {
   fleet.style.pointerEvents = state;
+};
+
+export const startTimer = function (fleet, target = false) {
+  // Timer feature
+
+  if (timer) {
+    console.log(timer);
+    clearInterval(timer);
+    // labelContraryTimer && (labelContraryTimer.style.opacity = "0");
+  }
+  const contraryFleet =
+    fleet === enemySideMyFleet ? mySideMyFleet : enemySideEnemyFleet;
+
+  const timeLeftLabel = fleet
+    .closest(".sea-container")
+    .querySelector(".timer-label");
+  const timeContraryLeftLabel = contraryFleet
+    .closest(".sea-container")
+    .querySelector(".timer-label");
+  let labelTimer = fleet.closest(".sea-container").querySelector(".timer-time");
+  timeLeftLabel.style.opacity = "100";
+  labelContraryTimer = contraryFleet
+    .closest(".sea-container")
+    .querySelector(".timer-time");
+
+  timeContraryLeftLabel.style.opacity = "100";
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+
+    labelTimer.textContent = `${min}:${sec}`;
+    labelContraryTimer.textContent = `${min}:${sec}`;
+
+    if (time === 0) {
+      clearInterval(timer);
+      timeLeftLabel.style.opacity = "0";
+      showEndResults(fleet, true);
+
+      // fleet.classList.remove("binoculars");
+      // console.log("Magic item removed");
+    }
+    time--;
+  };
+  let time = 10;
+  tick();
+  timer = setInterval(tick, 1000);
 };

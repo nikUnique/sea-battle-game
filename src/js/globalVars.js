@@ -24,6 +24,7 @@ const startGameBtn = document.querySelector(".fleet-1");
 const startGameBtn2 = document.querySelector(".fleet-2");
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 const seaFleet = Array.from({ length: 10 }, (_, i) => i + 1);
+const allTimers = [...document.querySelectorAll(".timer-label")];
 
 let createMyShips = [
   [["e1"], ["e1"].length],
@@ -78,6 +79,7 @@ export {
   startGameBtn2,
   letters,
   seaFleet,
+  allTimers,
   createMyShips,
   createEnemyShips,
   mySideMyShips,

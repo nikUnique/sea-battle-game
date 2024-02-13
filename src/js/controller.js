@@ -112,3 +112,9 @@ const createFleet = function (fleetParts) {
 // Now opponents name can written or if not then a default name will be used instead. Right now players can offer start a new game and if both agreed then the new game will start, this work both as in the game and also after the game finished. There are also 2 button of ready to start action when you built your fleet and waiting when your opponent will be ready to play. Right now there is a big mess, so let's refactor it another time
 // All code is refactored, a lot of things are tested, and probably somewhere something isn't right, but when I start to test it again and again and then I change one thing which can be a reason and after that I cannot find that bug
 // Binoculars feature implemented, the secret bug from previous writing is found and fixed, gameplay with arrow keys was done but then removed(too much control of another opponent with just a keyboard)
+// Improved sea-container, now it's time to implement timer feature in which every player will be given 30 sec to make a shot
+
+// Where should the timer implementation be? Probably game control
+// When it should start and stop?
+// When game starts, the timer starts, when move is done the timer restarts, when timer finished the game is lost
+// Where should I put the timer?

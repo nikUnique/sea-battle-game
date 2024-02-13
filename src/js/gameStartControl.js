@@ -15,6 +15,7 @@ import {
   allowForbidClick,
   buildShipBorder,
   getSeaOpacityBack,
+  startTimer,
 } from "./helpers";
 
 let playing;
@@ -248,6 +249,7 @@ export const gameStartControl = function (fleet, fleetParts) {
       playing = true;
       console.log("Game started 🥰");
       console.log(playing, "playing");
+
       // Disable right-click
       // document.addEventListener("contextmenu", (e) => e.preventDefault());
       // function ctrlShiftKey(e, key) {
@@ -282,9 +284,11 @@ export const gameStartControl = function (fleet, fleetParts) {
     mySideEnemyFleet
       ? (firstTurn < 0.5 &&
           (allowForbidClick(mySideEnemyFleet, "auto"),
+          startTimer(mySideEnemyFleet),
           (enemySideMyFleet.closest(".sea").style.opacity = "0.7")),
         firstTurn >= 0.5 &&
           (allowForbidClick(enemySideMyFleet, "auto"),
+          startTimer(enemySideMyFleet),
           (mySideEnemyFleet.closest(".sea").style.opacity = "0.7")))
       : "";
     [newGameBtn, newGameBtn2].forEach((btn) => {

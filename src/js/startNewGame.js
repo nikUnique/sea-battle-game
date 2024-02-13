@@ -1,5 +1,6 @@
 import { bothFleetsReady, newGameAgreement } from "./gameStartControl";
 import {
+  allTimers,
   bothSideShips,
   createEnemyShips,
   createMyShips,
@@ -101,7 +102,9 @@ export const startNewGame = function (fleet, fleetParts) {
           true
         );
         getSeaOpacityBack();
-
+        allTimers.forEach((timerEl) => {
+          timerEl.style.opacity = "0";
+        });
         playing = false;
         [
           [mySideMyFleet, "auto"],
