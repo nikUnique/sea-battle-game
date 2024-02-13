@@ -20,6 +20,7 @@ import {
   closeNotificationWindow,
   closeNotificationWindow2,
   getSeaOpacityBack,
+  startTimer,
 } from "./helpers";
 import placeShipsManually from "./placeShipsManually";
 
@@ -105,6 +106,7 @@ export const startNewGame = function (fleet, fleetParts) {
         allTimers.forEach((timerEl) => {
           timerEl.style.opacity = "0";
         });
+        startTimer(fleet, true);
         playing = false;
         [
           [mySideMyFleet, "auto"],

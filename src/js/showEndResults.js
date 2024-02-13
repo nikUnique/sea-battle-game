@@ -37,6 +37,7 @@ export default function (fleet, noTime = false) {
   if (!areAllShipsInjured && !runOutOfTime) {
     return;
   }
+
   console.log(areAllShipsInjured, "areAll");
   console.log(runOutOfTime, "areAll");
   const composeMessage = function (messageEl, fleetSide) {

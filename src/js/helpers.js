@@ -2,6 +2,7 @@ import { playing } from "./gameStartControl";
 import {
   enemySideEnemyFleet,
   enemySideMyFleet,
+  letters,
   mySideMyFleet,
   notificatonWindow,
   notificatonWindow2,
@@ -57,9 +58,12 @@ export const allowForbidClick = function (fleet, state) {
   fleet.style.pointerEvents = state;
 };
 
-export const startTimer = function (fleet, target = false) {
+export const startTimer = function (fleet, newGame = false) {
   // Timer feature
-
+  if (newGame) {
+    clearInterval(timer);
+    return;
+  }
   if (timer) {
     console.log(timer);
     clearInterval(timer);
@@ -91,6 +95,7 @@ export const startTimer = function (fleet, target = false) {
     if (time === 0) {
       clearInterval(timer);
       timeLeftLabel.style.opacity = "0";
+
       showEndResults(fleet, true);
 
       // fleet.classList.remove("binoculars");
@@ -101,4 +106,26 @@ export const startTimer = function (fleet, target = false) {
   let time = 10;
   tick();
   timer = setInterval(tick, 1000);
+};
+
+export const selectCellsAround = function (cell) {
+  const coordSlice01 = cell.slice(0, 1);
+  const coordSlice1 = cell.slice(1);
+  const letterAround = letters.indexOf(coordSlice01);
+
+  const previousCell = coordSlice01 + (+coordSlice1 - 1);
+  const nextCell = coordSlice01 + (+coordSlice1 + 1);
+
+  const rightCell = letters[letterAround + 1] + coordSlice1;
+
+  const leftCell = letters[letterAround - 1] + coordSlice1;
+  return {
+    coordSlice01,
+    coordSlice1,
+    letterAround,
+    previousCell,
+    nextCell,
+    rightCell,
+    leftCell,
+  };
 };

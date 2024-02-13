@@ -84,15 +84,12 @@ body {
 
 .sea-container {
   position: relative;
-  /* margin-left: 1.5rem; */
 }
 
 .sea {
   border-right: 7px solid #087f5b;
   border-bottom: 7px solid #087f5b;
   border-left: 3.6rem solid #087f5b;
-  /* border-bottom: none;
-  border-right: none; */
 }
 
 .grid {
@@ -186,44 +183,6 @@ th {
   top: 414;
 }
 
-/* .column-letter {
-  top: -25;
-  position: absolute;
-  user-select: none;
-  transform: translate(0, -150%);
-}
-
-.column-letter-1 {
-  left: 23;
-}
-.column-letter-2 {
-  left: 64;
-}
-.column-letter-3 {
-  left: 104;
-}
-.column-letter-4 {
-  left: 145;
-}
-.column-letter-5 {
-  left: 186;
-}
-.column-letter-6 {
-  left: 226;
-}
-.column-letter-7 {
-  left: 266;
-}
-.column-letter-8 {
-  left: 306;
-}
-.column-letter-9 {
-  left: 350;
-}
-.column-letter-10 {
-  left: 388;
-} */
-
 td,
 th {
   height: 3.6rem;
@@ -305,7 +264,6 @@ p {
 .timer-label {
   position: absolute;
   left: 8%;
-
   transform: translate(0, 180%);
   transition: all 0.5s;
   opacity: 0;

@@ -1,4 +1,5 @@
 import * as GlobalVars from "./globalVars";
+import { selectCellsAround } from "./helpers";
 
 export default createShip = function (coords, size, fleetParts) {
   const fleet = fleetParts[0];
@@ -57,17 +58,24 @@ export default createShip = function (coords, size, fleetParts) {
     fleet !== GlobalVars.enemySideEnemyFleet
   ) {
     const checkWholesomness = coords.map((coord, i) => {
-      const coordSlice01 = coord.slice(0, 1);
-      const coordSlice1 = coord.slice(1);
-
-      const letterAround = letters.indexOf(coordSlice01);
+      const cellAttributes = selectCellsAround(coord);
 
       if (
         coords.length > 1 &&
-        !coords.includes(letters[letterAround] + (coordSlice1 - 1)) &&
-        !coords.includes(letters[letterAround] + (+coordSlice1 + 1)) &&
-        !coords.includes(letters[letterAround - 1] + coordSlice1) &&
-        !coords.includes(letters[letterAround + 1] + coordSlice1)
+        !coords.includes(
+          letters[cellAttributes.letterAround] +
+            (cellAttributes.coordSlice1 - 1)
+        ) &&
+        !coords.includes(
+          letters[cellAttributes.letterAround] +
+            (+cellAttributes.coordSlice1 + 1)
+        ) &&
+        !coords.includes(
+          letters[cellAttributes.letterAround - 1] + cellAttributes.coordSlice1
+        ) &&
+        !coords.includes(
+          letters[cellAttributes.letterAround + 1] + cellAttributes.coordSlice1
+        )
       ) {
         return false;
       }
@@ -82,17 +90,18 @@ export default createShip = function (coords, size, fleetParts) {
 
   const cellsAround = bigCoords.reduce((acc, coord, i) => {
     fleet.querySelector(`.${coord}`)?.classList.add("ship");
-    const coordSlice01 = coord.slice(0, 1);
-    const coordSlice1 = coord.slice(1);
-    const letterAround = letters.indexOf(coordSlice01);
 
-    const previousCell = coordSlice01 + (+coordSlice1 - 1);
-    const nextCell = coordSlice01 + (+coordSlice1 + 1);
+    const cellAttributes = selectCellsAround(coord);
 
-    const rightCell = letters[letterAround + 1] + coordSlice1;
+    const coordSlice01 = cellAttributes.coordSlice01;
+    const coordSlice1 = cellAttributes.coordSlice1;
+    const letterAround = cellAttributes.letterAround;
 
-    const leftCell = letters[letterAround - 1] + coordSlice1;
+    const previousCell = cellAttributes.previousCell;
+    const nextCell = cellAttributes.nextCell;
 
+    const rightCell = cellAttributes.rightCell;
+    const leftCell = cellAttributes.leftCell;
     const diagonalCells = function (number1, number2) {
       return letters[letterAround + number1] + (+coordSlice1 + number2);
     };
@@ -136,5 +145,7 @@ export default createShip = function (coords, size, fleetParts) {
         ? "column"
         : "row",
   };
+
   ships.push(ship);
+  console.log(ships, "ships");
 };

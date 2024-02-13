@@ -13,23 +13,7 @@ export default function (fleet) {
   [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
     console.log(playing);
 
-    // When the target got damaged I need to reset the timer, but when I click on already damaged ship the timer shouldn't reset
-
     fleet.addEventListener("click", function (e) {
-      // if (
-      //   e.target.classList.contains("ship") ||
-      //   e.target.querySelector(".ship")?.classList.contains("ship")
-      // ) {
-      //   console.log("shipTimer");
-
-      //   !e.target?.classList.contains("timer-reset") &&
-      //     !String(e.target.classList[0]).endsWith("fleet") &&
-      //     !String(e.target.classList[0]).startsWith("row") &&
-      //     !e.target.classList.contains("dropzone") &&
-      //     startTimer(fleet) &&
-      //     console.log(e.target, "target");
-      //   e.target?.classList.add("timer-reset");
-      // }
       if (
         e.target.classList.contains("ship") ||
         e.target.textContent !== "" ||

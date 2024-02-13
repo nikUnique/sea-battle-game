@@ -10,11 +10,13 @@ import {
   newGameBtn,
   startGameBtn,
   startGameBtn2,
+  letters,
 } from "./globalVars";
 import {
   allowForbidClick,
   buildShipBorder,
   getSeaOpacityBack,
+  selectCellsAround,
   startTimer,
 } from "./helpers";
 
@@ -23,6 +25,7 @@ let bothFleetsReady = [];
 let newGameAgreement = [];
 export { playing, bothFleetsReady, newGameAgreement };
 let firstTurn = "";
+let checkCells;
 
 export const gameStartControl = function (fleet, fleetParts) {
   // playing = false;
@@ -130,11 +133,44 @@ export const gameStartControl = function (fleet, fleetParts) {
         const sortedCoords = ship[0].map((coord, i) => {
           return sortedLeters[i] + sortedNumbers[i];
         });
+        console.log(sortedCoords);
 
         if (createShip(sortedCoords, ship[1], fleetParts) === false) {
           return false;
         }
+
+        if (sortedCoords.length === 4) {
+          const inBetweenShipParts = sortedCoords.filter((cell, i, arr) => {
+            return i !== 0 && i !== arr.length - 1;
+          });
+
+          checkCells = inBetweenShipParts
+            .map((cell) => {
+              fleet.querySelector(`.${cell}`).classList;
+
+              const cellAttrbs = selectCellsAround(cell);
+
+              const selectCell = function (cell) {
+                return fleet.querySelector(`.${cell}`)?.nextElementSibling;
+              };
+              return [
+                selectCell(cellAttrbs.previousCell),
+                selectCell(cellAttrbs.nextCell),
+                selectCell(cellAttrbs.rightCell),
+                selectCell(cellAttrbs.leftCell),
+              ];
+            })
+            .map((cellArr) => {
+              return cellArr.filter((cellEl) => {
+                return cellEl && cellEl;
+              });
+            });
+
+          console.log(inBetweenShipParts, "inBetween");
+          console.log(checkCells.flat(2), "check");
+        }
       });
+
       return sortCoords;
     };
 
@@ -161,7 +197,8 @@ export const gameStartControl = function (fleet, fleetParts) {
         createManuallyPlacedShips(
           fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips,
           fleetIsEnemySideMyFleet ? enemySideMyShips : mySideEnemyShips
-        ).includes(false)
+        ).includes(false) ||
+        checkCells.flat(2).length !== 4
       ) {
         return resetWrongShipPlacement();
       }
