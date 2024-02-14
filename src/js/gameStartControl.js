@@ -344,6 +344,6 @@ export const gameStartControl = function (fleet, fleetParts) {
 // Nice idea about making binoculars for 10 seconds to find more ships
 
 // Binoculars feature:
-// 1. When you destroyed a ship for which destruction there should be an award in kind of binoculars then for 10 seconds hovering effect on ships will be different from hovering state on empty cells
+// 1. When you destroyed a ship for which destruction there should be an award in a kind of magic video camera then for 10 seconds hovering effect on ships will be different from hovering effect on empty cells
 // If destroyed ship has reward class then add binoculars to the fleet on which that ship was destroyed, but before I need randomly add this reward class to the ship in the beginning of the game
 // Take all ship's classes and assign one of them to the ship

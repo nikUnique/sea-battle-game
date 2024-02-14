@@ -54,7 +54,7 @@
             </thead>
             <tbody class="my-side--my-fleet"></tbody>
           </table>
-          <p class="username-1">Player-1's ships</p>
+          <p class="username-1">First player's ships</p>
           <p class="timer-label opponent-timer">
             Opponent's turn - time to shoot left:&nbsp;<span
               class="timer-time"
@@ -84,6 +84,7 @@
           </p>
         </div>
       </div>
+
       <div class="grid-helper"></div>
       <div class="grid grid--2-cols">
         <div class="sea-container">
@@ -93,7 +94,7 @@
             </thead>
             <tbody class="enemy-side--enemy-fleet"></tbody>
           </table>
-          <p class="username-2">Player-2's ships</p>
+          <p class="username-2">Second player's ships</p>
           <p class="timer-label opponent-timer">
             Opponent's turn - time to shoot left:&nbsp;<span
               class="timer-time"
@@ -122,6 +123,156 @@
             ></span>
           </p>
         </div>
+      </div>
+      <div class="game-description-container">
+        <h2 class="rules-caption">Sea battle rules</h2>
+        <p>
+          In Sea Battle game you play against an opponent, both of you have two
+          10x10 grids, one grid is for your own ships, and another one is for
+          your opponent's ships which you are trying to discover. You start by
+          arranging your ships on your grid. You have these kinds of ships:
+        </p>
+        <div class="ship-description-grid">
+          <ol class="ship-types">
+            <li class="flex-string flex-string-1">
+              <span class="battleship">Aviation Carrier (1 ship)</span>
+            </li>
+            <li class="flex-string flex-string-2">
+              <span class="cruiser"> Battleship(2 ships)</span>
+            </li>
+            <li class="flex-string flex-string-3">
+              <span class="submarine">Cruiser (3 ships)</span>
+            </li>
+            <li class="flex-string flex-string-4">
+              <span class="destroyer">Destroyer (4 ships)</span>
+            </li>
+          </ol>
+          <ul class="ship-types">
+            <li>
+              <img
+                class="show-ship show-ship-battle"
+                src="src/img/battleship.png"
+              />
+            </li>
+            <li>
+              <img
+                class="show-ship show-ship-cruiser"
+                src="src/img/cruiser.png"
+              />
+            </li>
+            <li>
+              <img
+                class="show-ship show-ship-submarine"
+                src="src/img/submarine.png"
+              />
+            </li>
+            <li>
+              <img
+                class="show-ship show-ship-destroyer"
+                src="src/img/destroyer.png"
+              />
+            </li>
+          </ul>
+        </div>
+
+        <p>
+          The ships cannot be next to each other on the grid, not even
+          diagonally, they must always be at least one square away from one
+          another. Also every ship except destroyer consists of multiple parts
+          which you cannot mix together with parts of different ships and to see
+          the difference between them every part has corresponding size label.
+          You can arrange them as you want by dragging and dropping them
+          following ship placement rules.
+        </p>
+        <p>
+          After the game started players take turns clicking(shooting) on the
+          grid. If you miss the turn changes and if you hit a ship you get to
+          shoot again. You mark which squares are hits and which are misses and
+          try to be the first to sink all your opponent's ships. The first
+          player to sink their opponent's ships or the first player whose enemy
+          loses all his time wins the game.
+        </p>
+        <p>
+          Magic video camera 📹 feature: When you destroyed a ship for which
+          destruction there should be an award in a kind of magic video camera,
+          then for 10 seconds hovering effect on ships will be different from
+          hovering effect on empty cells.
+        </p>
+      </div>
+      <div class="game-description-container-2">
+        <h2 class="rules-caption">Sea battle rules</h2>
+        <p>
+          In Sea Battle game you play against an opponent, both of you have two
+          10x10 grids, one grid is for your own ships, and another one is for
+          your opponent's ships which you are trying to discover. You start by
+          arranging your ships on your grid. You have these kinds of ships:
+        </p>
+        <div class="ship-description-grid">
+          <ol class="ship-types">
+            <li class="flex-string flex-string-1">
+              <span class="battleship">Aviation Carrier (1 ship)</span>
+            </li>
+            <li class="flex-string flex-string-2">
+              <span class="cruiser"> Battleship(2 ships)</span>
+            </li>
+            <li class="flex-string flex-string-3">
+              <span class="submarine">Cruiser (3 ships)</span>
+            </li>
+            <li class="flex-string flex-string-4">
+              <span class="destroyer">Destroyer (4 ships)</span>
+            </li>
+          </ol>
+          <ul class="ship-types">
+            <li>
+              <img
+                class="show-ship show-ship-battle"
+                src="src/img/battleship.png"
+              />
+            </li>
+            <li>
+              <img
+                class="show-ship show-ship-cruiser"
+                src="src/img/cruiser.png"
+              />
+            </li>
+            <li>
+              <img
+                class="show-ship show-ship-submarine"
+                src="src/img/submarine.png"
+              />
+            </li>
+            <li>
+              <img
+                class="show-ship show-ship-destroyer"
+                src="src/img/destroyer.png"
+              />
+            </li>
+          </ul>
+        </div>
+
+        <p>
+          The ships cannot be next to each other on the grid, not even
+          diagonally, they must always be at least one square away from one
+          another. Also every ship except destroyer consists of multiple parts
+          which you cannot mix together with parts of different ships and to see
+          the difference between them every part has corresponding size label.
+          You can arrange them as you want by dragging and dropping them
+          following ship placement rules.
+        </p>
+        <p>
+          After the game started players take turns clicking(shooting) on the
+          grid. If you miss the turn changes and if you hit a ship you get to
+          shoot again. You mark which squares are hits and which are misses and
+          try to be the first to sink all your opponent's ships. The first
+          player to sink their opponent's ships or the first player whose enemy
+          loses all his time wins the game.
+        </p>
+        <p>
+          Magic video camera 📹 feature: When you destroyed a ship for which
+          destruction there should be an award in a kind of magic video camera,
+          then for 10 seconds hovering effect on ships will be different from
+          hovering effect on empty cells.
+        </p>
       </div>
     </div>
 

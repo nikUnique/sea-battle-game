@@ -34,7 +34,7 @@ body {
 
 .grid {
   gap: 4.8rem 2rem;
-  margin-bottom: 9.6rem;
+  margin-bottom: 4.8rem;
   display: grid;
 }
 
@@ -156,6 +156,7 @@ h1 {
 }
 
 p {
+  margin-bottom: 1.6rem;
   font-size: 1.8rem;
 }
 
@@ -298,6 +299,53 @@ p {
   top: 0;
   left: 50%;
   transform: translate(-50%, -150%);
+}
+
+.game-description-container {
+  grid-column: 1 / 2;
+  justify-self: center;
+  width: 80%;
+  display: grid;
+}
+
+.game-description-container-2 {
+  grid-column: 3 / -1;
+  justify-self: center;
+  width: 80%;
+  display: grid;
+}
+
+.flex-string {
+  align-items: center;
+  display: flex;
+}
+
+.ship-description-grid {
+  grid-template-columns: 1fr 1fr;
+  width: 45rem;
+  display: grid;
+}
+
+.ship-name {
+  color: inherit;
+}
+
+.rules-caption {
+  text-align: center;
+  margin-bottom: 2.4rem;
+  font-size: 2.4rem;
+}
+
+.ship-types {
+  gap: .8rem;
+  margin-bottom: 1.6rem;
+  font-size: 1.6rem;
+  list-style: none;
+  display: grid;
+}
+
+.show-ship {
+  height: 4rem;
 }
 
 /*# sourceMappingURL=index.c92073ef.css.map */

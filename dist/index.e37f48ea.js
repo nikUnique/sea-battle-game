@@ -680,7 +680,7 @@ var _startNewGame = require("./startNewGame");
  // Unexpected bug with 4-sized ship is fixed, the code is refactored, now it's time think about the next step
  // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
 
-},{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./startNewGame":"hGRP7"}],"gb5d6":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","./startNewGame":"hGRP7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "bothSideShips", ()=>bothSideShips);
@@ -962,7 +962,7 @@ exports.default = createShip = function(coords, size, fleetParts) {
     console.log(ships, "ships");
 };
 
-},{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./helpers":"hGI1E"}],"hGI1E":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGI1E":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "buildShipBorder", ()=>buildShipBorder);
@@ -1065,7 +1065,7 @@ const selectCellsAround = function(cell) {
     };
 };
 
-},{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./showEndResults":"2csmh"}],"2csmh":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
@@ -1401,7 +1401,7 @@ const gameStartControl = function(fleet, fleetParts) {
     fleet !== (0, _globalVars.mySideMyFleet) && fleet !== (0, _globalVars.enemySideEnemyFleet) && (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn) : (0, _globalVars.startGameBtn2)).addEventListener("click", startPlaying);
 }; // Nice idea about making binoculars for 10 seconds to find more ships
  // Binoculars feature:
- // 1. When you destroyed a ship for which destruction there should be an award in kind of binoculars then for 10 seconds hovering effect on ships will be different from hovering state on empty cells
+ // 1. When you destroyed a ship for which destruction there should be an award in a kind of magic video camera then for 10 seconds hovering effect on ships will be different from hovering effect on empty cells
  // If destroyed ship has reward class then add binoculars to the fleet on which that ship was destroyed, but before I need randomly add this reward class to the ship in the beginning of the game
  // Take all ship's classes and assign one of them to the ship
 
@@ -1529,7 +1529,7 @@ var _globalVars = require("./globalVars");
 var _gameStartControl = require("./gameStartControl");
 var _helpers = require("./helpers");
 
-},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./helpers":"hGI1E"}],"6WpIw":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6WpIw":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
