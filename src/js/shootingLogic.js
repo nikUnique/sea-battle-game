@@ -8,8 +8,8 @@ import {
 } from "./globalVars";
 
 import showEndResults from "./showEndResults";
-import { playing } from "./gameStartControl";
-import { buildShipBorder, startTimer } from "./helpers";
+import { playingCheck } from "./gameStartControl";
+import { buildShipBorder, startTimer, timerClock } from "./helpers";
 
 export default function (fleet, ships) {
   const shootingLogic = function (e) {
@@ -17,7 +17,7 @@ export default function (fleet, ships) {
 
     console.log(e.target, "target");
     if (
-      !playing ||
+      !playingCheck.playing ||
       e.target.querySelector(".ship")?.classList.contains("ship")
     ) {
       console.log("dropzone");
@@ -121,13 +121,12 @@ export default function (fleet, ships) {
       const labelBinocularsReward = fleet
         .closest(".sea-container")
         .querySelector(".binoculars-reward-label");
-      let labelTimer = fleet.closest(".sea-container").querySelector(".timer");
+      const labelTimer = fleet
+        .closest(".sea-container")
+        .querySelector(".timer");
       labelBinocularsReward.style.opacity = "100";
       const tick = function () {
-        const min = String(Math.trunc(time / 60)).padStart(2, 0);
-        const sec = String(Math.trunc(time % 60)).padStart(2, 0);
-
-        labelTimer.textContent = `${min}:${sec}`;
+        timerClock(time, labelTimer);
 
         if (time === 0) {
           clearInterval(timer);

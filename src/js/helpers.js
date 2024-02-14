@@ -1,4 +1,3 @@
-import { playing } from "./gameStartControl";
 import {
   enemySideEnemyFleet,
   enemySideMyFleet,
@@ -58,6 +57,13 @@ export const allowForbidClick = function (fleet, state) {
   fleet.style.pointerEvents = state;
 };
 
+export const timerClock = function (time, labelTimer) {
+  const min = String(Math.trunc(time / 60)).padStart(2, 0);
+  const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+  labelTimer.textContent = `${min}:${sec}`;
+  return `${min}:${sec}`;
+};
+
 export const startTimer = function (fleet, newGame = false) {
   // Timer feature
   if (newGame) {
@@ -67,7 +73,6 @@ export const startTimer = function (fleet, newGame = false) {
   if (timer) {
     console.log(timer);
     clearInterval(timer);
-    // labelContraryTimer && (labelContraryTimer.style.opacity = "0");
   }
   const contraryFleet =
     fleet === enemySideMyFleet ? mySideMyFleet : enemySideEnemyFleet;
@@ -78,7 +83,9 @@ export const startTimer = function (fleet, newGame = false) {
   const timeContraryLeftLabel = contraryFleet
     .closest(".sea-container")
     .querySelector(".timer-label");
-  let labelTimer = fleet.closest(".sea-container").querySelector(".timer-time");
+  const labelTimer = fleet
+    .closest(".sea-container")
+    .querySelector(".timer-time");
   timeLeftLabel.style.opacity = "100";
   labelContraryTimer = contraryFleet
     .closest(".sea-container")
@@ -86,20 +93,13 @@ export const startTimer = function (fleet, newGame = false) {
 
   timeContraryLeftLabel.style.opacity = "100";
   const tick = function () {
-    const min = String(Math.trunc(time / 60)).padStart(2, 0);
-    const sec = String(Math.trunc(time % 60)).padStart(2, 0);
-
-    labelTimer.textContent = `${min}:${sec}`;
-    labelContraryTimer.textContent = `${min}:${sec}`;
+    labelContraryTimer.textContent = timerClock(time, labelTimer);
 
     if (time === 0) {
       clearInterval(timer);
       timeLeftLabel.style.opacity = "0";
 
       showEndResults(fleet, true);
-
-      // fleet.classList.remove("binoculars");
-      // console.log("Magic item removed");
     }
     time--;
   };

@@ -1,4 +1,3 @@
-import * as GlobalVars from "./globalVars";
 export default function (fleet, fleetParts) {
   let dragged;
   const shipEls = fleet.querySelectorAll(".ship");
@@ -44,22 +43,20 @@ export default function (fleet, fleetParts) {
 
           if (e.target.classList.contains("ship")) return;
           // !e.target.classList.contains("ship") &&
-          e.target.appendChild(dragged),
-            fleet
-              .querySelector(
-                `.${dragged.classList[dragged.classList.length - 1]}`
-              )
-              .classList.replace(
-                fleet.querySelector(
-                  `.${dragged.classList[dragged.classList.length - 1]}`
-                ).classList[0],
-                e.target.querySelector("div")?.classList[0]
-              );
+          e.target.appendChild(dragged);
+          const movedShipPart = dragged.classList[dragged.classList.length - 1];
+          console.log(movedShipPart);
+          fleet
+            .querySelector(`.${movedShipPart}`)
+            .classList.replace(
+              fleet.querySelector(`.${movedShipPart}`).classList[0],
+              e.target.querySelector("div")?.classList[0]
+            );
         }
 
         const checkDragoverE = function () {
           e.preventDefault();
-          console.log("put");
+
           console.log(e, "put");
 
           if (ev !== "dragover") return;

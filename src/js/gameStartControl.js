@@ -10,7 +10,6 @@ import {
   newGameBtn,
   startGameBtn,
   startGameBtn2,
-  letters,
 } from "./globalVars";
 import {
   allowForbidClick,
@@ -20,10 +19,11 @@ import {
   startTimer,
 } from "./helpers";
 
-let playing;
+const playingCheck = { playing: false };
+
 let bothFleetsReady = [];
 let newGameAgreement = [];
-export { playing, bothFleetsReady, newGameAgreement };
+export { playingCheck, bothFleetsReady, newGameAgreement };
 let firstTurn = "";
 let checkCells;
 
@@ -32,7 +32,7 @@ export const gameStartControl = function (fleet, fleetParts) {
   const fleetIsEnemySideMyFleet = fleet === enemySideMyFleet;
 
   const startPlaying = function (e) {
-    playing = false;
+    playingCheck.playing = false;
     newGameAgreement.splice(0);
 
     fleet === mySideEnemyFleet && (firstTurn = Math.random());
@@ -283,9 +283,9 @@ export const gameStartControl = function (fleet, fleetParts) {
       flattenedBothSideShips.includes("mySideEnemyFleet") &&
       flattenedBothSideShips.includes("enemySideMyFleet")
     ) {
-      playing = true;
+      playingCheck.playing = true;
       console.log("Game started 🥰");
-      console.log(playing, "playing");
+      console.log(playingCheck.playing, "playing");
 
       // Disable right-click
       // document.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -315,8 +315,7 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     console.log(firstTurn);
 
-    console.log(playing);
-    if (!playing) return;
+    if (!playingCheck.playing) return;
     getSeaOpacityBack();
     mySideEnemyFleet
       ? (firstTurn < 0.5 &&

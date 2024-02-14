@@ -9,7 +9,7 @@ import {
   allTimers,
 } from "./globalVars";
 
-import { playing } from "./gameStartControl";
+import { playingCheck } from "./gameStartControl";
 import {
   closeNotificationWindow,
   closeNotificationWindow2,
@@ -66,7 +66,7 @@ export default function (fleet, noTime = false) {
 
     // overlay.classList.remove("hidden");
     [mySideEnemyFleet, enemySideMyFleet].forEach(
-      (fleet) => playing && (fleet.style.pointerEvents = "none"),
+      (fleet) => playingCheck.playing && (fleet.style.pointerEvents = "none"),
 
       getSeaOpacityBack()
     );

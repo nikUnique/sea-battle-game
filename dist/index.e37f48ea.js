@@ -678,6 +678,7 @@ var _startNewGame = require("./startNewGame");
  // Where should I put the timer?
  // The timer feature is working quite well, now it's time of refactoring
  // Unexpected bug with 4-sized ship is fixed, the code is refactored, now it's time think about the next step
+ // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./startNewGame":"hGRP7"}],"gb5d6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -969,9 +970,9 @@ parcelHelpers.export(exports, "getSeaOpacityBack", ()=>getSeaOpacityBack);
 parcelHelpers.export(exports, "closeNotificationWindow", ()=>closeNotificationWindow);
 parcelHelpers.export(exports, "closeNotificationWindow2", ()=>closeNotificationWindow2);
 parcelHelpers.export(exports, "allowForbidClick", ()=>allowForbidClick);
+parcelHelpers.export(exports, "timerClock", ()=>timerClock);
 parcelHelpers.export(exports, "startTimer", ()=>startTimer);
 parcelHelpers.export(exports, "selectCellsAround", ()=>selectCellsAround);
-var _gameStartControl = require("./gameStartControl");
 var _globalVars = require("./globalVars");
 var _showEndResults = require("./showEndResults");
 var _showEndResultsDefault = parcelHelpers.interopDefault(_showEndResults);
@@ -1009,6 +1010,12 @@ const closeNotificationWindow2 = function() {
 const allowForbidClick = function(fleet, state) {
     fleet.style.pointerEvents = state;
 };
+const timerClock = function(time, labelTimer) {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+    labelTimer.textContent = `${min}:${sec}`;
+    return `${min}:${sec}`;
+};
 const startTimer = function(fleet, newGame = false) {
     // Timer feature
     if (newGame) {
@@ -1018,26 +1025,20 @@ const startTimer = function(fleet, newGame = false) {
     if (timer) {
         console.log(timer);
         clearInterval(timer);
-    // labelContraryTimer && (labelContraryTimer.style.opacity = "0");
     }
     const contraryFleet = fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
     const timeLeftLabel = fleet.closest(".sea-container").querySelector(".timer-label");
     const timeContraryLeftLabel = contraryFleet.closest(".sea-container").querySelector(".timer-label");
-    let labelTimer = fleet.closest(".sea-container").querySelector(".timer-time");
+    const labelTimer = fleet.closest(".sea-container").querySelector(".timer-time");
     timeLeftLabel.style.opacity = "100";
     labelContraryTimer = contraryFleet.closest(".sea-container").querySelector(".timer-time");
     timeContraryLeftLabel.style.opacity = "100";
     const tick = function() {
-        const min = String(Math.trunc(time / 60)).padStart(2, 0);
-        const sec = String(Math.trunc(time % 60)).padStart(2, 0);
-        labelTimer.textContent = `${min}:${sec}`;
-        labelContraryTimer.textContent = `${min}:${sec}`;
+        labelContraryTimer.textContent = timerClock(time, labelTimer);
         if (time === 0) {
             clearInterval(timer);
             timeLeftLabel.style.opacity = "0";
             (0, _showEndResultsDefault.default)(fleet, true);
-        // fleet.classList.remove("binoculars");
-        // console.log("Magic item removed");
         }
         time--;
     };
@@ -1064,7 +1065,7 @@ const selectCellsAround = function(cell) {
     };
 };
 
-},{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./showEndResults":"2csmh","./gameStartControl":"fXv0K"}],"2csmh":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./showEndResults":"2csmh"}],"2csmh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
@@ -1105,7 +1106,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
             [
                 (0, _globalVars.mySideEnemyFleet),
                 (0, _globalVars.enemySideMyFleet)
-            ].forEach((fleet)=>(0, _gameStartControl.playing) && (fleet.style.pointerEvents = "none"), (0, _helpers.getSeaOpacityBack)());
+            ].forEach((fleet)=>(0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none"), (0, _helpers.getSeaOpacityBack)());
         };
         (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
         (areAllShipsInjured || runOutOfTime) && (0, _globalVars.allTimers).forEach((timerEl)=>{
@@ -1130,13 +1131,15 @@ var _helpers = require("./helpers");
 },{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fXv0K":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "playing", ()=>playing);
+parcelHelpers.export(exports, "playingCheck", ()=>playingCheck);
 parcelHelpers.export(exports, "bothFleetsReady", ()=>bothFleetsReady);
 parcelHelpers.export(exports, "newGameAgreement", ()=>newGameAgreement);
 parcelHelpers.export(exports, "gameStartControl", ()=>gameStartControl);
 var _globalVars = require("./globalVars");
 var _helpers = require("./helpers");
-let playing;
+const playingCheck = {
+    playing: false
+};
 let bothFleetsReady = [];
 let newGameAgreement = [];
 let firstTurn = "";
@@ -1145,7 +1148,7 @@ const gameStartControl = function(fleet, fleetParts) {
     // playing = false;
     const fleetIsEnemySideMyFleet = fleet === (0, _globalVars.enemySideMyFleet);
     const startPlaying = function(e) {
-        playing = false;
+        playingCheck.playing = false;
         newGameAgreement.splice(0);
         fleet === (0, _globalVars.mySideEnemyFleet) && (firstTurn = Math.random());
         (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn) : (0, _globalVars.startGameBtn2)).setAttribute("disabled", true);
@@ -1361,9 +1364,9 @@ const gameStartControl = function(fleet, fleetParts) {
         const flattenedBothSideShips = (0, _globalVars.bothSideShips).flat(2);
         console.log(flattenedBothSideShips);
         if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2 && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet")) {
-            playing = true;
+            playingCheck.playing = true;
             console.log("Game started \uD83E\uDD70");
-            console.log(playing, "playing");
+            console.log(playingCheck.playing, "playing");
             // Disable right-click
             // document.addEventListener("contextmenu", (e) => e.preventDefault());
             // function ctrlShiftKey(e, key) {
@@ -1384,8 +1387,7 @@ const gameStartControl = function(fleet, fleetParts) {
             (0, _helpers.allowForbidClick)((0, _globalVars.mySideMyFleet), "none"), (0, _helpers.allowForbidClick)((0, _globalVars.enemySideEnemyFleet), "none");
         }
         console.log(firstTurn);
-        console.log(playing);
-        if (!playing) return;
+        if (!playingCheck.playing) return;
         (0, _helpers.getSeaOpacityBack)();
         (0, _globalVars.mySideEnemyFleet) && (firstTurn < 0.5 && ((0, _helpers.allowForbidClick)((0, _globalVars.mySideEnemyFleet), "auto"), (0, _helpers.startTimer)((0, _globalVars.mySideEnemyFleet)), (0, _globalVars.enemySideMyFleet).closest(".sea").style.opacity = "0.7"), firstTurn >= 0.5 && ((0, _helpers.allowForbidClick)((0, _globalVars.enemySideMyFleet), "auto"), (0, _helpers.startTimer)((0, _globalVars.enemySideMyFleet)), (0, _globalVars.mySideEnemyFleet).closest(".sea").style.opacity = "0.7"));
         [
@@ -1481,11 +1483,13 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, fleetParts) {
                     e.preventDefault(), console.log(dragged, e.target);
                     if (e.target.classList.contains("ship")) return;
                     // !e.target.classList.contains("ship") &&
-                    e.target.appendChild(dragged), fleet.querySelector(`.${dragged.classList[dragged.classList.length - 1]}`).classList.replace(fleet.querySelector(`.${dragged.classList[dragged.classList.length - 1]}`).classList[0], e.target.querySelector("div")?.classList[0]);
+                    e.target.appendChild(dragged);
+                    const movedShipPart = dragged.classList[dragged.classList.length - 1];
+                    console.log(movedShipPart);
+                    fleet.querySelector(`.${movedShipPart}`).classList.replace(fleet.querySelector(`.${movedShipPart}`).classList[0], e.target.querySelector("div")?.classList[0]);
                 }
                 const checkDragoverE = function() {
                     e.preventDefault();
-                    console.log("put");
                     console.log(e, "put");
                     if (ev !== "dragover") return;
                     if (e.target.classList.contains("ship") || e.target.classList.length === 0) return;
@@ -1495,30 +1499,29 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, fleetParts) {
             }, ev === "dragover" && false);
         });
     });
-var _globalVars = require("./globalVars");
 
-},{"./globalVars":"gb5d6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dx0uc":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dx0uc":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet) {
         (0, _globalVars.mySideMyFleet).classList.add("player0");
-        (0, _gameStartControl.playing) === true && ((0, _globalVars.enemySideMyFleet).style.pointerEvents = "none");
+        (0, _gameStartControl.playingCheck).playing === true && ((0, _globalVars.enemySideMyFleet).style.pointerEvents = "none");
         [
             (0, _globalVars.mySideEnemyFleet),
             (0, _globalVars.enemySideMyFleet)
         ].forEach((fleet)=>{
-            console.log((0, _gameStartControl.playing));
+            console.log((0, _gameStartControl.playingCheck).playing);
             fleet.addEventListener("click", function(e) {
                 if (e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
-                const turn = (0, _gameStartControl.playing) && fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideEnemyFleet) : (0, _globalVars.enemySideMyFleet);
-                if (0, _gameStartControl.playing) {
+                const turn = (0, _gameStartControl.playingCheck).playing && fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideEnemyFleet) : (0, _globalVars.enemySideMyFleet);
+                if ((0, _gameStartControl.playingCheck).playing) {
                     turn.style.pointerEvents = "auto", fleet.closest(".sea").style.opacity = "0.7";
                     (0, _helpers.startTimer)(turn);
                     fleet.closest(".sea-container").querySelector(".timer-label") && (fleet.closest(".sea-container").querySelector(".timer-label").style.opacity = "0");
                     const fleetSide = fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
                     fleetSide.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
                 }
-                (0, _gameStartControl.playing) && (fleet.style.pointerEvents = "none"), turn.closest(".sea").style.opacity = "1";
+                (0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none"), turn.closest(".sea").style.opacity = "1";
             });
         });
     });
@@ -1533,7 +1536,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
         const shootingLogic = function(e) {
             e.preventDefault();
             console.log(e.target, "target");
-            if (!(0, _gameStartControl.playing) || e.target.querySelector(".ship")?.classList.contains("ship")) {
+            if (!(0, _gameStartControl.playingCheck).playing || e.target.querySelector(".ship")?.classList.contains("ship")) {
                 console.log("dropzone");
                 return;
             }
@@ -1583,12 +1586,10 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 if (!rewardShip) return;
                 fleet.classList.add("binoculars");
                 const labelBinocularsReward = fleet.closest(".sea-container").querySelector(".binoculars-reward-label");
-                let labelTimer = fleet.closest(".sea-container").querySelector(".timer");
+                const labelTimer = fleet.closest(".sea-container").querySelector(".timer");
                 labelBinocularsReward.style.opacity = "100";
                 const tick = function() {
-                    const min = String(Math.trunc(time / 60)).padStart(2, 0);
-                    const sec = String(Math.trunc(time % 60)).padStart(2, 0);
-                    labelTimer.textContent = `${min}:${sec}`;
+                    (0, _helpers.timerClock)(time, labelTimer);
                     if (time === 0) {
                         clearInterval(timer);
                         labelBinocularsReward.style.opacity = "0";
@@ -1699,7 +1700,7 @@ const startNewGame = function(fleet, fleetParts) {
                 timerEl.style.opacity = "0";
             });
             (0, _helpers.startTimer)(fleet, true);
-            playing = false;
+            (0, _gameStartControl.playingCheck).playing = false;
             [
                 [
                     (0, _globalVars.mySideMyFleet),

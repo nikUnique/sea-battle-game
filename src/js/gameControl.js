@@ -4,14 +4,15 @@ import {
   enemySideMyFleet,
   enemySideEnemyFleet,
 } from "./globalVars";
-import { playing } from "./gameStartControl";
+import { playingCheck } from "./gameStartControl";
 import { startTimer } from "./helpers";
 
 export default function (fleet) {
   mySideMyFleet.classList.add("player0");
-  playing === true && (enemySideMyFleet.style.pointerEvents = "none");
+  playingCheck.playing === true &&
+    (enemySideMyFleet.style.pointerEvents = "none");
   [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
-    console.log(playing);
+    console.log(playingCheck.playing);
 
     fleet.addEventListener("click", function (e) {
       if (
@@ -23,10 +24,10 @@ export default function (fleet) {
       }
 
       const turn =
-        playing && fleet === enemySideMyFleet
+        playingCheck.playing && fleet === enemySideMyFleet
           ? mySideEnemyFleet
           : enemySideMyFleet;
-      if (playing) {
+      if (playingCheck.playing) {
         (turn.style.pointerEvents = "auto"),
           (fleet.closest(".sea").style.opacity = "0.7");
         startTimer(turn);
@@ -40,7 +41,7 @@ export default function (fleet) {
           .closest(".sea-container")
           .querySelector(".timer-label").style.opacity = "0";
       }
-      playing && (fleet.style.pointerEvents = "none"),
+      playingCheck.playing && (fleet.style.pointerEvents = "none"),
         (turn.closest(".sea").style.opacity = "1");
     });
   });

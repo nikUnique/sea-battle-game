@@ -29,6 +29,7 @@ body {
   border-bottom: 7px solid #087f5b;
   border-left: 3.6rem solid #087f5b;
   border-right: 7px solid #087f5b;
+  border-radius: 4px;
 }
 
 .grid {
@@ -170,11 +171,11 @@ p {
 }
 
 .ship-color {
-  background-color: #fcc419;
+  background-color: #63e6be;
 }
 
 .ship:hover {
-  background-color: #ffd43b;
+  background-color: #96f2d7;
 }
 
 .my-side--enemy-fleet .ship.injure:hover, .enemy-side--my-fleet .ship.injure:hover, .my-side--enemy-fleet.binoculars .ship:hover, .enemy-side--my-fleet.binoculars .ship:hover {

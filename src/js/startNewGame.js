@@ -1,4 +1,8 @@
-import { bothFleetsReady, newGameAgreement } from "./gameStartControl";
+import {
+  bothFleetsReady,
+  newGameAgreement,
+  playingCheck,
+} from "./gameStartControl";
 import {
   allTimers,
   bothSideShips,
@@ -107,7 +111,7 @@ export const startNewGame = function (fleet, fleetParts) {
           timerEl.style.opacity = "0";
         });
         startTimer(fleet, true);
-        playing = false;
+        playingCheck.playing = false;
         [
           [mySideMyFleet, "auto"],
           [enemySideEnemyFleet, "auto"],

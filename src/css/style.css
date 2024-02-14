@@ -14,33 +14,32 @@ Default: 1
 
 --- 02 COLORS
 
-- Primary: #e67e22
+- Primary: #087f5b
 - Tints:
-#fdf2e9
-#fae5d3
-#eb984e
+#20c997
+#63e6be
+#96f2d7
+#c3fae8
+#e6fcf5
 
-- Shades: 
-#cf711f
-#45260a
+- Accents: #fcc419
+- Tints: #ffd43b
+- Shades: #654e0a
 
-- Accents:
-- Greys
+#3bc9db
+#ff6b6b
 
-#888
-#767676 (lightest grey allowed on #fff)
-#6f6f6f (lightest grey allowed on #fdf2e9)
-#555
-#333
+- Greys: #555
+
 
 --- 05 SHADOWS
 
-0 2.4rem 4.8rem rgba(0, 0, 0, 0.075);
+0 3rem 5rem rgba(0, 0, 0, 0.3);
+
 
 --- 06 BORDER-RADIUS
+Small: 4px
 
-Default: 9px
-Medium: 11px
 
 --- 07 WHITESPACE
 
@@ -87,6 +86,7 @@ body {
 }
 
 .sea {
+  border-radius: 4px;
   border-right: 7px solid #087f5b;
   border-bottom: 7px solid #087f5b;
   border-left: 3.6rem solid #087f5b;
@@ -238,11 +238,11 @@ p {
 }
 
 .ship-color {
-  background-color: #fcc419;
+  background-color: #63e6be;
 }
 
 .ship:hover {
-  background-color: #ffd43b;
+  background-color: #96f2d7;
 }
 
 .my-side--enemy-fleet .ship.injure:hover,
@@ -401,12 +401,7 @@ p {
 /**************************/
 
 .username-1,
-.player-1--pronoun {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -150%);
-}
+.player-1--pronoun,
 .username-2,
 .player-2--pronoun {
   position: absolute;
