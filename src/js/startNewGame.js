@@ -148,6 +148,10 @@ export const startNewGame = function (fleet, fleetParts) {
             newGameBtn2.setAttribute("disabled", true),
             startGameBtn.removeAttribute("disabled", true),
             startGameBtn2.removeAttribute("disabled", true),
+            (startGameBtn.style.display = ""),
+            (startGameBtn2.style.display = ""),
+            (startGameBtn.textContent = "Ready to start"),
+            (startGameBtn2.textContent = "Ready to start"),
             bothFleetsReady.splice(0);
           bothSideShips.splice(0);
         };

@@ -301,6 +301,27 @@ p {
   transform: translate(-50%, -150%);
 }
 
+.second-player-data {
+  position: absolute;
+  top: 0;
+  transform: translate(80%, -200%);
+}
+
+.start-game.fleet-1, .start-game.fleet-2, .start-game.fleet-2 {
+  z-index: 1000;
+  padding: 1.2rem 2.4rem;
+  font-size: 1.8rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -50%);
+}
+
+.waiting-opponent-1, .waiting-opponent-2, .waiting-opponent-2 {
+  opacity: 0;
+  transform: translate(24%, 50%);
+}
+
 .game-description-container {
   grid-column: 1 / 2;
   justify-self: center;

@@ -411,6 +411,42 @@ p {
   transform: translate(-50%, -150%);
 }
 
+.second-player-data {
+  position: absolute;
+  top: 0;
+  transform: translate(80%, -200%);
+}
+.start-game.fleet-1,
+.start-game.fleet-2 {
+  font-size: 1.8rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -50%);
+  padding: 1.2rem 2.4rem;
+  z-index: 1000;
+}
+
+.start-game.fleet-2 {
+  font-size: 1.8rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -50%);
+  padding: 1.2rem 2.4rem;
+  z-index: 1000;
+}
+
+.waiting-opponent-1,
+.waiting-opponent-2 {
+  transform: translate(24%, 50%);
+  opacity: 0;
+}
+.waiting-opponent-2 {
+  transform: translate(24%, 50%);
+  opacity: 0;
+}
+
 /**************************/
 /* GAME DESCRIPTION */
 /**************************/

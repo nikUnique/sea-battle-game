@@ -10,6 +10,8 @@ import {
   newGameBtn,
   startGameBtn,
   startGameBtn2,
+  waitingForOpponentLabel1,
+  waitingForOpponentLabel2,
 } from "./globalVars";
 import {
   allowForbidClick,
@@ -249,13 +251,18 @@ export const gameStartControl = function (fleet, fleetParts) {
         ] = "2px solid #3bc9db");
     };
 
-    bothFleetsReady.length === 1 &&
+    if (bothFleetsReady.length === 1) {
       (fleet === mySideEnemyFleet ? enemySideEnemyFleet : mySideMyFleet)
         .querySelectorAll(".ship")
         .forEach((ship) => {
           ship.classList.remove("ship-color");
           ship.textContent = "";
         });
+      fleet.querySelectorAll(".ship").forEach((ship) => {
+        ship.classList.remove("ship-color");
+        ship.textContent = "";
+      });
+    }
 
     bothFleetsReady.length === 2 &&
       [mySideMyFleet, enemySideEnemyFleet].forEach((fleet) => {
@@ -274,8 +281,30 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     fleet === mySideEnemyFleet && bothSideShips.push("mySideEnemyFleet");
     fleetIsEnemySideMyFleet && bothSideShips.push("enemySideMyFleet");
+    // bothSideShips.includes('mySideEnemyFleet') ||  bothSideShips.includes('mySideEnemyFleet')
 
     const flattenedBothSideShips = bothSideShips.flat(2);
+
+    console.log(flattenedBothSideShips, "both");
+    // flattenedBothSideShips.length === createFleetShips.length + 1  &&
+    //   ((fleetIsEnemySideMyFleet ? startGameBtn : startGameBtn2).textContent =
+    //     "Waiting for the opponent...");
+    (fleetIsEnemySideMyFleet ? startGameBtn : startGameBtn2).style.display =
+      "none";
+    (fleetIsEnemySideMyFleet
+      ? waitingForOpponentLabel1
+      : waitingForOpponentLabel2
+    ).style.opacity = "100";
+
+    if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2) {
+      [waitingForOpponentLabel1, waitingForOpponentLabel2].forEach((label) => {
+        label.style.opacity = "0";
+      });
+    }
+    // [startGameBtn, startGameBtn2].forEach((btn) => {
+    //   btn.style.display = "none";
+
+    // });
 
     console.log(flattenedBothSideShips);
     if (

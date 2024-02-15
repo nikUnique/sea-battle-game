@@ -120,3 +120,4 @@ const createFleet = function (fleetParts) {
 // The timer feature is working quite well, now it's time of refactoring
 // Unexpected bug with 4-sized ship is fixed, the code is refactored, now it's time think about the next step
 // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
+// All instructions are written and look good, now it's time to place buttons and inputs to the right places

@@ -679,6 +679,7 @@ var _startNewGame = require("./startNewGame");
  // The timer feature is working quite well, now it's time of refactoring
  // Unexpected bug with 4-sized ship is fixed, the code is refactored, now it's time think about the next step
  // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
+ // All instructions are written and look good, now it's time to place buttons and inputs to the right places
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","./startNewGame":"hGRP7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -702,6 +703,8 @@ parcelHelpers.export(exports, "startGameBtn2", ()=>startGameBtn2);
 parcelHelpers.export(exports, "letters", ()=>letters);
 parcelHelpers.export(exports, "seaFleet", ()=>seaFleet);
 parcelHelpers.export(exports, "allTimers", ()=>allTimers);
+parcelHelpers.export(exports, "waitingForOpponentLabel1", ()=>waitingForOpponentLabel1);
+parcelHelpers.export(exports, "waitingForOpponentLabel2", ()=>waitingForOpponentLabel2);
 parcelHelpers.export(exports, "createMyShips", ()=>createMyShips);
 parcelHelpers.export(exports, "createEnemyShips", ()=>createEnemyShips);
 parcelHelpers.export(exports, "mySideMyShips", ()=>mySideMyShips);
@@ -741,6 +744,8 @@ const seaFleet = Array.from({
 const allTimers = [
     ...document.querySelectorAll(".timer-label")
 ];
+const waitingForOpponentLabel1 = document.querySelector(".waiting-opponent-1");
+const waitingForOpponentLabel2 = document.querySelector(".waiting-opponent-2");
 let createMyShips = [
     [
         [
@@ -1335,10 +1340,16 @@ const gameStartControl = function(fleet, fleetParts) {
             const fleetSide = fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
             fleetSide && (fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = "2px solid #3bc9db");
         };
-        bothFleetsReady.length === 1 && (fleet === (0, _globalVars.mySideEnemyFleet) ? (0, _globalVars.enemySideEnemyFleet) : (0, _globalVars.mySideMyFleet)).querySelectorAll(".ship").forEach((ship)=>{
-            ship.classList.remove("ship-color");
-            ship.textContent = "";
-        });
+        if (bothFleetsReady.length === 1) {
+            (fleet === (0, _globalVars.mySideEnemyFleet) ? (0, _globalVars.enemySideEnemyFleet) : (0, _globalVars.mySideMyFleet)).querySelectorAll(".ship").forEach((ship)=>{
+                ship.classList.remove("ship-color");
+                ship.textContent = "";
+            });
+            fleet.querySelectorAll(".ship").forEach((ship)=>{
+                ship.classList.remove("ship-color");
+                ship.textContent = "";
+            });
+        }
         bothFleetsReady.length === 2 && [
             (0, _globalVars.mySideMyFleet),
             (0, _globalVars.enemySideEnemyFleet)
@@ -1361,7 +1372,23 @@ const gameStartControl = function(fleet, fleetParts) {
         if (fleet !== (0, _globalVars.mySideEnemyFleet) && fleet !== (0, _globalVars.enemySideMyFleet)) return;
         fleet === (0, _globalVars.mySideEnemyFleet) && (0, _globalVars.bothSideShips).push("mySideEnemyFleet");
         fleetIsEnemySideMyFleet && (0, _globalVars.bothSideShips).push("enemySideMyFleet");
+        // bothSideShips.includes('mySideEnemyFleet') ||  bothSideShips.includes('mySideEnemyFleet')
         const flattenedBothSideShips = (0, _globalVars.bothSideShips).flat(2);
+        console.log(flattenedBothSideShips, "both");
+        // flattenedBothSideShips.length === createFleetShips.length + 1  &&
+        //   ((fleetIsEnemySideMyFleet ? startGameBtn : startGameBtn2).textContent =
+        //     "Waiting for the opponent...");
+        (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn) : (0, _globalVars.startGameBtn2)).style.display = "none";
+        (fleetIsEnemySideMyFleet ? (0, _globalVars.waitingForOpponentLabel1) : (0, _globalVars.waitingForOpponentLabel2)).style.opacity = "100";
+        if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2) [
+            (0, _globalVars.waitingForOpponentLabel1),
+            (0, _globalVars.waitingForOpponentLabel2)
+        ].forEach((label)=>{
+            label.style.opacity = "0";
+        });
+        // [startGameBtn, startGameBtn2].forEach((btn) => {
+        //   btn.style.display = "none";
+        // });
         console.log(flattenedBothSideShips);
         if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2 && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet")) {
             playingCheck.playing = true;
@@ -1740,7 +1767,7 @@ const startNewGame = function(fleet, fleetParts) {
                         (0, _globalVars.enemySideEnemyShips),
                         (0, _globalVars.createEnemyShips)
                     ]);
-                }), (0, _globalVars.newGameBtn).setAttribute("disabled", true), (0, _globalVars.newGameBtn2).setAttribute("disabled", true), (0, _globalVars.startGameBtn).removeAttribute("disabled", true), (0, _globalVars.startGameBtn2).removeAttribute("disabled", true), (0, _gameStartControl.bothFleetsReady).splice(0);
+                }), (0, _globalVars.newGameBtn).setAttribute("disabled", true), (0, _globalVars.newGameBtn2).setAttribute("disabled", true), (0, _globalVars.startGameBtn).removeAttribute("disabled", true), (0, _globalVars.startGameBtn2).removeAttribute("disabled", true), (0, _globalVars.startGameBtn).style.display = "", (0, _globalVars.startGameBtn2).style.display = "", (0, _globalVars.startGameBtn).textContent = "Ready to start", (0, _globalVars.startGameBtn2).textContent = "Ready to start", (0, _gameStartControl.bothFleetsReady).splice(0);
                 (0, _globalVars.bothSideShips).splice(0);
             };
             fleetIsMySideMyFleet && clearFleets();
