@@ -14,7 +14,10 @@ import {
   closeNotificationWindow,
   closeNotificationWindow2,
   getSeaOpacityBack,
+  timer,
 } from "./helpers";
+// When game ends I need to stop timer, how?
+
 export default function (fleet, noTime = false) {
   const resultsMessage = document.querySelector(".results-message");
   const resultsMessage2 = document.querySelector(".results-message-2");
@@ -37,7 +40,7 @@ export default function (fleet, noTime = false) {
   if (!areAllShipsInjured && !runOutOfTime) {
     return;
   }
-
+  clearInterval(timer);
   console.log(areAllShipsInjured, "areAll");
   console.log(runOutOfTime, "areAll");
   const composeMessage = function (messageEl, fleetSide) {

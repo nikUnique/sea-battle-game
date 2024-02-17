@@ -8,6 +8,9 @@ import {
   enemySideMyFleet,
   seas,
   seaContainers,
+  changeUsernameBtn,
+  firstPlayerData,
+  secondPlayerData,
 } from "./globalVars";
 
 {

@@ -15,21 +15,6 @@
     <title>Sea Battle</title>
   </head>
   <body>
-    <button class="new-game-btn player-1" disabled>New game</button>
-
-    <form class="player-data">
-      <label>Your name</label>
-      <input
-        value=""
-        type="text"
-        placeholder="John"
-        class="fill-username--player-1"
-        minlength="2"
-        required
-      />
-      <button class="submit-username--fleet-1">Submit</button>
-    </form>
-
     <div class="container grid grid--3-cols">
       <div class="grid grid--2-cols">
         <div class="sea-container">
@@ -39,12 +24,34 @@
             </thead>
             <tbody class="my-side--my-fleet"></tbody>
           </table>
-          <p class="username-1">First player's ships</p>
+          <p class="player-2--pronoun">Your ships</p>
+
           <p class="timer-label opponent-timer">
             Opponent's turn - time to shoot left:&nbsp;<span
               class="timer-time"
             ></span>
           </p>
+          <p class="error-message-1">Place your ships in the right way</p>
+          <div class="first-player-data">
+            <form class="player-data-1 data">
+              <label class="your-name-1">Your name</label>
+              <input
+                value=""
+                type="text"
+                placeholder="John"
+                class="fill-username--player-1"
+                minlength="2"
+              />
+
+              <button class="submit-username--fleet-1">Submit&nbsp;</button>
+              <button class="new-game-btn player-1" disabled>
+                New game&nbsp;<ion-icon name="repeat"></ion-icon>
+              </button>
+              <button class="change-username-btn-1">
+                Change username&nbsp;✍️
+              </button>
+            </form>
+          </div>
         </div>
         <div class="sea-container mrg-right">
           <table class="sea">
@@ -53,12 +60,14 @@
             </thead>
             <tbody class="my-side--enemy-fleet"></tbody>
           </table>
+          <p class="username-2">Second player's ships</p>
+
           <div class="notification-window hidden player-2">
             <button class="close-notification-window-2">&times;</button>
             <h1>The results of the battle are: 😍</h1>
             <p class="results-message-2">🔥</p>
           </div>
-          <p class="player-2--pronoun">Your ships</p>
+
           <p class="binoculars-reward-label">
             Video camera reward 📹 time left:&nbsp;<span class="timer"></span>
           </p>
@@ -67,8 +76,10 @@
               class="timer-time"
             ></span>
           </p>
-          <button class="start-game fleet-1">Ready to start</button>
+
           <p class="waiting-opponent-1">Waiting for the opponent...</p>
+
+          <button class="start-game fleet-1">Ready to start ⚔️</button>
         </div>
       </div>
 
@@ -81,26 +92,35 @@
             </thead>
             <tbody class="enemy-side--enemy-fleet"></tbody>
           </table>
-          <p class="username-2">Second player's ships</p>
+          <p class="player-1--pronoun">Your ships</p>
+
           <p class="timer-label opponent-timer">
             Opponent's turn - time to shoot left:&nbsp;<span
               class="timer-time"
             ></span>
           </p>
+          <p class="error-message-2">Place your ships in the right way</p>
 
           <div class="second-player-data">
-            <button class="new-game-btn player-2" disabled>New game</button>
-            <form class="player-data">
-              <label>Your name</label>
+            <form class="player-data-2 data">
+              <label class="your-name-2">Your name</label>
+
               <input
                 value=""
                 type="text"
                 placeholder="Beny"
                 class="fill-username--player-2"
                 minlength="2"
-                required
               />
-              <button class="submit-username--fleet-2">Submit</button>
+              <button class="submit-username--fleet-2">
+                <span>Submit&nbsp;</span>
+              </button>
+              <button class="new-game-btn player-2" disabled>
+                New game&nbsp;<ion-icon name="repeat"></ion-icon>
+              </button>
+              <button class="change-username-btn-2">
+                Change username&nbsp;✍️
+              </button>
             </form>
           </div>
         </div>
@@ -112,12 +132,14 @@
             </thead>
             <tbody class="enemy-side--my-fleet"></tbody>
           </table>
+
           <div class="notification-window hidden player-1">
             <button class="close-notification-window">&times;</button>
             <h1>The results of the battle are: 😍</h1>
             <p class="results-message">🔥</p>
           </div>
-          <p class="player-1--pronoun">Your ships</p>
+
+          <p class="username-1">First player's ships</p>
           <p class="binoculars-reward-label">
             Video camera reward 📹 time left:&nbsp;<span class="timer"></span>
           </p>
@@ -126,7 +148,7 @@
               class="timer-time"
             ></span>
           </p>
-          <button class="start-game fleet-2">Ready to start</button>
+          <button class="start-game fleet-2">Ready to start ⚔️</button>
           <p class="waiting-opponent-2">Waiting for the opponent...</p>
         </div>
       </div>
@@ -283,5 +305,10 @@
     </div>
 
     <!-- <div class="overlay hidden"></div> -->
+    <script src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <!-- <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script> -->
   </body>
 </html>

@@ -6,11 +6,14 @@ import {
 import {
   allTimers,
   bothSideShips,
+  changeUsernameBtn1,
+  changeUsernameBtn2,
   createEnemyShips,
   createMyShips,
   enemySideEnemyFleet,
   enemySideEnemyShips,
   enemySideMyFleet,
+  inputUsernameLabel2,
   mySideEnemyFleet,
   mySideMyFleet,
   mySideMyShips,
@@ -18,18 +21,31 @@ import {
   newGameBtn2,
   startGameBtn,
   startGameBtn2,
+  submitUsername2,
+  username1Input,
+  username2Input,
 } from "./globalVars";
 import {
   allowForbidClick,
   closeNotificationWindow,
   closeNotificationWindow2,
+  closeUsernameForm,
   getSeaOpacityBack,
+  openUsernameForm,
   startTimer,
 } from "./helpers";
 import placeShipsManually from "./placeShipsManually";
 
 export const startNewGame = function (fleet, fleetParts) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
+  const changeUsernameBtn = fleetIsMySideMyFleet
+    ? changeUsernameBtn1
+    : changeUsernameBtn2;
+
+  changeUsernameBtn.addEventListener("click", function (e) {
+    openUsernameForm(fleet, "flex");
+  });
+  console.log("how often");
 
   const submitBtn = document.querySelector(
     `.submit-username--fleet-${fleetIsMySideMyFleet ? 1 : 2}`
@@ -53,27 +69,37 @@ export const startNewGame = function (fleet, fleetParts) {
       const checkUsernameCase = function (input) {
         return (
           input.value.toLowerCase().slice(0, 1).toUpperCase() +
-          input.value.slice(1).toLowerCase() +
-          "'s ships"
+          input.value.slice(1).toLowerCase()
         );
       };
 
-      const player1Username = checkUsernameCase(inputPlayer1Username);
+      const player1Username =
+        checkUsernameCase(inputPlayer1Username).trim(); /* + "'s ships" */
 
-      const player2Username = checkUsernameCase(inputPlayer2Username);
+      const player2Username =
+        checkUsernameCase(inputPlayer2Username).trim(); /* + "'s ships" */
 
       if (
         fleetIsMySideMyFleet
           ? player1Username.length < 2
           : player2Username.length < 2
       ) {
-        console.log("Your username should contains atleast 2 letters");
+        console.log("Your username should contains at least 2 letters");
         return;
       }
+      if (
+        fleetIsMySideMyFleet
+          ? player1Username.includes(" ")
+          : player2Username.includes(" ")
+      ) {
+        console.log(player2Username, "username");
+        console.log("Your username should not contain empty spaces");
+        return;
+      }
+
       (fleetIsMySideMyFleet ? username1Label : username2Label).textContent = "";
-      const playerUsername = fleetIsMySideMyFleet
-        ? player1Username
-        : player2Username;
+      const playerUsername =
+        (fleetIsMySideMyFleet ? player1Username : player2Username) + "'s ships";
       const usernameLabel = fleetIsMySideMyFleet
         ? username1Label.insertAdjacentHTML("afterbegin", playerUsername)
         : username2Label.insertAdjacentHTML("afterbegin", playerUsername);
@@ -82,6 +108,7 @@ export const startNewGame = function (fleet, fleetParts) {
         ? (inputPlayer1Username.value = "")
         : (inputPlayer2Username.value = "");
       console.log(playerUsername);
+      closeUsernameForm(fleet, "none");
     });
   };
 
@@ -101,7 +128,9 @@ export const startNewGame = function (fleet, fleetParts) {
       const refreshFleets = function () {
         closeNotificationWindow();
         closeNotificationWindow2();
-
+        [changeUsernameBtn1, changeUsernameBtn2].forEach((btn) => {
+          btn.removeAttribute("disabled", true);
+        });
         (fleetIsMySideMyFleet ? startGameBtn : startGameBtn2).removeAttribute(
           "disabled",
           true
@@ -111,6 +140,7 @@ export const startNewGame = function (fleet, fleetParts) {
           timerEl.style.opacity = "0";
         });
         startTimer(fleet, true);
+
         playingCheck.playing = false;
         [
           [mySideMyFleet, "auto"],
@@ -150,8 +180,6 @@ export const startNewGame = function (fleet, fleetParts) {
             startGameBtn2.removeAttribute("disabled", true),
             (startGameBtn.style.display = ""),
             (startGameBtn2.style.display = ""),
-            (startGameBtn.textContent = "Ready to start"),
-            (startGameBtn2.textContent = "Ready to start"),
             bothFleetsReady.splice(0);
           bothSideShips.splice(0);
         };

@@ -66,7 +66,7 @@ export default function (fleet, ships) {
 
     e.target.classList.add("injure");
     const injure = "&cross;";
-    e.target.insertAdjacentHTML("afterbegin", injure);
+    // e.target.insertAdjacentHTML("afterbegin", injure);
 
     const destroyedShipCoords = ships[injuredShipPos].coords.map((_, i) => {
       return fleet
@@ -76,21 +76,21 @@ export default function (fleet, ships) {
 
     e.target
       .closest(".enemy-side--my-fleet")
-      ?.querySelector(`.${e.target.classList[0]}`) &&
-      (addMarkToFleet(mySideMyFleet).nextElementSibling.insertAdjacentHTML(
+      ?.querySelector(
+        `.${e.target.classList[0]}`
+      ) /* addMarkToFleet(mySideMyFleet).nextElementSibling.insertAdjacentHTML(
         "afterbegin",
         injure
-      ),
-      addMarkToFleet(mySideMyFleet).nextElementSibling.classList.add("injure"),
+      ), */ &&
+      (addMarkToFleet(mySideMyFleet).nextElementSibling.classList.add("injure"),
       startTimer(fleet));
 
     !e.target
       .closest(".enemy-side--my-fleet")
-      ?.querySelector(`.${e.target.classList[0]}`) &&
-      (addMarkToFleet(
+      ?.querySelector(`.${e.target.classList[0]}`) /* addMarkToFleet(
         enemySideEnemyFleet
-      ).nextElementSibling.insertAdjacentHTML("afterbegin", injure),
-      addMarkToFleet(enemySideEnemyFleet).nextElementSibling.classList.add(
+      ).nextElementSibling.insertAdjacentHTML("afterbegin", injure), */ &&
+      (addMarkToFleet(enemySideEnemyFleet).nextElementSibling.classList.add(
         "injure"
       ),
       startTimer(fleet));

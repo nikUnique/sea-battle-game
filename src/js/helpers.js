@@ -1,14 +1,32 @@
+import { playingCheck } from "./gameStartControl";
 import {
+  changeUsernameBtn1,
+  changeUsernameBtn2,
+  dataContainer1,
+  dataContainer2,
   enemySideEnemyFleet,
   enemySideMyFleet,
+  firstPlayerData,
+  inputUsernameLabel1,
+  inputUsernameLabel2,
   letters,
+  mySideEnemyFleet,
   mySideMyFleet,
+  newGameBtn,
+  newGameBtn2,
   notificatonWindow,
   notificatonWindow2,
+  playerData1,
+  playerData2,
+  secondPlayerData,
+  submitUsername1,
+  submitUsername2,
+  username1Input,
+  username2Input,
 } from "./globalVars";
 import showEndResults from "./showEndResults";
 let timer, labelContraryTimer;
-
+export { timer };
 export const buildShipBorder = function (borderParts) {
   const ship = borderParts[0];
   const coord = borderParts[1];
@@ -96,14 +114,17 @@ export const startTimer = function (fleet, newGame = false) {
     labelContraryTimer.textContent = timerClock(time, labelTimer);
 
     if (time === 0) {
+      console.log(playingCheck.playing, "play");
+      const fleetSide =
+        fleet === mySideEnemyFleet ? enemySideMyFleet : mySideEnemyFleet;
       clearInterval(timer);
       timeLeftLabel.style.opacity = "0";
-
-      showEndResults(fleet, true);
+      console.log(fleet, "fleet");
+      showEndResults(fleetSide, true);
     }
     time--;
   };
-  let time = 10;
+  let time = 100;
   tick();
   timer = setInterval(tick, 1000);
 };
@@ -128,4 +149,53 @@ export const selectCellsAround = function (cell) {
     rightCell,
     leftCell,
   };
+};
+
+const toggleUsernameForm = function (fleet, display) {
+  (fleet === mySideMyFleet
+    ? [username1Input, inputUsernameLabel1, submitUsername1]
+    : [username2Input, inputUsernameLabel2, submitUsername2]
+  ).forEach((item) => {
+    console.log(item.style.display);
+    item.style.display = display;
+    // if (i === 2) {
+    //   item.style.display = "flex";
+    //   item.style.alignItems = "center";
+    //   item.style.justifyContent = "flex-start";
+    // }
+
+    /* item.style.display === "none" ? "block" : "none"; */
+    /* item.style.display === "none" ? "block" : "none"; */
+  });
+  if (display !== "flex") {
+    fleet === mySideMyFleet
+      ? (changeUsernameBtn1.style.display = "flex")
+      : (changeUsernameBtn2.style.display = "flex");
+    fleet === mySideMyFleet
+      ? (newGameBtn.style.display = "flex")
+      : (newGameBtn2.style.display = "flex");
+    fleet === mySideMyFleet
+      ? playerData1?.classList.add("data")
+      : playerData2?.classList.add("data");
+  }
+  if (display === "flex") {
+    fleet === mySideMyFleet
+      ? (changeUsernameBtn1.style.display = "none")
+      : (changeUsernameBtn2.style.display = "none");
+
+    fleet === mySideMyFleet
+      ? (newGameBtn.style.display = "none")
+      : (newGameBtn2.style.display = "none");
+    fleet === mySideMyFleet
+      ? playerData1?.classList.remove("data")
+      : playerData2?.classList.remove("data");
+  }
+};
+
+export const openUsernameForm = function (fleet, display) {
+  toggleUsernameForm(fleet, display);
+};
+
+export const closeUsernameForm = function (fleet, display) {
+  toggleUsernameForm(fleet, display);
 };

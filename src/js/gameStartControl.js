@@ -12,10 +12,15 @@ import {
   startGameBtn2,
   waitingForOpponentLabel1,
   waitingForOpponentLabel2,
+  changeUsernameBtn1,
+  changeUsernameBtn2,
+  errorMessage1,
+  errorMessage2,
 } from "./globalVars";
 import {
   allowForbidClick,
   buildShipBorder,
+  closeUsernameForm,
   getSeaOpacityBack,
   selectCellsAround,
   startTimer,
@@ -57,20 +62,54 @@ export const gameStartControl = function (fleet, fleetParts) {
     let createFleetShips = [
       [[findCell("cell1")], [0].length],
       [[findCell("cell2")], [0].length],
-      // [[findCell("cell2")], [0].length],
-      // [[findCell("cell3")], [0].length],
-      // [
-      //   [findCell("cell4"), findCell("cell5"), findCell("cell6")],
-      //   [0, 0, 0].length,
-      // ],
-      // [[findCell("cell7"), findCell("cell8")], [0, 0].length],
+      [[findCell("cell3")], [0].length],
+      [[findCell("cell4")], [0].length],
+
+      [[findCell("cell8"), findCell("cell9")], [0, 0].length],
+      [[findCell("cell10"), findCell("cell11")], [0, 0].length],
+      [[findCell("cell12"), findCell("cell13")], [0, 0].length],
+
       [
-        [findCell("cell3"), findCell("cell4"), findCell("cell5")],
+        [findCell("cell5"), findCell("cell6"), findCell("cell7")],
+        [0, 0, 0].length,
+      ],
+      [
+        [findCell("cell14"), findCell("cell15"), findCell("cell16")],
 
         [0, 0, 0].length,
       ],
-      // [[findCell("cell12"), findCell("cell14")], [0, 0].length],
-      [[findCell("cell6"), findCell("cell7")], [0, 0].length],
+
+      [
+        [
+          findCell("cell17"),
+          findCell("cell18"),
+          findCell("cell19"),
+          findCell("cell20"),
+        ],
+
+        [0, 0, 0, 0].length,
+      ],
+    ];
+
+    let createMoreShips = [
+      [[findCell("cell1")], [0].length],
+      [[findCell("cell2")], [0].length],
+      [[findCell("cell3")], [0].length],
+      [[findCell("cell7")], [0].length],
+
+      [[findCell("cell13"), findCell("cell14")], [0, 0].length],
+      [[findCell("cell17"), findCell("cell18")], [0, 0].length],
+      [[findCell("cell19"), findCell("cell20")], [0, 0].length],
+
+      [
+        [findCell("cell4"), findCell("cell5"), findCell("cell6")],
+        [0, 0, 0].length,
+      ],
+      [
+        [findCell("cell12"), findCell("cell15"), findCell("cell16")],
+        [0, 0, 0].length,
+      ],
+
       [
         [
           findCell("cell8"),
@@ -81,39 +120,6 @@ export const gameStartControl = function (fleet, fleetParts) {
 
         [0, 0, 0, 0].length,
       ],
-      // [[findCell("cell19")], [0].length],
-    ];
-
-    let createMoreShips = [
-      [[findCell("cell1")], [0].length],
-      [[findCell("cell2")], [0].length],
-      // [[findCell("cell2")], [0].length],
-      // [[findCell("cell3")], [0].length],
-      // [[findCell("cell4")], [0].length],
-      [
-        [
-          findCell("cell6"),
-          findCell("cell7"),
-          findCell("cell8"),
-          findCell("cell9"),
-        ],
-
-        [0, 0, 0, 0].length,
-      ],
-      [
-        [findCell("cell3"), findCell("cell4"), findCell("cell5")],
-        [0, 0, 0].length,
-      ],
-      // [[findCell("cell8"), findCell("cell9")], [0, 0].length],
-      // [[findCell("cell10"), findCell("cell11")], [0, 0].length],
-
-      // [
-      //   [findCell("cell12"), findCell("cell13"), findCell("cell14")],
-
-      //   [0, 0, 0].length,
-      // ],
-
-      [[findCell("cell10"), findCell("cell11")], [0, 0].length],
     ];
 
     const createManuallyPlacedShips = function (createSource, ships) {
@@ -184,6 +190,10 @@ export const gameStartControl = function (fleet, fleetParts) {
           ? startGameBtn
           : startGameBtn2
         ).removeAttribute("disabled", true);
+        (fleetIsEnemySideMyFleet
+          ? errorMessage1
+          : errorMessage2
+        ).style.opacity = "100";
 
         [...fleet.querySelectorAll("td")].forEach((cell) => {
           cell.querySelector(".ship")?.remove();
@@ -209,6 +219,9 @@ export const gameStartControl = function (fleet, fleetParts) {
       console.log("Yeah, that is wrong");
       return;
     }
+
+    (fleetIsEnemySideMyFleet ? errorMessage1 : errorMessage2).style.opacity =
+      "0";
 
     bothFleetsReady.push(true);
     allowForbidClick(
@@ -312,6 +325,13 @@ export const gameStartControl = function (fleet, fleetParts) {
       flattenedBothSideShips.includes("mySideEnemyFleet") &&
       flattenedBothSideShips.includes("enemySideMyFleet")
     ) {
+      [changeUsernameBtn1, changeUsernameBtn2].forEach((btn) => {
+        btn.setAttribute("disabled", true);
+        btn.style.display = "block";
+      });
+      closeUsernameForm(mySideMyFleet, "none");
+      closeUsernameForm(enemySideEnemyFleet, "none");
+
       playingCheck.playing = true;
       console.log("Game started 🥰");
       console.log(playingCheck.playing, "playing");
