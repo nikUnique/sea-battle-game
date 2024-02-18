@@ -1753,6 +1753,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
         const shootingLogic = function(e) {
             e.preventDefault();
             console.log(e.target, "target");
+            // const containsShip
             if (!(0, _gameStartControl.playingCheck).playing || e.target.querySelector(".ship")?.classList.contains("ship")) {
                 console.log("dropzone");
                 return;
@@ -1766,7 +1767,11 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 if (e.target.textContent !== "") return;
                 e.target.querySelector("div").classList.add("miss");
                 e.target.querySelector("div").insertAdjacentHTML("afterbegin", miss);
-                e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet((0, _globalVars.mySideMyFleet)).classList.add("miss"), addMarkToFleet((0, _globalVars.mySideMyFleet)).insertAdjacentHTML("afterbegin", miss)), !e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).classList.add("miss"), addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).insertAdjacentHTML("afterbegin", miss));
+                if (e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`)) {
+                    addMarkToFleet((0, _globalVars.mySideMyFleet)).classList.add("miss");
+                    addMarkToFleet((0, _globalVars.mySideMyFleet)).insertAdjacentHTML("afterbegin", miss);
+                }
+                if (!e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`)) addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).classList.add("miss"), addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).insertAdjacentHTML("afterbegin", miss);
             };
             !e.target.closest(".ship") && addMissMark();
             if (e.target.closest(".ship")?.textContent !== "") return;
@@ -1780,8 +1785,13 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             const destroyedShipCoords = ships[injuredShipPos].coords.map((_, i)=>{
                 return fleet.querySelector(`.${ships[injuredShipPos]?.coords[i]}`).nextElementSibling.classList.contains("injure");
             });
-            e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet((0, _globalVars.mySideMyFleet)).nextElementSibling.classList.add("injure"), (0, _helpers.startTimer)(fleet));
-            !e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`) && (addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).nextElementSibling.classList.add("injure"), (0, _helpers.startTimer)(fleet));
+            if (e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`)) /* addMarkToFleet(mySideMyFleet).nextElementSibling.insertAdjacentHTML(
+        "afterbegin",
+        injure
+      ), && */ addMarkToFleet((0, _globalVars.mySideMyFleet)).nextElementSibling.classList.add("injure"), (0, _helpers.startTimer)(fleet);
+            if (!e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`)) /* addMarkToFleet(
+        enemySideEnemyFleet
+      ).nextElementSibling.insertAdjacentHTML("afterbegin", injure), && */ addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).nextElementSibling.classList.add("injure"), (0, _helpers.startTimer)(fleet);
             if (destroyedShipCoords.includes(false)) return;
             const addBorder = function(borderSide, coord, color = "#ff6f6f") {
                 const selectTd = function(fleetSide) {
@@ -1834,7 +1844,6 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 // There is also can be an imaginary 11th cell when it comes to side ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
                 cellAround && (cellAround.style.fontSize = "3.2rem");
                 const surroundDestroyedShip = function(fleet, cellAround) {
-                    console.log(new Date());
                     cellAround?.textContent === "" && fleet.querySelector(`.${cell}`)?.insertAdjacentHTML("afterbegin", miss);
                     !cellAround?.classList.contains("miss") && cellAround?.classList.add("cell-around");
                     cellAround && (cellAround.style.fontSize = "3.2rem");
