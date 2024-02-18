@@ -21,8 +21,10 @@ import {
   username2Input,
 } from "./globalVars";
 import showEndResults from "./showEndResults";
+
 let timer;
 export { timer };
+
 export const buildShipBorder = function (borderParts) {
   const ship = borderParts[0];
   const coord = borderParts[1];
@@ -32,10 +34,12 @@ export const buildShipBorder = function (borderParts) {
   const color = borderParts[5] && borderParts[5];
 
   console.log(ship);
+
   ship.direction === "column"
     ? i === 0 && addBorder("borderTop", coord, color)
     : // 1. Add left to the top cell
       i === 0 && addBorder("borderLeft", coord, color);
+
   // 2. Add  bottom to the last cell
   ship.direction === "column"
     ? i === arr.length - 1 && addBorder("borderBottom", coord, color)
@@ -73,7 +77,9 @@ export const allowForbidClick = function (fleet, state) {
 
 export const timerClock = function (time, labelTimer) {
   const min = String(Math.trunc(time / 60)).padStart(2, 0);
+
   const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+
   labelTimer.textContent = `${min}:${sec}`;
   return `${min}:${sec}`;
 };
@@ -84,6 +90,7 @@ export const startTimer = function (fleet, newGame = false) {
     clearInterval(timer);
     return;
   }
+
   if (timer) {
     console.log(timer);
     clearInterval(timer);
@@ -94,13 +101,17 @@ export const startTimer = function (fleet, newGame = false) {
   const timeLeftLabel = fleet
     .closest(".sea-container")
     .querySelector(".timer-label");
+
   const timeContraryLeftLabel = contraryFleet
     .closest(".sea-container")
     .querySelector(".timer-label");
+
   const labelTimer = fleet
     .closest(".sea-container")
     .querySelector(".timer-time");
+
   timeLeftLabel.style.opacity = "100";
+
   const labelContraryTimer = contraryFleet
     .closest(".sea-container")
     .querySelector(".timer-time");
@@ -111,8 +122,10 @@ export const startTimer = function (fleet, newGame = false) {
 
     if (time === 0) {
       console.log(playingCheck.playing, "play");
+
       const fleetSide =
         fleet === mySideEnemyFleet ? enemySideMyFleet : mySideEnemyFleet;
+
       clearInterval(timer);
       timeLeftLabel.style.opacity = "0";
       console.log(fleet, "fleet");
@@ -120,6 +133,7 @@ export const startTimer = function (fleet, newGame = false) {
     }
     time--;
   };
+
   let time = 100;
   tick();
   timer = setInterval(tick, 1000);
@@ -131,11 +145,13 @@ export const selectCellsAround = function (cell) {
   const letterAround = letters.indexOf(coordSlice01);
 
   const previousCell = coordSlice01 + (+coordSlice1 - 1);
+
   const nextCell = coordSlice01 + (+coordSlice1 + 1);
 
   const rightCell = letters[letterAround + 1] + coordSlice1;
 
   const leftCell = letters[letterAround - 1] + coordSlice1;
+
   return {
     coordSlice01,
     coordSlice1,
@@ -148,43 +164,36 @@ export const selectCellsAround = function (cell) {
 };
 
 const toggleUsernameForm = function (fleet, display) {
-  (fleet === mySideMyFleet
+  const fleetIsMySideMyFleet = fleet === mySideMyFleet;
+
+  (fleetIsMySideMyFleet
     ? [username1Input, inputUsernameLabel1, submitUsername1]
     : [username2Input, inputUsernameLabel2, submitUsername2]
   ).forEach((item) => {
     console.log(item.style.display);
     item.style.display = display;
-    // if (i === 2) {
-    //   item.style.display = "flex";
-    //   item.style.alignItems = "center";
-    //   item.style.justifyContent = "flex-start";
-    // }
-
-    /* item.style.display === "none" ? "block" : "none"; */
-    /* item.style.display === "none" ? "block" : "none"; */
   });
-  if (display !== "flex") {
-    fleet === mySideMyFleet
-      ? (changeUsernameBtn1.style.display = "flex")
-      : (changeUsernameBtn2.style.display = "flex");
-    fleet === mySideMyFleet
-      ? (newGameBtn1.style.display = "flex")
-      : (newGameBtn2.style.display = "flex");
-    fleet === mySideMyFleet
-      ? playerData1?.classList.add("data")
-      : playerData2?.classList.add("data");
-  }
-  if (display === "flex") {
-    fleet === mySideMyFleet
-      ? (changeUsernameBtn1.style.display = "none")
-      : (changeUsernameBtn2.style.display = "none");
 
-    fleet === mySideMyFleet
-      ? (newGameBtn1.style.display = "none")
-      : (newGameBtn2.style.display = "none");
-    fleet === mySideMyFleet
-      ? playerData1?.classList.remove("data")
-      : playerData2?.classList.remove("data");
+  const changeDisplayState = function (state, toggleMethod) {
+    if (fleetIsMySideMyFleet) {
+      changeUsernameBtn1.style.display = state;
+      newGameBtn1.style.display = state;
+      playerData1?.classList[toggleMethod]("data");
+    }
+
+    if (!fleetIsMySideMyFleet) {
+      changeUsernameBtn2.style.display = state;
+      newGameBtn2.style.display = state;
+      playerData2?.classList[toggleMethod]("data");
+    }
+  };
+
+  if (display !== "flex") {
+    changeDisplayState("flex", "add");
+  }
+
+  if (display === "flex") {
+    changeDisplayState("none", "remove");
   }
 };
 

@@ -1181,7 +1181,8 @@ const selectCellsAround = function(cell) {
     };
 };
 const toggleUsernameForm = function(fleet, display) {
-    (fleet === (0, _globalVars.mySideMyFleet) ? [
+    const fleetIsMySideMyFleet = fleet === (0, _globalVars.mySideMyFleet);
+    (fleetIsMySideMyFleet ? [
         (0, _globalVars.username1Input),
         (0, _globalVars.inputUsernameLabel1),
         (0, _globalVars.submitUsername1)
@@ -1192,22 +1193,21 @@ const toggleUsernameForm = function(fleet, display) {
     ]).forEach((item)=>{
         console.log(item.style.display);
         item.style.display = display;
-    // if (i === 2) {
-    //   item.style.display = "flex";
-    //   item.style.alignItems = "center";
-    //   item.style.justifyContent = "flex-start";
-    // }
-    /* item.style.display === "none" ? "block" : "none"; */ /* item.style.display === "none" ? "block" : "none"; */ });
-    if (display !== "flex") {
-        fleet === (0, _globalVars.mySideMyFleet) ? (0, _globalVars.changeUsernameBtn1).style.display = "flex" : (0, _globalVars.changeUsernameBtn2).style.display = "flex";
-        fleet === (0, _globalVars.mySideMyFleet) ? (0, _globalVars.newGameBtn1).style.display = "flex" : (0, _globalVars.newGameBtn2).style.display = "flex";
-        fleet === (0, _globalVars.mySideMyFleet) ? (0, _globalVars.playerData1)?.classList.add("data") : (0, _globalVars.playerData2)?.classList.add("data");
-    }
-    if (display === "flex") {
-        fleet === (0, _globalVars.mySideMyFleet) ? (0, _globalVars.changeUsernameBtn1).style.display = "none" : (0, _globalVars.changeUsernameBtn2).style.display = "none";
-        fleet === (0, _globalVars.mySideMyFleet) ? (0, _globalVars.newGameBtn1).style.display = "none" : (0, _globalVars.newGameBtn2).style.display = "none";
-        fleet === (0, _globalVars.mySideMyFleet) ? (0, _globalVars.playerData1)?.classList.remove("data") : (0, _globalVars.playerData2)?.classList.remove("data");
-    }
+    });
+    const changeDisplayState = function(state, toggleMethod) {
+        if (fleetIsMySideMyFleet) {
+            (0, _globalVars.changeUsernameBtn1).style.display = state;
+            (0, _globalVars.newGameBtn1).style.display = state;
+            (0, _globalVars.playerData1)?.classList[toggleMethod]("data");
+        }
+        if (!fleetIsMySideMyFleet) {
+            (0, _globalVars.changeUsernameBtn2).style.display = state;
+            (0, _globalVars.newGameBtn2).style.display = state;
+            (0, _globalVars.playerData2)?.classList[toggleMethod]("data");
+        }
+    };
+    if (display !== "flex") changeDisplayState("flex", "add");
+    if (display === "flex") changeDisplayState("none", "remove");
 };
 const openUsernameForm = function(fleet, display) {
     toggleUsernameForm(fleet, display);

@@ -25,8 +25,8 @@ import {
   allowForbidClick,
   closeNotificationWindow1,
   closeNotificationWindow2,
-  closeUsernameForm,
   getSeaOpacityBack,
+  closeUsernameForm,
   openUsernameForm,
   startTimer,
 } from "./helpers";
