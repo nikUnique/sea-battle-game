@@ -678,6 +678,10 @@ var _startNewGame = require("./startNewGame");
  // Where should I put the timer?
  // The timer feature is working quite well, now it's time of refactoring
  // Unexpected bug with 4-sized ship is fixed, the code is refactored, now it's time think about the next step
+ // Binoculars feature:
+ // 1. When you destroyed a ship for which destruction there should be an award in a kind of magic video camera then for 10 seconds hovering effect on ships will be different from hovering effect on empty cells
+ // If destroyed ship has reward class then add binoculars to the fleet on which that ship was destroyed, but before I need randomly add this reward class to the ship in the beginning of the game
+ // Take all ship's classes and assign one of them to the ship
  // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
  // All instructions are written and look good, now it's time to place buttons and inputs to the right places
  // The app is finished in relation to features. All functionalities and features are 100% complete(at least till I didn't find a bug or two 😄). Now it's time of big refactoring
@@ -1418,8 +1422,6 @@ const gameStartControl = function(fleet, fleetParts) {
                             return cellEl && cellEl;
                         });
                     });
-                    console.log(inBetweenShipParts, "inBetween");
-                    console.log(checkCells.flat(2), "check");
                 }
             });
             return sortCoords;
@@ -1445,6 +1447,8 @@ const gameStartControl = function(fleet, fleetParts) {
             console.log("Yeah, that is wrong");
             return;
         }
+        const ships = fleetParts[1];
+        (0, _globalVars.bothSideShips).push(ships);
         (fleetIsEnemySideMyFleet ? (0, _globalVars.errorMessage1) : (0, _globalVars.errorMessage2)).style.opacity = "0";
         bothFleetsReady.push(true);
         (0, _helpers.allowForbidClick)(fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet), "none");
@@ -1453,22 +1457,17 @@ const gameStartControl = function(fleet, fleetParts) {
         ].forEach((shipEl)=>{
             bothFleetsReady.length === 2 && (shipEl.textContent = "");
         });
-        const ships = fleetParts[1];
         const submarines = ships.filter((ship)=>{
             const shipEl = fleet.querySelector(`.${ship.coords[0]}`);
-            console.log(shipEl.classList[0]);
             return ship.coords.length === 1;
         });
-        const rewardSubmarine = Math.trunc(Math.random() * 2) + 1;
-        console.log(rewardSubmarine);
-        console.log(submarines);
+        const rewardSubmarine = Math.trunc(Math.random() * 4) + 1;
         submarines.forEach((submarine, i)=>{
             i + 1 === rewardSubmarine && fleet.querySelector(`.${submarine.coords[0]}`).nextElementSibling.classList.add("reward");
         });
-        (0, _globalVars.bothSideShips).push(ships);
         const addBorder = function(borderSide, coord) {
             const fleetSide = fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
-            fleetSide && (fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = "2px solid #3bc9db");
+            fleetSide && (fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = "2px solid  #22b8cf");
         };
         if (bothFleetsReady.length === 1) {
             (fleet === (0, _globalVars.mySideEnemyFleet) ? (0, _globalVars.enemySideEnemyFleet) : (0, _globalVars.mySideMyFleet)).querySelectorAll(".ship").forEach((ship)=>{
@@ -1476,7 +1475,7 @@ const gameStartControl = function(fleet, fleetParts) {
                 ship.textContent = "";
             });
             fleet.querySelectorAll(".ship").forEach((ship)=>{
-                ship.classList.remove("ship-color");
+                // ship.classList.remove("ship-color");
                 ship.textContent = "";
             });
         }
@@ -1502,12 +1501,8 @@ const gameStartControl = function(fleet, fleetParts) {
         if (fleet !== (0, _globalVars.mySideEnemyFleet) && fleet !== (0, _globalVars.enemySideMyFleet)) return;
         fleet === (0, _globalVars.mySideEnemyFleet) && (0, _globalVars.bothSideShips).push("mySideEnemyFleet");
         fleetIsEnemySideMyFleet && (0, _globalVars.bothSideShips).push("enemySideMyFleet");
-        // bothSideShips.includes('mySideEnemyFleet') ||  bothSideShips.includes('mySideEnemyFleet')
         const flattenedBothSideShips = (0, _globalVars.bothSideShips).flat(2);
         console.log(flattenedBothSideShips, "both");
-        // flattenedBothSideShips.length === createFleetShips.length + 1  &&
-        //   ((fleetIsEnemySideMyFleet ? startGameBtn : startGameBtn2).textContent =
-        //     "Waiting for the opponent...");
         (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn) : (0, _globalVars.startGameBtn2)).style.display = "none";
         (fleetIsEnemySideMyFleet ? (0, _globalVars.waitingForOpponentLabel1) : (0, _globalVars.waitingForOpponentLabel2)).style.opacity = "100";
         if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2) [
@@ -1516,9 +1511,6 @@ const gameStartControl = function(fleet, fleetParts) {
         ].forEach((label)=>{
             label.style.opacity = "0";
         });
-        // [startGameBtn, startGameBtn2].forEach((btn) => {
-        //   btn.style.display = "none";
-        // });
         console.log(flattenedBothSideShips);
         if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2 && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet")) {
             [
@@ -1534,42 +1526,37 @@ const gameStartControl = function(fleet, fleetParts) {
             console.log("Game started \uD83E\uDD70");
             console.log(playingCheck.playing, "playing");
             // Disable right-click
-            // document.addEventListener("contextmenu", (e) => e.preventDefault());
-            // function ctrlShiftKey(e, key) {
-            //   return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
-            // }
-            // (document.onkeydown = (e) => {
-            //   // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
-            //   if (
-            //     e.key === 123 ||
-            //     ctrlShiftKey(e, "I") ||
-            //     ctrlShiftKey(e, "J") ||
-            //     ctrlShiftKey(e, "C") ||
-            //     (e.ctrlKey && e.key === "U".charCodeAt(0))
-            //   )
-            //     return false;
-            // }),
-            // Making sure that I will not destroy my own ship ;)
+            document.addEventListener("contextmenu", (e)=>e.preventDefault());
+            function ctrlShiftKey(e, key) {
+                return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
+            }
+            document.onkeydown = (e)=>{
+                // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+                if (e.key === 123 || ctrlShiftKey(e, "I") || ctrlShiftKey(e, "J") || ctrlShiftKey(e, "C") || e.ctrlKey && e.key === "U".charCodeAt(0)) return false;
+            }, // Making sure that I will not destroy my own ship ;)
             (0, _helpers.allowForbidClick)((0, _globalVars.mySideMyFleet), "none"), (0, _helpers.allowForbidClick)((0, _globalVars.enemySideEnemyFleet), "none");
         }
         console.log(firstTurn);
         if (!playingCheck.playing) return;
         (0, _helpers.getSeaOpacityBack)();
-        (0, _globalVars.mySideEnemyFleet) && (firstTurn < 0.5 && ((0, _helpers.allowForbidClick)((0, _globalVars.mySideEnemyFleet), "auto"), (0, _helpers.startTimer)((0, _globalVars.mySideEnemyFleet)), (0, _globalVars.enemySideMyFleet).closest(".sea").style.opacity = "0.7"), firstTurn >= 0.5 && ((0, _helpers.allowForbidClick)((0, _globalVars.enemySideMyFleet), "auto"), (0, _helpers.startTimer)((0, _globalVars.enemySideMyFleet)), (0, _globalVars.mySideEnemyFleet).closest(".sea").style.opacity = "0.7"));
+        const defineFirstTurn = function(fleet, contraryFleet) {
+            (0, _helpers.allowForbidClick)(fleet, "auto");
+            (0, _helpers.startTimer)(fleet);
+            contraryFleet.closest(".sea").style.opacity = "0.7";
+        };
+        if (fleet === (0, _globalVars.mySideEnemyFleet) || fleet === (0, _globalVars.enemySideMyFleet)) {
+            firstTurn < 0.5 && defineFirstTurn((0, _globalVars.mySideEnemyFleet), (0, _globalVars.enemySideMyFleet));
+            firstTurn >= 0.5 && defineFirstTurn((0, _globalVars.enemySideMyFleet), (0, _globalVars.mySideEnemyFleet));
+        }
         [
             (0, _globalVars.newGameBtn),
             (0, _globalVars.newGameBtn2)
         ].forEach((btn)=>{
-            console.log("btn");
             btn.removeAttribute("disabled", true);
         });
     };
     fleet !== (0, _globalVars.mySideMyFleet) && fleet !== (0, _globalVars.enemySideEnemyFleet) && (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn) : (0, _globalVars.startGameBtn2)).addEventListener("click", startPlaying);
-}; // Nice idea about making binoculars for 10 seconds to find more ships
- // Binoculars feature:
- // 1. When you destroyed a ship for which destruction there should be an award in a kind of magic video camera then for 10 seconds hovering effect on ships will be different from hovering effect on empty cells
- // If destroyed ship has reward class then add binoculars to the fleet on which that ship was destroyed, but before I need randomly add this reward class to the ship in the beginning of the game
- // Take all ship's classes and assign one of them to the ship
+};
 
 },{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
