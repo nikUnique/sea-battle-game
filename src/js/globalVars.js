@@ -4,7 +4,7 @@ const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
 const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
 const seas = document.querySelectorAll(".sea");
 const seaContainers = document.querySelectorAll(".sea-container");
-const notificatonWindow = document.querySelector(
+const notificatonWindow1 = document.querySelector(
   ".notification-window.player-1"
 );
 const notificatonWindow2 = document.querySelector(
@@ -12,15 +12,15 @@ const notificatonWindow2 = document.querySelector(
 );
 
 // const overlay = document.querySelector(".overlay");
-const btnCloseNotificationWindow = document.querySelector(
+const btnCloseNotificationWindow1 = document.querySelector(
   ".close-notification-window"
 );
 const btnCloseNotificationWindow2 = document.querySelector(
   ".close-notification-window-2"
 );
-const newGameBtn = document.querySelector(".new-game-btn.player-1");
+const newGameBtn1 = document.querySelector(".new-game-btn.player-1");
 const newGameBtn2 = document.querySelector(".new-game-btn.player-2");
-const startGameBtn = document.querySelector(".fleet-1");
+const startGameBtn1 = document.querySelector(".fleet-1");
 const startGameBtn2 = document.querySelector(".fleet-2");
 const changeUsernameBtn1 = document.querySelector(".change-username-btn-1");
 const changeUsernameBtn2 = document.querySelector(".change-username-btn-2");
@@ -38,7 +38,7 @@ const playerData1 = document.querySelector(".player-data-1");
 const playerData2 = document.querySelector(".player-data-2");
 const errorMessage1 = document.querySelector(".error-message-1");
 const errorMessage2 = document.querySelector(".error-message-2");
-const resultsMessage = document.querySelector(".results-message");
+const resultsMessage1 = document.querySelector(".results-message");
 const resultsMessage2 = document.querySelector(".results-message-2");
 const player1 = document.querySelector(".username-1").textContent;
 const player2 = document.querySelector(".username-2").textContent;
@@ -92,14 +92,14 @@ export {
   enemySideMyFleet,
   seas,
   seaContainers,
-  notificatonWindow,
+  notificatonWindow1,
   notificatonWindow2,
   // overlay,
-  btnCloseNotificationWindow,
+  btnCloseNotificationWindow1,
   btnCloseNotificationWindow2,
-  newGameBtn,
+  newGameBtn1,
   newGameBtn2,
-  startGameBtn,
+  startGameBtn1,
   startGameBtn2,
   changeUsernameBtn1,
   changeUsernameBtn2,
@@ -128,7 +128,7 @@ export {
   enemySideEnemyShips,
   mySideEnemyShips,
   enemySideMyShips,
-  resultsMessage,
+  resultsMessage1,
   resultsMessage2,
   player1,
   player2,

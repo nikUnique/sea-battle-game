@@ -2,30 +2,26 @@ import { playingCheck } from "./gameStartControl";
 import {
   changeUsernameBtn1,
   changeUsernameBtn2,
-  dataContainer1,
-  dataContainer2,
   enemySideEnemyFleet,
   enemySideMyFleet,
-  firstPlayerData,
   inputUsernameLabel1,
   inputUsernameLabel2,
   letters,
   mySideEnemyFleet,
   mySideMyFleet,
-  newGameBtn,
+  newGameBtn1,
   newGameBtn2,
-  notificatonWindow,
+  notificatonWindow1,
   notificatonWindow2,
   playerData1,
   playerData2,
-  secondPlayerData,
   submitUsername1,
   submitUsername2,
   username1Input,
   username2Input,
 } from "./globalVars";
 import showEndResults from "./showEndResults";
-let timer, labelContraryTimer;
+let timer;
 export { timer };
 export const buildShipBorder = function (borderParts) {
   const ship = borderParts[0];
@@ -61,8 +57,8 @@ export const getSeaOpacityBack = function () {
   });
 };
 
-export const closeNotificationWindow = function () {
-  notificatonWindow.classList.add("hidden");
+export const closeNotificationWindow1 = function () {
+  notificatonWindow1.classList.add("hidden");
 
   // overlay.classList.add("hidden");
 };
@@ -105,7 +101,7 @@ export const startTimer = function (fleet, newGame = false) {
     .closest(".sea-container")
     .querySelector(".timer-time");
   timeLeftLabel.style.opacity = "100";
-  labelContraryTimer = contraryFleet
+  const labelContraryTimer = contraryFleet
     .closest(".sea-container")
     .querySelector(".timer-time");
 
@@ -172,7 +168,7 @@ const toggleUsernameForm = function (fleet, display) {
       ? (changeUsernameBtn1.style.display = "flex")
       : (changeUsernameBtn2.style.display = "flex");
     fleet === mySideMyFleet
-      ? (newGameBtn.style.display = "flex")
+      ? (newGameBtn1.style.display = "flex")
       : (newGameBtn2.style.display = "flex");
     fleet === mySideMyFleet
       ? playerData1?.classList.add("data")
@@ -184,7 +180,7 @@ const toggleUsernameForm = function (fleet, display) {
       : (changeUsernameBtn2.style.display = "none");
 
     fleet === mySideMyFleet
-      ? (newGameBtn.style.display = "none")
+      ? (newGameBtn1.style.display = "none")
       : (newGameBtn2.style.display = "none");
     fleet === mySideMyFleet
       ? playerData1?.classList.remove("data")

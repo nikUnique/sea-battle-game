@@ -2,9 +2,6 @@ import {
   mySideMyFleet,
   enemySideEnemyFleet,
   enemySideMyFleet,
-  enemySideMyShips,
-  mySideMyShips,
-  enemySideEnemyShips,
 } from "./globalVars";
 
 import showEndResults from "./showEndResults";

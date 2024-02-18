@@ -1,13 +1,13 @@
 import {
   mySideEnemyFleet,
   enemySideMyFleet,
-  notificatonWindow,
+  notificatonWindow1,
   notificatonWindow2,
   // overlay,
-  btnCloseNotificationWindow,
+  btnCloseNotificationWindow1,
   btnCloseNotificationWindow2,
   allTimers,
-  resultsMessage,
+  resultsMessage1,
   resultsMessage2,
   player1,
   player2,
@@ -15,7 +15,7 @@ import {
 
 import { playingCheck } from "./gameStartControl";
 import {
-  closeNotificationWindow,
+  closeNotificationWindow1,
   closeNotificationWindow2,
   getSeaOpacityBack,
   timer,
@@ -55,7 +55,7 @@ export default function (fleet, noTime = false) {
   // Show notification window
   const openNotificationWindow = function () {
     const addNotification = function () {
-      composeMessage(resultsMessage, enemySideMyFleet);
+      composeMessage(resultsMessage1, enemySideMyFleet);
       composeMessage(resultsMessage2, mySideEnemyFleet);
     };
 
@@ -63,7 +63,7 @@ export default function (fleet, noTime = false) {
 
     fleet !== mySideEnemyFleet && addNotification(player2);
 
-    notificatonWindow.classList.remove("hidden");
+    notificatonWindow1.classList.remove("hidden");
     notificatonWindow2.classList.remove("hidden");
 
     // overlay.classList.remove("hidden");
@@ -80,7 +80,10 @@ export default function (fleet, noTime = false) {
       timerEl.style.opacity = "0";
     });
 
-  btnCloseNotificationWindow.addEventListener("click", closeNotificationWindow);
+  btnCloseNotificationWindow1.addEventListener(
+    "click",
+    closeNotificationWindow1
+  );
   // overlay.addEventListener("click", closeNotificationWindow);
   btnCloseNotificationWindow2.addEventListener(
     "click",

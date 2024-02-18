@@ -7,8 +7,8 @@ import {
   mySideEnemyShips,
   bothSideShips,
   newGameBtn2,
-  newGameBtn,
-  startGameBtn,
+  newGameBtn1,
+  startGameBtn1,
   startGameBtn2,
   waitingForOpponentLabel1,
   waitingForOpponentLabel2,
@@ -43,7 +43,7 @@ export const gameStartControl = function (fleet, fleetParts) {
     newGameAgreement.splice(0);
 
     fleet === mySideEnemyFleet && (firstTurn = Math.random());
-    (fleetIsEnemySideMyFleet ? startGameBtn : startGameBtn2).setAttribute(
+    (fleetIsEnemySideMyFleet ? startGameBtn1 : startGameBtn2).setAttribute(
       "disabled",
       true
     );
@@ -183,7 +183,7 @@ export const gameStartControl = function (fleet, fleetParts) {
         console.log("Place your ships in the right way, 🐒");
 
         (fleetIsEnemySideMyFleet
-          ? startGameBtn
+          ? startGameBtn1
           : startGameBtn2
         ).removeAttribute("disabled", true);
         (fleetIsEnemySideMyFleet
@@ -292,7 +292,7 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     console.log(flattenedBothSideShips, "both");
 
-    (fleetIsEnemySideMyFleet ? startGameBtn : startGameBtn2).style.display =
+    (fleetIsEnemySideMyFleet ? startGameBtn1 : startGameBtn2).style.display =
       "none";
     (fleetIsEnemySideMyFleet
       ? waitingForOpponentLabel1
@@ -359,14 +359,14 @@ export const gameStartControl = function (fleet, fleetParts) {
       firstTurn >= 0.5 && defineFirstTurn(enemySideMyFleet, mySideEnemyFleet);
     }
 
-    [newGameBtn, newGameBtn2].forEach((btn) => {
+    [newGameBtn1, newGameBtn2].forEach((btn) => {
       btn.removeAttribute("disabled", true);
     });
   };
 
   fleet !== mySideMyFleet &&
     fleet !== enemySideEnemyFleet &&
-    (fleetIsEnemySideMyFleet ? startGameBtn : startGameBtn2).addEventListener(
+    (fleetIsEnemySideMyFleet ? startGameBtn1 : startGameBtn2).addEventListener(
       "click",
       startPlaying
     );
