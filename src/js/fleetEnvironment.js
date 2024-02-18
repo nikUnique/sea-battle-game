@@ -7,10 +7,6 @@ import {
   enemySideEnemyFleet,
   enemySideMyFleet,
   seas,
-  seaContainers,
-  changeUsernameBtn,
-  firstPlayerData,
-  secondPlayerData,
 } from "./globalVars";
 
 {
@@ -43,12 +39,12 @@ let markupSeaHead = ` ${seaFleet
 
   .join("")}`;
 
-let markupLetters = ` ${seaFleet
-  .map((item, i) => {
-    return `<p class="column-letter column-letter-${i + 1}">${letters[i]}</p>`;
-  })
+// let markupLetters = ` ${seaFleet
+//   .map((item, i) => {
+//     return `<p class="column-letter column-letter-${i + 1}">${letters[i]}</p>`;
+//   })
 
-  .join("")}`;
+//   .join("")}`;
 
 let markupNumbers = ` ${seaFleet
   .map((item, i) => {

@@ -38,6 +38,10 @@ const playerData1 = document.querySelector(".player-data-1");
 const playerData2 = document.querySelector(".player-data-2");
 const errorMessage1 = document.querySelector(".error-message-1");
 const errorMessage2 = document.querySelector(".error-message-2");
+const resultsMessage = document.querySelector(".results-message");
+const resultsMessage2 = document.querySelector(".results-message-2");
+const player1 = document.querySelector(".username-1").textContent;
+const player2 = document.querySelector(".username-2").textContent;
 
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
 const seaFleet = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -124,4 +128,8 @@ export {
   enemySideEnemyShips,
   mySideEnemyShips,
   enemySideMyShips,
+  resultsMessage,
+  resultsMessage2,
+  player1,
+  player2,
 };

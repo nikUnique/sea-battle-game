@@ -17,9 +17,7 @@ export default createShip = function (coords, size, fleetParts) {
   });
 
   if (checkSpace.includes(true)) {
-    console.log(
-      "In such a mood it wouldn't be surprising if you stepped with you shoe on a dog's poop 🍭"
-    );
+    console.log("Place your ships in the right way🍭");
     return false;
   }
 
@@ -57,7 +55,7 @@ export default createShip = function (coords, size, fleetParts) {
     fleet !== GlobalVars.mySideMyFleet &&
     fleet !== GlobalVars.enemySideEnemyFleet
   ) {
-    const checkWholesomness = coords.map((coord, i) => {
+    const checkShipsWholesomness = coords.map((coord, i) => {
       const cellAttributes = selectCellsAround(coord);
 
       if (
@@ -81,8 +79,8 @@ export default createShip = function (coords, size, fleetParts) {
       }
     });
 
-    if (checkWholesomness.includes(false)) {
-      console.log(ships, "sho");
+    if (checkShipsWholesomness.includes(false)) {
+      console.log(ships, "ships");
       console.log("Place your ships in the right order, man 🤸‍♂️");
       return false;
     }
@@ -124,7 +122,7 @@ export default createShip = function (coords, size, fleetParts) {
     ),
   ];
 
-  console.log(bigCoords, "flu");
+  console.log(bigCoords, "bigCoords");
 
   bigCoords.forEach((pos) => {
     const cellEl = fleet.querySelector(`.${pos}`);

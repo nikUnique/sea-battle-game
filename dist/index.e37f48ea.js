@@ -680,6 +680,7 @@ var _startNewGame = require("./startNewGame");
  // Unexpected bug with 4-sized ship is fixed, the code is refactored, now it's time think about the next step
  // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
  // All instructions are written and look good, now it's time to place buttons and inputs to the right places
+ // The app is finished in relation to features. All functionalities and features are 100% complete(at least till I didn't find a bug or two 😄). Now it's time of big refactoring
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","./startNewGame":"hGRP7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -727,6 +728,10 @@ parcelHelpers.export(exports, "mySideMyShips", ()=>mySideMyShips);
 parcelHelpers.export(exports, "enemySideEnemyShips", ()=>enemySideEnemyShips);
 parcelHelpers.export(exports, "mySideEnemyShips", ()=>mySideEnemyShips);
 parcelHelpers.export(exports, "enemySideMyShips", ()=>enemySideMyShips);
+parcelHelpers.export(exports, "resultsMessage", ()=>resultsMessage);
+parcelHelpers.export(exports, "resultsMessage2", ()=>resultsMessage2);
+parcelHelpers.export(exports, "player1", ()=>player1);
+parcelHelpers.export(exports, "player2", ()=>player2);
 const mySideMyFleet = document.querySelector(".my-side--my-fleet");
 const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
 const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
@@ -758,6 +763,10 @@ const playerData1 = document.querySelector(".player-data-1");
 const playerData2 = document.querySelector(".player-data-2");
 const errorMessage1 = document.querySelector(".error-message-1");
 const errorMessage2 = document.querySelector(".error-message-2");
+const resultsMessage = document.querySelector(".results-message");
+const resultsMessage2 = document.querySelector(".results-message-2");
+const player1 = document.querySelector(".username-1").textContent;
+const player2 = document.querySelector(".username-2").textContent;
 const letters = [
     "A",
     "B",
@@ -977,7 +986,7 @@ exports.default = createShip = function(coords, size, fleetParts) {
         });
     });
     if (checkSpace.includes(true)) {
-        console.log("In such a mood it wouldn't be surprising if you stepped with you shoe on a dog's poop \uD83C\uDF6D");
+        console.log("Place your ships in the right way\uD83C\uDF6D");
         return false;
     }
     const checkSpaceAround = fleetParts[1].map((ship)=>{
@@ -1005,12 +1014,12 @@ exports.default = createShip = function(coords, size, fleetParts) {
         return false;
     }
     if (fleet !== _globalVars.mySideMyFleet && fleet !== _globalVars.enemySideEnemyFleet) {
-        const checkWholesomness = coords.map((coord, i)=>{
+        const checkShipsWholesomness = coords.map((coord, i)=>{
             const cellAttributes = (0, _helpers.selectCellsAround)(coord);
             if (coords.length > 1 && !coords.includes(letters[cellAttributes.letterAround] + (cellAttributes.coordSlice1 - 1)) && !coords.includes(letters[cellAttributes.letterAround] + (+cellAttributes.coordSlice1 + 1)) && !coords.includes(letters[cellAttributes.letterAround - 1] + cellAttributes.coordSlice1) && !coords.includes(letters[cellAttributes.letterAround + 1] + cellAttributes.coordSlice1)) return false;
         });
-        if (checkWholesomness.includes(false)) {
-            console.log(ships, "sho");
+        if (checkShipsWholesomness.includes(false)) {
+            console.log(ships, "ships");
             console.log("Place your ships in the right order, man \uD83E\uDD38\u200D\u2642\uFE0F");
             return false;
         }
@@ -1037,7 +1046,7 @@ exports.default = createShip = function(coords, size, fleetParts) {
     const readyCellsAround = [
         ...new Set(cellsAround.replace(",", "").split(",").map((cell)=>cell.trim()).filter((cell)=>letters.includes(cell.slice(0, 1))))
     ];
-    console.log(bigCoords, "flu");
+    console.log(bigCoords, "bigCoords");
     bigCoords.forEach((pos)=>{
         const cellEl = fleet.querySelector(`.${pos}`);
         cellEl?.classList.add("ship-color");
@@ -1220,9 +1229,8 @@ let newGameAgreement = [];
 let firstTurn = "";
 let checkCells;
 const gameStartControl = function(fleet, fleetParts) {
-    // playing = false;
     const fleetIsEnemySideMyFleet = fleet === (0, _globalVars.enemySideMyFleet);
-    const startPlaying = function(e) {
+    const startPlaying = function() {
         playingCheck.playing = false;
         newGameAgreement.splice(0);
         fleet === (0, _globalVars.mySideEnemyFleet) && (firstTurn = Math.random());
@@ -1395,7 +1403,6 @@ const gameStartControl = function(fleet, fleetParts) {
                         return i !== 0 && i !== arr.length - 1;
                     });
                     checkCells = inBetweenShipParts.map((cell)=>{
-                        fleet.querySelector(`.${cell}`).classList;
                         const cellAttrbs = (0, _helpers.selectCellsAround)(cell);
                         const selectCell = function(cell) {
                             return fleet.querySelector(`.${cell}`)?.nextElementSibling;
@@ -1567,15 +1574,10 @@ const gameStartControl = function(fleet, fleetParts) {
 },{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-// When game ends I need to stop timer, how?
 parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
-        const resultsMessage = document.querySelector(".results-message");
-        const resultsMessage2 = document.querySelector(".results-message-2");
         const allShips = [
             ...fleet.querySelectorAll(".ship")
         ];
-        const player1 = document.querySelector(".username-1").textContent;
-        const player2 = document.querySelector(".username-2").textContent;
         const injuredShips = allShips.map((ship)=>{
             if (ship.classList.contains("injure")) return ship;
         }).filter((ship)=>{
@@ -1595,12 +1597,12 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
         };
         // Show notification window
         const openNotificationWindow = function() {
-            const addNotification = function(player) {
-                composeMessage(resultsMessage, (0, _globalVars.enemySideMyFleet));
-                composeMessage(resultsMessage2, (0, _globalVars.mySideEnemyFleet));
+            const addNotification = function() {
+                composeMessage((0, _globalVars.resultsMessage), (0, _globalVars.enemySideMyFleet));
+                composeMessage((0, _globalVars.resultsMessage2), (0, _globalVars.mySideEnemyFleet));
             };
-            fleet === (0, _globalVars.mySideEnemyFleet) && addNotification(player1);
-            fleet !== (0, _globalVars.mySideEnemyFleet) && addNotification(player2);
+            fleet === (0, _globalVars.mySideEnemyFleet) && addNotification((0, _globalVars.player1));
+            fleet !== (0, _globalVars.mySideEnemyFleet) && addNotification((0, _globalVars.player2));
             (0, _globalVars.notificatonWindow).classList.remove("hidden");
             (0, _globalVars.notificatonWindow2).classList.remove("hidden");
             // overlay.classList.remove("hidden");
@@ -1640,9 +1642,11 @@ let markupSeaHead = ` ${(0, _globalVars.seaFleet).map((_, i)=>{
     return i > 0 ? `<th>${(0, _globalVars.letters)[i]}</th>` : ` 
         <th>${(0, _globalVars.letters)[i]}</th>`;
 }).join("")}`;
-let markupLetters = ` ${(0, _globalVars.seaFleet).map((item, i)=>{
-    return `<p class="column-letter column-letter-${i + 1}">${(0, _globalVars.letters)[i]}</p>`;
-}).join("")}`;
+// let markupLetters = ` ${seaFleet
+//   .map((item, i) => {
+//     return `<p class="column-letter column-letter-${i + 1}">${letters[i]}</p>`;
+//   })
+//   .join("")}`;
 let markupNumbers = ` ${(0, _globalVars.seaFleet).map((item, i)=>{
     return `<p class="row-number row-number-${i + 1}">${i + 1}</p>`;
 }).join("")}`;
@@ -1739,13 +1743,15 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
                 if (e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
                 const turn = (0, _gameStartControl.playingCheck).playing && fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideEnemyFleet) : (0, _globalVars.enemySideMyFleet);
                 if ((0, _gameStartControl.playingCheck).playing) {
-                    turn.style.pointerEvents = "auto", fleet.closest(".sea").style.opacity = "0.7";
+                    turn.style.pointerEvents = "auto";
+                    fleet.closest(".sea").style.opacity = "0.7";
                     (0, _helpers.startTimer)(turn);
                     fleet.closest(".sea-container").querySelector(".timer-label") && (fleet.closest(".sea-container").querySelector(".timer-label").style.opacity = "0");
                     const fleetSide = fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
                     fleetSide.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
                 }
-                (0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none"), turn.closest(".sea").style.opacity = "1";
+                (0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none");
+                turn.closest(".sea").style.opacity = "1";
             });
         });
     });

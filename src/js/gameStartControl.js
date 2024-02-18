@@ -30,15 +30,15 @@ const playingCheck = { playing: false };
 
 let bothFleetsReady = [];
 let newGameAgreement = [];
-export { playingCheck, bothFleetsReady, newGameAgreement };
 let firstTurn = "";
 let checkCells;
 
+export { playingCheck, bothFleetsReady, newGameAgreement };
+
 export const gameStartControl = function (fleet, fleetParts) {
-  // playing = false;
   const fleetIsEnemySideMyFleet = fleet === enemySideMyFleet;
 
-  const startPlaying = function (e) {
+  const startPlaying = function () {
     playingCheck.playing = false;
     newGameAgreement.splice(0);
 
@@ -50,6 +50,7 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     allowForbidClick(fleet, "none");
     console.log(fleet);
+
     const findCell = function (cell) {
       return `${
         (fleetIsEnemySideMyFleet
@@ -154,8 +155,6 @@ export const gameStartControl = function (fleet, fleetParts) {
 
           checkCells = inBetweenShipParts
             .map((cell) => {
-              fleet.querySelector(`.${cell}`).classList;
-
               const cellAttrbs = selectCellsAround(cell);
 
               const selectCell = function (cell) {

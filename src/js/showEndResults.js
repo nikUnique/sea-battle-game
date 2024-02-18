@@ -7,6 +7,10 @@ import {
   btnCloseNotificationWindow,
   btnCloseNotificationWindow2,
   allTimers,
+  resultsMessage,
+  resultsMessage2,
+  player1,
+  player2,
 } from "./globalVars";
 
 import { playingCheck } from "./gameStartControl";
@@ -16,14 +20,9 @@ import {
   getSeaOpacityBack,
   timer,
 } from "./helpers";
-// When game ends I need to stop timer, how?
 
 export default function (fleet, noTime = false) {
-  const resultsMessage = document.querySelector(".results-message");
-  const resultsMessage2 = document.querySelector(".results-message-2");
   const allShips = [...fleet.querySelectorAll(".ship")];
-  const player1 = document.querySelector(".username-1").textContent;
-  const player2 = document.querySelector(".username-2").textContent;
 
   const injuredShips = allShips
     .map((ship) => {
@@ -55,7 +54,7 @@ export default function (fleet, noTime = false) {
 
   // Show notification window
   const openNotificationWindow = function () {
-    const addNotification = function (player) {
+    const addNotification = function () {
       composeMessage(resultsMessage, enemySideMyFleet);
       composeMessage(resultsMessage2, mySideEnemyFleet);
     };

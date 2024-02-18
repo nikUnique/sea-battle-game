@@ -121,3 +121,4 @@ const createFleet = function (fleetParts) {
 // Unexpected bug with 4-sized ship is fixed, the code is refactored, now it's time think about the next step
 // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
 // All instructions are written and look good, now it's time to place buttons and inputs to the right places
+// The app is finished in relation to features. All functionalities and features are 100% complete(at least till I didn't find a bug or two 😄). Now it's time of big refactoring

@@ -28,8 +28,8 @@ export default function (fleet) {
           ? mySideEnemyFleet
           : enemySideMyFleet;
       if (playingCheck.playing) {
-        (turn.style.pointerEvents = "auto"),
-          (fleet.closest(".sea").style.opacity = "0.7");
+        turn.style.pointerEvents = "auto";
+        fleet.closest(".sea").style.opacity = "0.7";
         startTimer(turn);
         fleet.closest(".sea-container").querySelector(".timer-label") &&
           (fleet
@@ -41,8 +41,8 @@ export default function (fleet) {
           .closest(".sea-container")
           .querySelector(".timer-label").style.opacity = "0";
       }
-      playingCheck.playing && (fleet.style.pointerEvents = "none"),
-        (turn.closest(".sea").style.opacity = "1");
+      playingCheck.playing && (fleet.style.pointerEvents = "none");
+      turn.closest(".sea").style.opacity = "1";
     });
   });
 }
