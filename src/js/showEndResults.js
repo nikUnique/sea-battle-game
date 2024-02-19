@@ -14,6 +14,7 @@ import {
 } from "./globalVars";
 
 import { playingCheck } from "./gameStartControl";
+
 import {
   closeNotificationWindow1,
   closeNotificationWindow2,
@@ -24,14 +25,17 @@ import {
 export default function (fleet, noTime = false) {
   const allShips = [...fleet.querySelectorAll(".ship")];
 
-  const injuredShips = allShips
-    .map((ship) => {
-      if (ship.classList.contains("injure")) return ship;
-    })
-    .filter((ship) => {
-      // It can be undefined
-      if (ship) return ship;
-    });
+  const injuredShips = allShips.filter((ship) => {
+    // Checks all ships on the fleet and those which are destroyed will be returned
+    if (ship.classList.contains("injure")) {
+      return ship;
+    }
+  });
+  // .filter((ship, i, arr) => {
+  //   if (ship) {
+  //     return ship;
+  //   }
+  // });
 
   console.log(fleet);
 
@@ -42,10 +46,13 @@ export default function (fleet, noTime = false) {
   if (!areAllShipsInjured && !runOutOfTime) {
     return;
   }
+
+  // If code execution is at this point - this means the game is finished
   clearInterval(timer);
   console.log(areAllShipsInjured, "areAll");
   console.log(runOutOfTime, "areAll");
 
+  // Composing the result message
   const composeMessage = function (messageEl, fleetSide) {
     messageEl.textContent !== "" && (messageEl.textContent = "");
 
@@ -74,11 +81,10 @@ export default function (fleet, noTime = false) {
     notificatonWindow2.classList.remove("hidden");
 
     // overlay.classList.remove("hidden");
-    [mySideEnemyFleet, enemySideMyFleet].forEach(
-      (fleet) => playingCheck.playing && (fleet.style.pointerEvents = "none"),
-
-      getSeaOpacityBack()
-    );
+    [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
+      fleet.style.pointerEvents = "none";
+      getSeaOpacityBack();
+    });
   };
 
   (areAllShipsInjured || runOutOfTime) && openNotificationWindow();

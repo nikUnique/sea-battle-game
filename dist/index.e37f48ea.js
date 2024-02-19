@@ -1584,19 +1584,24 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
         const allShips = [
             ...fleet.querySelectorAll(".ship")
         ];
-        const injuredShips = allShips.map((ship)=>{
+        const injuredShips = allShips.filter((ship)=>{
+            // Checks all ships on the fleet and those which are destroyed will be returned
             if (ship.classList.contains("injure")) return ship;
-        }).filter((ship)=>{
-            // It can be undefined
-            if (ship) return ship;
         });
+        // .filter((ship, i, arr) => {
+        //   if (ship) {
+        //     return ship;
+        //   }
+        // });
         console.log(fleet);
         const areAllShipsInjured = injuredShips.length === allShips.length;
         const runOutOfTime = noTime ? true : false;
         if (!areAllShipsInjured && !runOutOfTime) return;
+        // If code execution is at this point - this means the game is finished
         clearInterval((0, _helpers.timer));
         console.log(areAllShipsInjured, "areAll");
         console.log(runOutOfTime, "areAll");
+        // Composing the result message
         const composeMessage = function(messageEl, fleetSide) {
             messageEl.textContent !== "" && (messageEl.textContent = "");
             messageEl.insertAdjacentHTML("afterbegin", `You ${fleet === fleetSide ? "won" : "lost"} the battle! ${fleet === fleetSide ? "Congratulations! \uD83C\uDF8A" : "Get lucky other time \uD83D\uDE10"}`);
@@ -1615,7 +1620,10 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
             [
                 (0, _globalVars.mySideEnemyFleet),
                 (0, _globalVars.enemySideMyFleet)
-            ].forEach((fleet)=>(0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none"), (0, _helpers.getSeaOpacityBack)());
+            ].forEach((fleet)=>{
+                fleet.style.pointerEvents = "none";
+                (0, _helpers.getSeaOpacityBack)();
+            });
         };
         (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
         (areAllShipsInjured || runOutOfTime) && (0, _globalVars.allTimers).forEach((timerEl)=>{
@@ -1639,11 +1647,13 @@ var _helpers = require("./helpers");
 
 },{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iXTJE":[function(require,module,exports) {
 var _globalVars = require("./globalVars");
+/* <th>${item}</th> */ // Creates fleet cells
 let markup = (0, _globalVars.seaFleet).map((item, i)=>`
      <tr class="row-${i + 1}">
  ${(0, _globalVars.letters).map((letter)=>`<td class="dropzone"><div class="${letter}${i + 1} cell"></div></td>`).join("")}
 </tr>
 `).join("");
+// Creates sea head
 let markupSeaHead = ` ${(0, _globalVars.seaFleet).map((_, i)=>{
     return i > 0 ? `<th>${(0, _globalVars.letters)[i]}</th>` : ` 
         <th>${(0, _globalVars.letters)[i]}</th>`;
@@ -1653,6 +1663,7 @@ let markupSeaHead = ` ${(0, _globalVars.seaFleet).map((_, i)=>{
 //     return `<p class="column-letter column-letter-${i + 1}">${letters[i]}</p>`;
 //   })
 //   .join("")}`;
+// Creates numbers on the left side of the grid - similar to creating letters on the sea head
 let markupNumbers = ` ${(0, _globalVars.seaFleet).map((item, i)=>{
     return `<p class="row-number row-number-${i + 1}">${i + 1}</p>`;
 }).join("")}`;
@@ -1893,7 +1904,8 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 // If the cell is empty then a new mark will be inserted, but if there is something inside then nothing will happen
                 surroundDestroyedShip(fleet, cellAround);
             });
-            /**************************/ /* CONTROLLING THE END OF THE GAME */ /**************************/ (0, _showEndResultsDefault.default)(fleet);
+            /**************************/ /* CONTROLLING THE END OF THE GAME */ /**************************/ console.log("end");
+            (0, _showEndResultsDefault.default)(fleet);
         };
         fleet.addEventListener("click", function(e) {
             shootingLogic(e);
@@ -2040,6 +2052,6 @@ const startNewGame = function(fleet) {
     });
 };
 
-},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./globalVars":"gb5d6","./helpers":"hGI1E","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
+},{"./gameStartControl":"fXv0K","./globalVars":"gb5d6","./helpers":"hGI1E","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
 //# sourceMappingURL=index.e37f48ea.js.map

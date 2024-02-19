@@ -9,6 +9,7 @@ import showEndResults from "./showEndResults";
 import { playingCheck } from "./gameStartControl";
 
 import { buildShipBorder, startTimer, timerClock } from "./helpers";
+
 import { APPEAR_TIME } from "./config";
 
 export default function (fleet, ships) {
@@ -243,7 +244,7 @@ export default function (fleet, ships) {
     /**************************/
     /* CONTROLLING THE END OF THE GAME */
     /**************************/
-
+    console.log("end");
     showEndResults(fleet);
   };
 

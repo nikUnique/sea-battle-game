@@ -9,9 +9,9 @@ import {
   seas,
 } from "./globalVars";
 
-{
-  /* <th>${item}</th> */
-}
+/* <th>${item}</th> */
+
+// Creates fleet cells
 let markup = seaFleet
   .map(
     (item, i) => `
@@ -29,6 +29,8 @@ let markup = seaFleet
 {
   /* <th class='empty-cell'></th> */
 }
+
+// Creates sea head
 let markupSeaHead = ` ${seaFleet
   .map((_, i) => {
     return i > 0
@@ -46,6 +48,7 @@ let markupSeaHead = ` ${seaFleet
 
 //   .join("")}`;
 
+// Creates numbers on the left side of the grid - similar to creating letters on the sea head
 let markupNumbers = ` ${seaFleet
   .map((item, i) => {
     return `<p class="row-number row-number-${i + 1}">${i + 1}</p>`;
