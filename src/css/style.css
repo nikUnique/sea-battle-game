@@ -315,6 +315,7 @@ button:disabled {
 
 .injure {
   color: #ff6b6b;
+
   &::after {
     content: url("../icons/icons8-close.svg");
     display: flex;

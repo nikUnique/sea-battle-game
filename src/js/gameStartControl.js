@@ -323,23 +323,23 @@ export const gameStartControl = function (fleet, fleetParts) {
       console.log(playingCheck.playing, "playing");
 
       // Disable right-click
-      document.addEventListener("contextmenu", (e) => e.preventDefault());
-      function ctrlShiftKey(e, key) {
-        return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
-      }
-      (document.onkeydown = (e) => {
-        // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
-        if (
-          e.key === 123 ||
-          ctrlShiftKey(e, "I") ||
-          ctrlShiftKey(e, "J") ||
-          ctrlShiftKey(e, "C") ||
-          (e.ctrlKey && e.key === "U".charCodeAt(0))
-        )
-          return false;
-      }),
-        // Making sure that I will not destroy my own ship ;)
-        allowForbidClick(mySideMyFleet, "none"),
+      // document.addEventListener("contextmenu", (e) => e.preventDefault());
+      // function ctrlShiftKey(e, key) {
+      //   return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
+      // }
+      // (document.onkeydown = (e) => {
+      //   // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+      //   if (
+      //     e.key === 123 ||
+      //     ctrlShiftKey(e, "I") ||
+      //     ctrlShiftKey(e, "J") ||
+      //     ctrlShiftKey(e, "C") ||
+      //     (e.ctrlKey && e.key === "U".charCodeAt(0))
+      //   )
+      //     return false;
+      // });
+      // Making sure that I will not destroy my own ship ;)
+      allowForbidClick(mySideMyFleet, "none"),
         allowForbidClick(enemySideEnemyFleet, "none");
     }
 
