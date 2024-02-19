@@ -983,7 +983,10 @@ exports.default = createShip = function(coords, size, fleetParts) {
     const bigCoords = coords?.map((coord)=>{
         return coord.toUpperCase();
     });
-    if (bigCoords === undefined) return;
+    // if (bigCoords === undefined) {
+    //   return;
+    // }
+    // Check whether two or more ships were placed in the same cell, which is impossible now, but during development was
     const checkSpace = fleetParts[1]?.map((ship, i)=>{
         return ship?.coords?.some((coord)=>{
             return bigCoords.includes(coord);
@@ -993,6 +996,7 @@ exports.default = createShip = function(coords, size, fleetParts) {
         console.log("Place your ships in the right way\uD83C\uDF6D");
         return false;
     }
+    // Check if your ship was placed on the neighbour cells of other ships which is against the rules
     const checkSpaceAround = fleetParts[1].map((ship)=>{
         return ship?.unavailabeCells?.some((cell)=>{
             if (bigCoords.includes(cell)) console.log(`You cannot place your ship on ${cell} because it's around another ship. Find a better place to drop an anchor \u{1F602}`);
@@ -1013,13 +1017,17 @@ exports.default = createShip = function(coords, size, fleetParts) {
         ...new Set(sameNumber)
     ];
     console.log(columnShip);
+    // Defining if ship parts connected in the right way, or probably one part is in the cell which is diagonally opposite to another part of the same ship
     if (columnShip.length !== 1 && rowShip.length !== 1) {
         console.log("Place your ships in the right order, man \uD83D\uDD7A");
         return false;
     }
-    if (fleet !== _globalVars.mySideMyFleet && fleet !== _globalVars.enemySideEnemyFleet) {
+    // Checks whether every ship is whole or not
+    const checkShipsWholesomness = function() {
+        if (fleet === _globalVars.mySideMyFleet || fleet === _globalVars.enemySideEnemyFleet) return;
         const checkShipsWholesomness = coords.map((coord, i)=>{
             const cellAttributes = (0, _helpers.selectCellsAround)(coord);
+            // Condition checks all ships which have more then one part and every coord of that ship should contain at least one of the coords to the right, left, top or bottom and if not this means that this ship doesn't have all parts connected one after another
             if (coords.length > 1 && !coords.includes(letters[cellAttributes.letterAround] + (cellAttributes.coordSlice1 - 1)) && !coords.includes(letters[cellAttributes.letterAround] + (+cellAttributes.coordSlice1 + 1)) && !coords.includes(letters[cellAttributes.letterAround - 1] + cellAttributes.coordSlice1) && !coords.includes(letters[cellAttributes.letterAround + 1] + cellAttributes.coordSlice1)) return false;
         });
         if (checkShipsWholesomness.includes(false)) {
@@ -1027,7 +1035,9 @@ exports.default = createShip = function(coords, size, fleetParts) {
             console.log("Place your ships in the right order, man \uD83E\uDD38\u200D\u2642\uFE0F");
             return false;
         }
-    }
+    };
+    if (checkShipsWholesomness() === false) return false;
+    // Computing all cells around damaged ship part
     const cellsAround = bigCoords.reduce((acc, coord, i)=>{
         fleet.querySelector(`.${coord}`)?.classList.add("ship");
         const cellAttributes = (0, _helpers.selectCellsAround)(coord);
@@ -1047,14 +1057,16 @@ exports.default = createShip = function(coords, size, fleetParts) {
         const rightBottomCell = diagonalCells(1, 1);
         return acc += `, ${previousCell}, ${nextCell}, ${leftCell} ,${rightCell} ,${rightTopCell} ,${leftTopCell} ,${leftBottomCell} ,${rightBottomCell}`;
     }, "");
+    // Every ship part contains 8 cells around and if ship has more than 1 part this means that cells will be repeated and because of this here by creating a set I get rid of duplicate coordinates, but there are also coords on which ship parts themselves are placed, so, they will be taken care of later
     const readyCellsAround = [
         ...new Set(cellsAround.replace(",", "").split(",").map((cell)=>cell.trim()).filter((cell)=>letters.includes(cell.slice(0, 1))))
     ];
     console.log(bigCoords, "bigCoords");
     bigCoords.forEach((pos)=>{
-        const cellEl = fleet.querySelector(`.${pos}`);
-        cellEl?.classList.add("ship-color");
-        cellEl && (cellEl.textContent = size);
+        const shipPartEl = fleet.querySelector(`.${pos}`);
+        shipPartEl?.classList.add("ship-color");
+        shipPartEl && (shipPartEl.textContent = size);
+        // This is needed for placement reasons, of course a better idea is not to have this at all, but it is as it is
         fleet.querySelector(`.${pos}`)?.insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);
     });
     const ship = {
