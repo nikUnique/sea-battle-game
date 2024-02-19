@@ -13,8 +13,8 @@ import {
   newGameBtn2,
   notificatonWindow1,
   notificatonWindow2,
-  playerData1,
-  playerData2,
+  playerUsername1,
+  playerUsername2,
   submitUsername1,
   submitUsername2,
   username1Input,
@@ -178,13 +178,13 @@ const toggleUsernameForm = function (fleet, display) {
     if (fleetIsMySideMyFleet) {
       changeUsernameBtn1.style.display = state;
       newGameBtn1.style.display = state;
-      playerData1?.classList[toggleMethod]("data");
+      playerUsername1?.classList[toggleMethod]("data");
     }
 
     if (!fleetIsMySideMyFleet) {
       changeUsernameBtn2.style.display = state;
       newGameBtn2.style.display = state;
-      playerData2?.classList[toggleMethod]("data");
+      playerUsername2?.classList[toggleMethod]("data");
     }
   };
 

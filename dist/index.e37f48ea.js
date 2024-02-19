@@ -684,9 +684,10 @@ var _startNewGame = require("./startNewGame");
  // Take all ship's classes and assign one of them to the ship
  // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
  // All instructions are written and look good, now it's time to place buttons and inputs to the right places
- // The app is finished in relation to features. All functionalities and features are 100% complete(at least till I didn't find a bug or two 😄). Now it's time of big refactoring
+ // The app is finished in relation to features. All functionalities and features are 100% complete(at least till the moment I find a bug or two 😄). Now it's time of big refactoring
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","./startNewGame":"hGRP7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
+// FLEET ENVIRONMENT
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "bothSideShips", ()=>bothSideShips);
@@ -698,8 +699,7 @@ parcelHelpers.export(exports, "seas", ()=>seas);
 parcelHelpers.export(exports, "seaContainers", ()=>seaContainers);
 parcelHelpers.export(exports, "notificatonWindow1", ()=>notificatonWindow1);
 parcelHelpers.export(exports, "notificatonWindow2", ()=>notificatonWindow2);
-parcelHelpers.export(exports, "btnCloseNotificationWindow1", ()=>// overlay,
-    btnCloseNotificationWindow1);
+parcelHelpers.export(exports, "btnCloseNotificationWindow1", ()=>btnCloseNotificationWindow1);
 parcelHelpers.export(exports, "btnCloseNotificationWindow2", ()=>btnCloseNotificationWindow2);
 parcelHelpers.export(exports, "newGameBtn1", ()=>newGameBtn1);
 parcelHelpers.export(exports, "newGameBtn2", ()=>newGameBtn2);
@@ -709,18 +709,16 @@ parcelHelpers.export(exports, "changeUsernameBtn1", ()=>changeUsernameBtn1);
 parcelHelpers.export(exports, "changeUsernameBtn2", ()=>changeUsernameBtn2);
 parcelHelpers.export(exports, "username1Input", ()=>username1Input);
 parcelHelpers.export(exports, "username2Input", ()=>username2Input);
-parcelHelpers.export(exports, "firstPlayerData", ()=>firstPlayerData);
-parcelHelpers.export(exports, "playerData1", ()=>playerData1);
-parcelHelpers.export(exports, "playerData2", ()=>playerData2);
+parcelHelpers.export(exports, "menuBtnsContainer1", ()=>menuBtnsContainer1);
+parcelHelpers.export(exports, "menuBtnsContainer2", ()=>menuBtnsContainer2);
+parcelHelpers.export(exports, "playerUsername1", ()=>playerUsername1);
+parcelHelpers.export(exports, "playerUsername2", ()=>playerUsername2);
 parcelHelpers.export(exports, "errorMessage1", ()=>errorMessage1);
 parcelHelpers.export(exports, "errorMessage2", ()=>errorMessage2);
-parcelHelpers.export(exports, "secondPlayerData", ()=>secondPlayerData);
 parcelHelpers.export(exports, "inputUsernameLabel2", ()=>inputUsernameLabel2);
 parcelHelpers.export(exports, "submitUsername2", ()=>submitUsername2);
 parcelHelpers.export(exports, "inputUsernameLabel1", ()=>inputUsernameLabel1);
 parcelHelpers.export(exports, "submitUsername1", ()=>submitUsername1);
-parcelHelpers.export(exports, "dataContainer1", ()=>dataContainer1);
-parcelHelpers.export(exports, "dataContainer2", ()=>dataContainer2);
 parcelHelpers.export(exports, "letters", ()=>letters);
 parcelHelpers.export(exports, "seaFleet", ()=>seaFleet);
 parcelHelpers.export(exports, "allTimers", ()=>allTimers);
@@ -740,37 +738,8 @@ const mySideMyFleet = document.querySelector(".my-side--my-fleet");
 const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
 const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
 const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
-const seas = document.querySelectorAll(".sea");
 const seaContainers = document.querySelectorAll(".sea-container");
-const notificatonWindow1 = document.querySelector(".notification-window.player-1");
-const notificatonWindow2 = document.querySelector(".notification-window.player-2");
-// const overlay = document.querySelector(".overlay");
-const btnCloseNotificationWindow1 = document.querySelector(".close-notification-window");
-const btnCloseNotificationWindow2 = document.querySelector(".close-notification-window-2");
-const newGameBtn1 = document.querySelector(".new-game-btn.player-1");
-const newGameBtn2 = document.querySelector(".new-game-btn.player-2");
-const startGameBtn1 = document.querySelector(".fleet-1");
-const startGameBtn2 = document.querySelector(".fleet-2");
-const changeUsernameBtn1 = document.querySelector(".change-username-btn-1");
-const changeUsernameBtn2 = document.querySelector(".change-username-btn-2");
-const username1Input = document.querySelector(".fill-username--player-1");
-const username2Input = document.querySelector(".fill-username--player-2");
-const inputUsernameLabel2 = document.querySelector(".your-name-2");
-const inputUsernameLabel1 = document.querySelector(".your-name-1");
-const submitUsername1 = document.querySelector(".submit-username--fleet-1");
-const submitUsername2 = document.querySelector(".submit-username--fleet-2");
-const firstPlayerData = document.querySelector(".first-player-data");
-const secondPlayerData = document.querySelector(".second-player-data");
-const dataContainer1 = document.querySelector(".data.first-player-data");
-const dataContainer2 = document.querySelector(".data.second-player-data");
-const playerData1 = document.querySelector(".player-data-1");
-const playerData2 = document.querySelector(".player-data-2");
-const errorMessage1 = document.querySelector(".error-message-1");
-const errorMessage2 = document.querySelector(".error-message-2");
-const resultsMessage1 = document.querySelector(".results-message");
-const resultsMessage2 = document.querySelector(".results-message-2");
-const player1 = document.querySelector(".username-1").textContent;
-const player2 = document.querySelector(".username-2").textContent;
+const seas = document.querySelectorAll(".sea");
 const letters = [
     "A",
     "B",
@@ -786,11 +755,17 @@ const letters = [
 const seaFleet = Array.from({
     length: 10
 }, (_, i)=>i + 1);
+const startGameBtn1 = document.querySelector(".fleet-1");
+const startGameBtn2 = document.querySelector(".fleet-2");
+const player1 = document.querySelector(".username-1").textContent;
+const player2 = document.querySelector(".username-2").textContent;
 const allTimers = [
     ...document.querySelectorAll(".timer-label")
 ];
 const waitingForOpponentLabel1 = document.querySelector(".waiting-opponent-1");
 const waitingForOpponentLabel2 = document.querySelector(".waiting-opponent-2");
+const errorMessage1 = document.querySelector(".error-message-1");
+const errorMessage2 = document.querySelector(".error-message-2");
 let createMyShips = [
     [
         [
@@ -940,6 +915,30 @@ let enemySideEnemyShips = [];
 let mySideEnemyShips = [];
 let enemySideMyShips = [];
 let bothSideShips = [];
+// NOTIFICATION WINDOW
+const notificatonWindow1 = document.querySelector(".notification-window.player-1");
+const notificatonWindow2 = document.querySelector(".notification-window.player-2");
+const resultsMessage1 = document.querySelector(".results-message");
+const resultsMessage2 = document.querySelector(".results-message-2");
+const btnCloseNotificationWindow1 = document.querySelector(".close-notification-window");
+const btnCloseNotificationWindow2 = document.querySelector(".close-notification-window-2");
+// const overlay = document.querySelector(".overlay");
+// MENU
+const menuBtnsContainer1 = document.querySelector(".menu-btns-container-1");
+const menuBtnsContainer2 = document.querySelector(".menu-btns-container-2");
+const playerUsername1 = document.querySelector(".player-username-1");
+const playerUsername2 = document.querySelector(".player-username-2");
+const newGameBtn1 = document.querySelector(".new-game-btn.player-1");
+const newGameBtn2 = document.querySelector(".new-game-btn.player-2");
+const changeUsernameBtn1 = document.querySelector(".change-username-btn-1");
+const changeUsernameBtn2 = document.querySelector(".change-username-btn-2");
+// FILL USERNAME FORM
+const username1Input = document.querySelector(".fill-username--player-1");
+const username2Input = document.querySelector(".fill-username--player-2");
+const inputUsernameLabel2 = document.querySelector(".your-name-2");
+const inputUsernameLabel1 = document.querySelector(".your-name-1");
+const submitUsername1 = document.querySelector(".submit-username--fleet-1");
+const submitUsername2 = document.querySelector(".submit-username--fleet-2");
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -1198,12 +1197,12 @@ const toggleUsernameForm = function(fleet, display) {
         if (fleetIsMySideMyFleet) {
             (0, _globalVars.changeUsernameBtn1).style.display = state;
             (0, _globalVars.newGameBtn1).style.display = state;
-            (0, _globalVars.playerData1)?.classList[toggleMethod]("data");
+            (0, _globalVars.playerUsername1)?.classList[toggleMethod]("data");
         }
         if (!fleetIsMySideMyFleet) {
             (0, _globalVars.changeUsernameBtn2).style.display = state;
             (0, _globalVars.newGameBtn2).style.display = state;
-            (0, _globalVars.playerData2)?.classList[toggleMethod]("data");
+            (0, _globalVars.playerUsername2)?.classList[toggleMethod]("data");
         }
     };
     if (display !== "flex") changeDisplayState("flex", "add");
@@ -1216,67 +1215,7 @@ const closeUsernameForm = function(fleet, display) {
     toggleUsernameForm(fleet, display);
 };
 
-},{"./globalVars":"gb5d6","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./gameStartControl":"fXv0K"}],"2csmh":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
-        const allShips = [
-            ...fleet.querySelectorAll(".ship")
-        ];
-        const injuredShips = allShips.map((ship)=>{
-            if (ship.classList.contains("injure")) return ship;
-        }).filter((ship)=>{
-            // It can be undefined
-            if (ship) return ship;
-        });
-        console.log(fleet);
-        const areAllShipsInjured = injuredShips.length === allShips.length;
-        const runOutOfTime = noTime ? true : false;
-        if (!areAllShipsInjured && !runOutOfTime) return;
-        clearInterval((0, _helpers.timer));
-        console.log(areAllShipsInjured, "areAll");
-        console.log(runOutOfTime, "areAll");
-        const composeMessage = function(messageEl, fleetSide) {
-            messageEl.textContent !== "" && (messageEl.textContent = "");
-            messageEl.insertAdjacentHTML("afterbegin", `You ${fleet === fleetSide ? "won" : "lost"} the battle! ${fleet === fleetSide ? "Congratulations! \uD83C\uDF8A" : "Get lucky other time \uD83D\uDE10"}`);
-        };
-        // Show notification window
-        const openNotificationWindow = function() {
-            const addNotification = function() {
-                composeMessage((0, _globalVars.resultsMessage1), (0, _globalVars.enemySideMyFleet));
-                composeMessage((0, _globalVars.resultsMessage2), (0, _globalVars.mySideEnemyFleet));
-            };
-            fleet === (0, _globalVars.mySideEnemyFleet) && addNotification((0, _globalVars.player1));
-            fleet !== (0, _globalVars.mySideEnemyFleet) && addNotification((0, _globalVars.player2));
-            (0, _globalVars.notificatonWindow1).classList.remove("hidden");
-            (0, _globalVars.notificatonWindow2).classList.remove("hidden");
-            // overlay.classList.remove("hidden");
-            [
-                (0, _globalVars.mySideEnemyFleet),
-                (0, _globalVars.enemySideMyFleet)
-            ].forEach((fleet)=>(0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none"), (0, _helpers.getSeaOpacityBack)());
-        };
-        (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
-        (areAllShipsInjured || runOutOfTime) && (0, _globalVars.allTimers).forEach((timerEl)=>{
-            timerEl.style.opacity = "0";
-        });
-        (0, _globalVars.btnCloseNotificationWindow1).addEventListener("click", (0, _helpers.closeNotificationWindow1));
-        // overlay.addEventListener("click", closeNotificationWindow);
-        (0, _globalVars.btnCloseNotificationWindow2).addEventListener("click", (0, _helpers.closeNotificationWindow2));
-    // overlay.addEventListener("click", closeNotificationWindow2);
-    // document.addEventListener("keydown", function (e) {
-    //   // console.log(e.key);
-    //   e.key === "Escape" &&
-    //     !notificatonWindow.classList.contains("hidden") &&
-    //     !notificatonWindow2.classList.contains("hidden") &&
-    //     closeNotificationWindow();
-    // });
-    });
-var _globalVars = require("./globalVars");
-var _gameStartControl = require("./gameStartControl");
-var _helpers = require("./helpers");
-
-},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fXv0K":[function(require,module,exports) {
+},{"./gameStartControl":"fXv0K","./globalVars":"gb5d6","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fXv0K":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "playingCheck", ()=>playingCheck);
@@ -1535,7 +1474,6 @@ const gameStartControl = function(fleet, fleetParts) {
                 ship.textContent = "";
             });
             fleet.querySelectorAll(".ship").forEach((ship)=>{
-                // ship.classList.remove("ship-color");
                 ship.textContent = "";
             });
         }
@@ -1626,7 +1564,67 @@ const gameStartControl = function(fleet, fleetParts) {
     fleet !== (0, _globalVars.mySideMyFleet) && fleet !== (0, _globalVars.enemySideEnemyFleet) && (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).addEventListener("click", startPlaying);
 };
 
-},{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iXTJE":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
+        const allShips = [
+            ...fleet.querySelectorAll(".ship")
+        ];
+        const injuredShips = allShips.map((ship)=>{
+            if (ship.classList.contains("injure")) return ship;
+        }).filter((ship)=>{
+            // It can be undefined
+            if (ship) return ship;
+        });
+        console.log(fleet);
+        const areAllShipsInjured = injuredShips.length === allShips.length;
+        const runOutOfTime = noTime ? true : false;
+        if (!areAllShipsInjured && !runOutOfTime) return;
+        clearInterval((0, _helpers.timer));
+        console.log(areAllShipsInjured, "areAll");
+        console.log(runOutOfTime, "areAll");
+        const composeMessage = function(messageEl, fleetSide) {
+            messageEl.textContent !== "" && (messageEl.textContent = "");
+            messageEl.insertAdjacentHTML("afterbegin", `You ${fleet === fleetSide ? "won" : "lost"} the battle! ${fleet === fleetSide ? "Congratulations! \uD83C\uDF8A" : "Get lucky other time \uD83D\uDE10"}`);
+        };
+        // Show notification window
+        const openNotificationWindow = function() {
+            const addNotification = function() {
+                composeMessage((0, _globalVars.resultsMessage1), (0, _globalVars.enemySideMyFleet));
+                composeMessage((0, _globalVars.resultsMessage2), (0, _globalVars.mySideEnemyFleet));
+            };
+            fleet === (0, _globalVars.mySideEnemyFleet) && addNotification((0, _globalVars.player1));
+            fleet !== (0, _globalVars.mySideEnemyFleet) && addNotification((0, _globalVars.player2));
+            (0, _globalVars.notificatonWindow1).classList.remove("hidden");
+            (0, _globalVars.notificatonWindow2).classList.remove("hidden");
+            // overlay.classList.remove("hidden");
+            [
+                (0, _globalVars.mySideEnemyFleet),
+                (0, _globalVars.enemySideMyFleet)
+            ].forEach((fleet)=>(0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none"), (0, _helpers.getSeaOpacityBack)());
+        };
+        (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
+        (areAllShipsInjured || runOutOfTime) && (0, _globalVars.allTimers).forEach((timerEl)=>{
+            timerEl.style.opacity = "0";
+        });
+        (0, _globalVars.btnCloseNotificationWindow1).addEventListener("click", (0, _helpers.closeNotificationWindow1));
+        // overlay.addEventListener("click", closeNotificationWindow);
+        (0, _globalVars.btnCloseNotificationWindow2).addEventListener("click", (0, _helpers.closeNotificationWindow2));
+    // overlay.addEventListener("click", closeNotificationWindow2);
+    // document.addEventListener("keydown", function (e) {
+    //   // console.log(e.key);
+    //   e.key === "Escape" &&
+    //     !notificatonWindow.classList.contains("hidden") &&
+    //     !notificatonWindow2.classList.contains("hidden") &&
+    //     closeNotificationWindow();
+    // });
+    });
+var _globalVars = require("./globalVars");
+var _gameStartControl = require("./gameStartControl");
+var _helpers = require("./helpers");
+
+},{"./globalVars":"gb5d6","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iXTJE":[function(require,module,exports) {
 var _globalVars = require("./globalVars");
 let markup = (0, _globalVars.seaFleet).map((item, i)=>`
      <tr class="row-${i + 1}">
@@ -1721,7 +1719,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dx0uc":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>function(fleet) {
+parcelHelpers.export(exports, "default", ()=>function() {
         (0, _globalVars.mySideMyFleet).classList.add("player0");
         (0, _gameStartControl.playingCheck).playing === true && ((0, _globalVars.enemySideMyFleet).style.pointerEvents = "none");
         [
@@ -1809,7 +1807,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 (0, _helpers.startTimer)(fleet);
             }
             if (destroyedShipCoords.includes(false)) return;
-            const addBorder = function(borderSide, coord, color = "#ff6f6f") {
+            const addBorder = function(borderSide, coord, color = "#FA5252") {
                 const selectTd = function(fleetSide) {
                     fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = `2px solid ${color} `;
                 };

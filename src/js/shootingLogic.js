@@ -118,7 +118,7 @@ export default function (fleet, ships) {
 
     if (destroyedShipCoords.includes(false)) return;
 
-    const addBorder = function (borderSide, coord, color = "#ff6f6f") {
+    const addBorder = function (borderSide, coord, color = "#FA5252") {
       const selectTd = function (fleetSide) {
         fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[
           borderSide

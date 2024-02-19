@@ -51,13 +51,10 @@ body {
 
 .grid-helper {
   background-color: #fcc419;
-  display: grid;
 }
 
 table {
   border-collapse: collapse;
-  box-sizing: border-box;
-  background-color: #c5f6fa;
   margin: 0 auto;
   transition: all .3s ease-in;
   display: block;
@@ -139,7 +136,6 @@ td, th {
 
 td {
   background-color: #e6fcf5;
-  border: 1px solid #fff;
   font-size: 2.4rem;
   overflow: hidden;
 }
@@ -166,10 +162,6 @@ label {
   font-size: 1.6rem;
 }
 
-input {
-  height: 100%;
-}
-
 button, input {
   border: none;
   border-radius: 4px;
@@ -181,14 +173,20 @@ button:disabled {
   opacity: .6;
 }
 
+.ship, .miss, .cell-around {
+  width: 100%;
+  height: 100%;
+}
+
+.ship, .cell-around, .player-username-1, .player-username-2, .submit-username--fleet-2, .submit-username--fleet-1, .ship.injure {
+  justify-content: center;
+  align-items: center;
+}
+
 .ship {
   -webkit-user-select: none;
   user-select: none;
   color: #654e0a;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
   display: flex;
   overflow: hidden;
   font-size: 2.4rem !important;
@@ -220,7 +218,6 @@ button:disabled {
 }
 
 .timer-label {
-  opacity: 0;
   left: 14%;
   transform: translate(0, 40%);
 }
@@ -230,7 +227,7 @@ button:disabled {
 }
 
 .injure {
-  color: #ff6b6b;
+  color: #fa5252;
 }
 
 .injure:after {
@@ -243,25 +240,17 @@ button:disabled {
 .miss {
   color: #22b8cf;
   background-color: #e6fcf5;
-  width: 100%;
-  height: 100%;
   font-size: 3.2rem;
 }
 
 .cell-around {
   color: #99e9f2;
   background-color: #e6fcf5;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
   display: flex;
 }
 
 .ship.injure {
   opacity: 1;
-  justify-content: center;
-  align-items: center;
   display: flex;
 }
 
@@ -334,15 +323,13 @@ button:disabled {
   transform: translate(-50%, -150%);
 }
 
-.first-player-data, .second-player-data {
+.menu-btns--container-1, .menu-btns--container-2 {
   position: absolute;
   top: -150px;
 }
 
-.player-data-1, .player-data-2 {
+.player-username-1, .player-username-2 {
   grid-template-columns: 29fr 20fr 10fr 20fr;
-  justify-content: center;
-  align-items: center;
   column-gap: .8rem;
   width: 203%;
   margin-top: .8rem;
@@ -357,7 +344,7 @@ button:disabled {
   grid-column: 2;
 }
 
-.data.player-data-1, .data.player-data-2 {
+.data.player-username-1, .data.player-username-2 {
   grid-template-columns: 45fr 50fr;
 }
 
@@ -385,13 +372,12 @@ button:disabled {
 
 .new-game-btn.player-2, .new-game-btn.player-1 {
   grid-column: 1 / 3;
-  justify-content: center;
   justify-self: end;
-  align-items: center;
   display: flex;
 }
 
-.player-data-1 input, .player-data-2 input {
+.player-username-1 input, .player-username-2 input {
+  height: 100%;
   display: none;
 }
 
@@ -410,8 +396,6 @@ button:disabled {
 }
 
 .change-username-btn-1, .change-username-btn-2 {
-  justify-content: center;
-  align-items: center;
   font-size: 1.8rem;
   display: flex;
 }
@@ -454,7 +438,7 @@ ion-icon {
   display: grid;
 }
 
-.flex-string {
+.ship-description {
   align-items: center;
   display: flex;
 }

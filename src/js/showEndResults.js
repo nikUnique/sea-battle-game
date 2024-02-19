@@ -3,7 +3,6 @@ import {
   enemySideMyFleet,
   notificatonWindow1,
   notificatonWindow2,
-  // overlay,
   btnCloseNotificationWindow1,
   btnCloseNotificationWindow2,
   allTimers,
@@ -11,6 +10,7 @@ import {
   resultsMessage2,
   player1,
   player2,
+  // overlay,
 } from "./globalVars";
 
 import { playingCheck } from "./gameStartControl";

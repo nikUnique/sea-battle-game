@@ -125,4 +125,4 @@ const createFleet = function (fleetParts) {
 // Take all ship's classes and assign one of them to the ship
 // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
 // All instructions are written and look good, now it's time to place buttons and inputs to the right places
-// The app is finished in relation to features. All functionalities and features are 100% complete(at least till I didn't find a bug or two 😄). Now it's time of big refactoring
+// The app is finished in relation to features. All functionalities and features are 100% complete(at least till the moment I find a bug or two 😄). Now it's time of big refactoring

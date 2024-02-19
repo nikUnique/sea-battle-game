@@ -265,7 +265,6 @@ export const gameStartControl = function (fleet, fleetParts) {
           ship.textContent = "";
         });
       fleet.querySelectorAll(".ship").forEach((ship) => {
-        // ship.classList.remove("ship-color");
         ship.textContent = "";
       });
     }
@@ -338,6 +337,7 @@ export const gameStartControl = function (fleet, fleetParts) {
       //   )
       //     return false;
       // });
+
       // Making sure that I will not destroy my own ship ;)
       allowForbidClick(mySideMyFleet, "none"),
         allowForbidClick(enemySideEnemyFleet, "none");
