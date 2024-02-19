@@ -20,17 +20,19 @@
             </thead>
             <tbody class="my-side--my-fleet"></tbody>
           </table>
+
           <p class="player-2--pronoun">Your ships</p>
 
           <p class="timer-label opponent-timer">
             Opponent's turn - time to shoot left:&nbsp;<span class="timer-time"></span>
           </p>
+
           <p class="error-message-1">Place your ships in the right way</p>
+
           <div class="menu-btns--container-1">
             <form class="player-username-1 data">
               <label class="your-name-1">Your name</label>
-              <input value="" type="text" placeholder="John" class="fill-username--player-1" minlength="2">
-
+              <input value="" type="text" placeholder="John" class="fill-username--player-1" minlength="2" maxlength="19">
               <button class="submit-username--fleet-1">Submit&nbsp;</button>
               <button class="new-game-btn player-1" disabled="">
                 New game&nbsp;<ion-icon name="repeat"></ion-icon>
@@ -41,6 +43,7 @@
             </form>
           </div>
         </div>
+
         <div class="sea-container mrg-right">
           <table class="sea">
             <thead>
@@ -48,6 +51,7 @@
             </thead>
             <tbody class="my-side--enemy-fleet"></tbody>
           </table>
+
           <p class="username-2">Second-player's ships</p>
 
           <div class="notification-window hidden player-2">
@@ -62,9 +66,7 @@
           <p class="timer-label">
             Your turn - time to shoot left:&nbsp;<span class="timer-time"></span>
           </p>
-
           <p class="waiting-opponent-1">Waiting for the opponent...</p>
-
           <button class="start-game fleet-1">Ready to start ⚔️</button>
         </div>
       </div>
@@ -78,8 +80,8 @@
             </thead>
             <tbody class="enemy-side--enemy-fleet"></tbody>
           </table>
-          <p class="player-1--pronoun">Your ships</p>
 
+          <p class="player-1--pronoun">Your ships</p>
           <p class="timer-label opponent-timer">
             Opponent's turn - time to shoot left:&nbsp;<span class="timer-time"></span>
           </p>
@@ -89,7 +91,7 @@
             <form class="player-username-2 data">
               <label class="your-name-2">Your name</label>
 
-              <input value="" type="text" placeholder="Beny" class="fill-username--player-2" minlength="2">
+              <input value="" type="text" placeholder="Beny" class="fill-username--player-2" minlength="2" maxlength="15">
               <button class="submit-username--fleet-2">
                 <span>Submit&nbsp;</span>
               </button>
@@ -128,6 +130,7 @@
           <p class="waiting-opponent-2">Waiting for the opponent...</p>
         </div>
       </div>
+
       <div class="game-description-container">
         <h2 class="rules-caption">Sea battle rules</h2>
         <p>
@@ -136,6 +139,7 @@
           your opponent's ships which you are trying to discover. You start by
           arranging your ships on your grid. You have these kinds of ships:
         </p>
+
         <div class="ship-description-grid">
           <ol class="ship-types">
             <li class="ship-description">

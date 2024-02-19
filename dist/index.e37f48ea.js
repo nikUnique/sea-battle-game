@@ -628,7 +628,7 @@ var _startNewGame = require("./startNewGame");
         (0, _globalVars.enemySideMyShips),
         (0, _globalVars.createMyShips)
     ]
-].forEach((container, i)=>createFleet(container)); // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
+].forEach((container, i)=>createFleet(container)); /**************************/  /* MY TASKS AND CONCLUSIONS DURING DEVELOPMENT(NOT FROM THE VERY BEGINNING) */  /**************************/  // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
  // Now it's time to do some refactoring
  // Refactoring finished, now it's time to think about shooting feature
  // When I click on a cell I need to extract a class of it
@@ -685,6 +685,7 @@ var _startNewGame = require("./startNewGame");
  // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
  // All instructions are written and look good, now it's time to place buttons and inputs to the right places
  // The app is finished in relation to features. All functionalities and features are 100% complete(at least till the moment I find a bug or two 😄). Now it's time of big refactoring
+ // All code is refactored and right now I am writing comments for my code
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","./startNewGame":"hGRP7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
 // FLEET ENVIRONMENT
@@ -1732,24 +1733,28 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function() {
-        (0, _globalVars.mySideMyFleet).classList.add("player0");
-        (0, _gameStartControl.playingCheck).playing === true && ((0, _globalVars.enemySideMyFleet).style.pointerEvents = "none");
+        // playingCheck.playing === true &&
+        //   (enemySideMyFleet.style.pointerEvents = "none");
         [
             (0, _globalVars.mySideEnemyFleet),
             (0, _globalVars.enemySideMyFleet)
         ].forEach((fleet)=>{
             console.log((0, _gameStartControl.playingCheck).playing);
+            // Adding an event listener to fleets on which we try to find ships
             fleet.addEventListener("click", function(e) {
-                if (e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
+                if (// Check complition of conditions which define whether the turn should or should not be changed
+                e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
                 const turn = (0, _gameStartControl.playingCheck).playing && fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideEnemyFleet) : (0, _globalVars.enemySideMyFleet);
                 if ((0, _gameStartControl.playingCheck).playing) {
                     turn.style.pointerEvents = "auto";
                     fleet.closest(".sea").style.opacity = "0.7";
                     (0, _helpers.startTimer)(turn);
-                    fleet.closest(".sea-container").querySelector(".timer-label") && (fleet.closest(".sea-container").querySelector(".timer-label").style.opacity = "0");
+                    /*   fleet.closest(".sea-container").querySelector(".timer-label") && */ fleet.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
+                    // Selecting part of the fleet which is on your opponent's side
                     const fleetSide = fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
                     fleetSide.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
                 }
+                // The turn changed and because of this the side which turn it was before will be unavailable for clicks
                 (0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none");
                 turn.closest(".sea").style.opacity = "1";
             });

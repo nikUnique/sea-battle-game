@@ -169,6 +169,12 @@ button, input {
   transition: all .3s;
 }
 
+ion-icon {
+  color: #22b8cf;
+  width: 24px;
+  height: 24px;
+}
+
 button:disabled {
   opacity: .6;
 }
@@ -407,12 +413,6 @@ button:disabled {
 
 .start-game.fleet-1:hover, .start-game.fleet-2:hover, .submit-username--fleet-2:hover, .submit-username--fleet-1:hover, .change-username-btn-1:hover:enabled, .change-username-btn-2:hover:enabled, .new-game-btn.player-2:hover:enabled, .new-game-btn.player-1:hover:enabled {
   background-color: #fab005;
-}
-
-ion-icon {
-  color: #1b93a6;
-  width: 24px;
-  height: 24px;
 }
 
 .waiting-opponent-1, .waiting-opponent-2, .error-message-1, .error-message-2 {

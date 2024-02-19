@@ -10,10 +10,14 @@ import {
   enemySideEnemyShips,
   enemySideMyShips,
 } from "./globalVars";
+
 import createShip from "./makeShips";
 import "./fleetEnvironment";
+
 import placeShipsManually from "./placeShipsManually";
+
 import { gameStartControl } from "./gameStartControl";
+
 import gameControl from "./gameControl";
 import shootingLogic from "./shootingLogic";
 import { startNewGame } from "./startNewGame";
@@ -69,6 +73,9 @@ const createFleet = function (fleetParts) {
   [enemySideMyFleet, enemySideMyShips, createMyShips],
 ].forEach((container, i) => createFleet(container));
 
+/**************************/
+/* MY TASKS AND CONCLUSIONS DURING DEVELOPMENT(NOT FROM THE VERY BEGINNING) */
+/**************************/
 // The situation about now: I created right spicing rules, so now I would not be able to put one ship on the next or previos cell of another ship, so all ships are at least one cell away from each other
 // Now it's time to do some refactoring
 // Refactoring finished, now it's time to think about shooting feature
@@ -126,3 +133,4 @@ const createFleet = function (fleetParts) {
 // Design is improved and probably will stay the same, now it's time to write some instructions about the game rules
 // All instructions are written and look good, now it's time to place buttons and inputs to the right places
 // The app is finished in relation to features. All functionalities and features are 100% complete(at least till the moment I find a bug or two 😄). Now it's time of big refactoring
+// All code is refactored and right now I am writing comments for my code
