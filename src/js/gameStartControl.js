@@ -1,4 +1,8 @@
 import {
+  AMOUNT_OF_DESTROYERS,
+  BOTH_FLEETS_READY_COMPLETE_LENGTH,
+} from "./config";
+import {
   mySideMyFleet,
   enemySideEnemyFleet,
   mySideEnemyFleet,
@@ -43,6 +47,7 @@ export const gameStartControl = function (fleet, fleetParts) {
     newGameAgreement.splice(0);
 
     fleet === mySideEnemyFleet && (firstTurn = Math.random());
+
     (fleetIsEnemySideMyFleet ? startGameBtn1 : startGameBtn2).setAttribute(
       "disabled",
       true
@@ -67,13 +72,16 @@ export const gameStartControl = function (fleet, fleetParts) {
       [[findCell("cell4")], [0].length],
 
       [[findCell("cell8"), findCell("cell9")], [0, 0].length],
+
       [[findCell("cell10"), findCell("cell11")], [0, 0].length],
+
       [[findCell("cell12"), findCell("cell13")], [0, 0].length],
 
       [
         [findCell("cell5"), findCell("cell6"), findCell("cell7")],
         [0, 0, 0].length,
       ],
+
       [
         [findCell("cell14"), findCell("cell15"), findCell("cell16")],
 
@@ -99,13 +107,16 @@ export const gameStartControl = function (fleet, fleetParts) {
       [[findCell("cell7")], [0].length],
 
       [[findCell("cell13"), findCell("cell14")], [0, 0].length],
+
       [[findCell("cell17"), findCell("cell18")], [0, 0].length],
+
       [[findCell("cell19"), findCell("cell20")], [0, 0].length],
 
       [
         [findCell("cell4"), findCell("cell5"), findCell("cell6")],
         [0, 0, 0].length,
       ],
+
       [
         [findCell("cell12"), findCell("cell15"), findCell("cell16")],
         [0, 0, 0].length,
@@ -142,6 +153,7 @@ export const gameStartControl = function (fleet, fleetParts) {
         const sortedCoords = ship[0].map((coord, i) => {
           return sortedLeters[i] + sortedNumbers[i];
         });
+
         console.log(sortedCoords);
 
         if (createShip(sortedCoords, ship[1], fleetParts) === false) {
@@ -162,8 +174,11 @@ export const gameStartControl = function (fleet, fleetParts) {
               };
               return [
                 selectCell(cellAttrbs.previousCell),
+
                 selectCell(cellAttrbs.nextCell),
+
                 selectCell(cellAttrbs.rightCell),
+
                 selectCell(cellAttrbs.leftCell),
               ];
             })
@@ -186,6 +201,7 @@ export const gameStartControl = function (fleet, fleetParts) {
           ? startGameBtn1
           : startGameBtn2
         ).removeAttribute("disabled", true);
+
         (fleetIsEnemySideMyFleet
           ? errorMessage1
           : errorMessage2
@@ -193,7 +209,9 @@ export const gameStartControl = function (fleet, fleetParts) {
 
         [...fleet.querySelectorAll("td")].forEach((cell) => {
           cell.querySelector(".ship")?.remove();
+
           cell.removeAttribute("style");
+
           cell.querySelector(".cell").textContent = "";
         }),
           console.log(fleetParts[1]);
@@ -223,6 +241,7 @@ export const gameStartControl = function (fleet, fleetParts) {
       "0";
 
     bothFleetsReady.push(true);
+
     allowForbidClick(
       fleetIsEnemySideMyFleet ? mySideMyFleet : enemySideEnemyFleet,
       "none"
@@ -234,10 +253,12 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     const submarines = ships.filter((ship) => {
       const shipEl = fleet.querySelector(`.${ship.coords[0]}`);
+
       return ship.coords.length === 1;
     });
 
-    const rewardSubmarine = Math.trunc(Math.random() * 4) + 1;
+    const rewardSubmarine =
+      Math.trunc(Math.random() * AMOUNT_OF_DESTROYERS) + 1;
 
     submarines.forEach((submarine, i) => {
       i + 1 === rewardSubmarine
@@ -251,6 +272,7 @@ export const gameStartControl = function (fleet, fleetParts) {
       const fleetSide = fleetIsEnemySideMyFleet
         ? mySideMyFleet
         : enemySideEnemyFleet;
+
       fleetSide &&
         (fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[
           borderSide
@@ -269,7 +291,7 @@ export const gameStartControl = function (fleet, fleetParts) {
       });
     }
 
-    bothFleetsReady.length === 2 &&
+    bothFleetsReady.length === BOTH_FLEETS_READY_COMPLETE_LENGTH &&
       [mySideMyFleet, enemySideEnemyFleet].forEach((fleet) => {
         fleet.querySelectorAll(`.ship`).forEach((ship) => {
           ship.style.backgroundColor = "#e6fcf5";
@@ -285,6 +307,7 @@ export const gameStartControl = function (fleet, fleetParts) {
     if (fleet !== mySideEnemyFleet && fleet !== enemySideMyFleet) return;
 
     fleet === mySideEnemyFleet && bothSideShips.push("mySideEnemyFleet");
+
     fleetIsEnemySideMyFleet && bothSideShips.push("enemySideMyFleet");
 
     const flattenedBothSideShips = bothSideShips.flat(2);
@@ -293,6 +316,7 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     (fleetIsEnemySideMyFleet ? startGameBtn1 : startGameBtn2).style.display =
       "none";
+
     (fleetIsEnemySideMyFleet
       ? waitingForOpponentLabel1
       : waitingForOpponentLabel2
@@ -315,32 +339,35 @@ export const gameStartControl = function (fleet, fleetParts) {
         btn.style.display = "block";
       });
       closeUsernameForm(mySideMyFleet, "none");
+
       closeUsernameForm(enemySideEnemyFleet, "none");
 
       playingCheck.playing = true;
       console.log("Game started 🥰");
+
       console.log(playingCheck.playing, "playing");
 
       // Disable right-click
-      // document.addEventListener("contextmenu", (e) => e.preventDefault());
-      // function ctrlShiftKey(e, key) {
-      //   return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
-      // }
-      // (document.onkeydown = (e) => {
-      //   // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
-      //   if (
-      //     e.key === 123 ||
-      //     ctrlShiftKey(e, "I") ||
-      //     ctrlShiftKey(e, "J") ||
-      //     ctrlShiftKey(e, "C") ||
-      //     (e.ctrlKey && e.key === "U".charCodeAt(0))
-      //   )
-      //     return false;
-      // });
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+      function ctrlShiftKey(e, key) {
+        return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
+      }
+      document.onkeydown = (e) => {
+        // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+        if (
+          e.key === 123 ||
+          ctrlShiftKey(e, "I") ||
+          ctrlShiftKey(e, "J") ||
+          ctrlShiftKey(e, "C") ||
+          (e.ctrlKey && e.key === "U".charCodeAt(0))
+        )
+          return false;
+      };
 
       // Making sure that I will not destroy my own ship ;)
-      allowForbidClick(mySideMyFleet, "none"),
-        allowForbidClick(enemySideEnemyFleet, "none");
+      allowForbidClick(mySideMyFleet, "none");
+
+      allowForbidClick(enemySideEnemyFleet, "none");
     }
 
     console.log(firstTurn);
@@ -351,11 +378,13 @@ export const gameStartControl = function (fleet, fleetParts) {
     const defineFirstTurn = function (fleet, contraryFleet) {
       allowForbidClick(fleet, "auto");
       startTimer(fleet);
+
       contraryFleet.closest(".sea").style.opacity = "0.7";
     };
 
     if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet) {
       firstTurn < 0.5 && defineFirstTurn(mySideEnemyFleet, enemySideMyFleet);
+
       firstTurn >= 0.5 && defineFirstTurn(enemySideMyFleet, mySideEnemyFleet);
     }
 

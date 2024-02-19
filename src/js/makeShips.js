@@ -5,11 +5,13 @@ export default createShip = function (coords, size, fleetParts) {
   const fleet = fleetParts[0];
   const ships = fleetParts[1];
   const letters = GlobalVars.letters;
+
   const bigCoords = coords?.map((coord) => {
     return coord.toUpperCase();
   });
 
   if (bigCoords === undefined) return;
+
   const checkSpace = fleetParts[1]?.map((ship, i) => {
     return ship?.coords?.some((coord) => {
       return bigCoords.includes(coord);
@@ -23,10 +25,11 @@ export default createShip = function (coords, size, fleetParts) {
 
   const checkSpaceAround = fleetParts[1].map((ship) => {
     return ship?.unavailabeCells?.some((cell) => {
-      if (bigCoords.includes(cell))
+      if (bigCoords.includes(cell)) {
         console.log(
           `You cannot place your ship on ${cell} because it's around another ship. Find a better place to drop an anchor 😂`
         );
+      }
 
       return bigCoords.includes(cell);
     });
@@ -45,6 +48,7 @@ export default createShip = function (coords, size, fleetParts) {
   const columnShip = [...new Set(sameLetter)];
   const rowShip = [...new Set(sameNumber)];
   console.log(columnShip);
+
   if (columnShip.length !== 1 && rowShip.length !== 1) {
     console.log("Place your ships in the right order, man 🕺");
 
@@ -81,7 +85,9 @@ export default createShip = function (coords, size, fleetParts) {
 
     if (checkShipsWholesomness.includes(false)) {
       console.log(ships, "ships");
+
       console.log("Place your ships in the right order, man 🤸‍♂️");
+
       return false;
     }
   }
@@ -92,21 +98,27 @@ export default createShip = function (coords, size, fleetParts) {
     const cellAttributes = selectCellsAround(coord);
 
     const coordSlice01 = cellAttributes.coordSlice01;
+
     const coordSlice1 = cellAttributes.coordSlice1;
+
     const letterAround = cellAttributes.letterAround;
 
     const previousCell = cellAttributes.previousCell;
+
     const nextCell = cellAttributes.nextCell;
 
     const rightCell = cellAttributes.rightCell;
     const leftCell = cellAttributes.leftCell;
+
     const diagonalCells = function (number1, number2) {
       return letters[letterAround + number1] + (+coordSlice1 + number2);
     };
 
     const rightTopCell = diagonalCells(1, -1);
     const leftTopCell = diagonalCells(-1, -1);
+
     const leftBottomCell = diagonalCells(-1, 1);
+
     const rightBottomCell = diagonalCells(1, 1);
 
     return (acc += `, ${previousCell}, ${nextCell}, ${leftCell} ,${rightCell} ,${rightTopCell} ,${leftTopCell} ,${leftBottomCell} ,${rightBottomCell}`);
@@ -126,6 +138,7 @@ export default createShip = function (coords, size, fleetParts) {
 
   bigCoords.forEach((pos) => {
     const cellEl = fleet.querySelector(`.${pos}`);
+
     cellEl?.classList.add("ship-color");
     cellEl && (cellEl.textContent = size);
 

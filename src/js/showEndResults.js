@@ -32,8 +32,11 @@ export default function (fleet, noTime = false) {
       // It can be undefined
       if (ship) return ship;
     });
+
   console.log(fleet);
+
   const areAllShipsInjured = injuredShips.length === allShips.length;
+
   const runOutOfTime = noTime ? true : false;
 
   if (!areAllShipsInjured && !runOutOfTime) {
@@ -42,8 +45,10 @@ export default function (fleet, noTime = false) {
   clearInterval(timer);
   console.log(areAllShipsInjured, "areAll");
   console.log(runOutOfTime, "areAll");
+
   const composeMessage = function (messageEl, fleetSide) {
     messageEl.textContent !== "" && (messageEl.textContent = "");
+
     messageEl.insertAdjacentHTML(
       "afterbegin",
       `You ${fleet === fleetSide ? "won" : "lost"} the battle! ${
@@ -56,6 +61,7 @@ export default function (fleet, noTime = false) {
   const openNotificationWindow = function () {
     const addNotification = function () {
       composeMessage(resultsMessage1, enemySideMyFleet);
+
       composeMessage(resultsMessage2, mySideEnemyFleet);
     };
 
@@ -64,6 +70,7 @@ export default function (fleet, noTime = false) {
     fleet !== mySideEnemyFleet && addNotification(player2);
 
     notificatonWindow1.classList.remove("hidden");
+
     notificatonWindow2.classList.remove("hidden");
 
     // overlay.classList.remove("hidden");
@@ -75,6 +82,7 @@ export default function (fleet, noTime = false) {
   };
 
   (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
+
   (areAllShipsInjured || runOutOfTime) &&
     allTimers.forEach((timerEl) => {
       timerEl.style.opacity = "0";

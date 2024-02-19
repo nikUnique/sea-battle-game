@@ -1,8 +1,11 @@
+import { MIN_INPUT_LENGTH, NEW_GAME_AGREEMENT_COMPLETE_LENGTH } from "./config";
+
 import {
   bothFleetsReady,
   newGameAgreement,
   playingCheck,
 } from "./gameStartControl";
+
 import {
   allTimers,
   bothSideShips,
@@ -21,6 +24,7 @@ import {
   startGameBtn1,
   startGameBtn2,
 } from "./globalVars";
+
 import {
   allowForbidClick,
   closeNotificationWindow1,
@@ -30,11 +34,14 @@ import {
   openUsernameForm,
   startTimer,
 } from "./helpers";
+
 import placeShipsManually from "./placeShipsManually";
 
 export const startNewGame = function (fleet) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
+
   const defineFleetNumber = fleetIsMySideMyFleet ? 1 : 2;
+
   const newGameBtn = fleetIsMySideMyFleet ? newGameBtn1 : newGameBtn2;
 
   const changeUsernameBtn = fleetIsMySideMyFleet
@@ -60,6 +67,7 @@ export const startNewGame = function (fleet) {
   const submitUsernames = function () {
     inputUsername.value =
       (fleetIsMySideMyFleet ? "First" : "Second") + "-player";
+
     submitBtn.addEventListener("click", function (e) {
       e.preventDefault();
 
@@ -72,13 +80,15 @@ export const startNewGame = function (fleet) {
 
       const playerUsername = checkUsernameCase(inputUsername).trim();
 
-      if (playerUsername.length < 2) {
+      if (playerUsername.length < MIN_INPUT_LENGTH) {
         console.log("Your username should contains at least 2 letters");
         return;
       }
       if (playerUsername.includes(" ")) {
         console.log(playerUsername, "username");
+
         console.log("Your username should not contain empty spaces");
+
         return;
       }
 
@@ -105,7 +115,8 @@ export const startNewGame = function (fleet) {
     fleet === enemySideEnemyFleet &&
       !newGameAgreement.includes("enemySideEnemyFleet") &&
       newGameAgreement.push("enemySideEnemyFleet");
-    if (newGameAgreement.length !== 2) return;
+
+    if (newGameAgreement.length !== NEW_GAME_AGREEMENT_COMPLETE_LENGTH) return;
 
     const refreshFleets = function () {
       closeNotificationWindow1();
@@ -129,31 +140,40 @@ export const startNewGame = function (fleet) {
       ].forEach((item) => allowForbidClick(...item));
 
       newGameBtn1.setAttribute("disabled", true);
+
       newGameBtn2.setAttribute("disabled", true);
 
       const clearFleets = function () {
         [...document.querySelectorAll("td")].forEach((cell) => {
           cell.querySelector(".ship")?.remove();
+
           cell.querySelector(".miss")?.classList.remove("miss");
+
           cell.removeAttribute("style");
 
           cell.querySelector(".cell-around")?.classList.remove("cell-around");
+
           cell.querySelector(".cell").textContent = "";
         });
         mySideMyShips.splice(0);
         enemySideEnemyShips.splice(0);
+
         createMyShips.forEach((ship) => {
           createShip(...ship, [mySideMyFleet, mySideMyShips, createMyShips]);
-        }),
-          createEnemyShips.forEach((ship) => {
-            createShip(...ship, [
-              enemySideEnemyFleet,
-              enemySideEnemyShips,
-              createEnemyShips,
-            ]);
-          });
+        });
+
+        createEnemyShips.forEach((ship) => {
+          createShip(...ship, [
+            enemySideEnemyFleet,
+            enemySideEnemyShips,
+            createEnemyShips,
+          ]);
+        });
+
         startGameBtn1.removeAttribute("disabled", true);
+
         startGameBtn2.removeAttribute("disabled", true);
+
         [changeUsernameBtn1, changeUsernameBtn2].forEach((btn) => {
           btn.removeAttribute("disabled", true);
         });

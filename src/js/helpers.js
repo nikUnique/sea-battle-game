@@ -1,3 +1,4 @@
+import { TIME_DIVIDER } from "./config";
 import { playingCheck } from "./gameStartControl";
 import {
   changeUsernameBtn1,
@@ -76,9 +77,9 @@ export const allowForbidClick = function (fleet, state) {
 };
 
 export const timerClock = function (time, labelTimer) {
-  const min = String(Math.trunc(time / 60)).padStart(2, 0);
+  const min = String(Math.trunc(time / TIME_DIVIDER)).padStart(2, 0);
 
-  const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+  const sec = String(Math.trunc(time % TIME_DIVIDER)).padStart(2, 0);
 
   labelTimer.textContent = `${min}:${sec}`;
   return `${min}:${sec}`;
@@ -134,7 +135,7 @@ export const startTimer = function (fleet, newGame = false) {
     time--;
   };
 
-  let time = 100;
+  let time = 30;
   tick();
   timer = setInterval(tick, 1000);
 };
@@ -142,6 +143,7 @@ export const startTimer = function (fleet, newGame = false) {
 export const selectCellsAround = function (cell) {
   const coordSlice01 = cell.slice(0, 1);
   const coordSlice1 = cell.slice(1);
+
   const letterAround = letters.indexOf(coordSlice01);
 
   const previousCell = coordSlice01 + (+coordSlice1 - 1);
@@ -178,12 +180,14 @@ const toggleUsernameForm = function (fleet, display) {
     if (fleetIsMySideMyFleet) {
       changeUsernameBtn1.style.display = state;
       newGameBtn1.style.display = state;
+
       playerUsername1?.classList[toggleMethod]("data");
     }
 
     if (!fleetIsMySideMyFleet) {
       changeUsernameBtn2.style.display = state;
       newGameBtn2.style.display = state;
+
       playerUsername2?.classList[toggleMethod]("data");
     }
   };

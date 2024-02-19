@@ -9,6 +9,7 @@ import showEndResults from "./showEndResults";
 import { playingCheck } from "./gameStartControl";
 
 import { buildShipBorder, startTimer, timerClock } from "./helpers";
+import { APPEAR_TIME } from "./config";
 
 export default function (fleet, ships) {
   const shootingLogic = function (e) {
@@ -220,7 +221,7 @@ export default function (fleet, ships) {
 
           setTimeout(function () {
             cellAround.style.visibility = "visible";
-          }, i * 100);
+          }, i * APPEAR_TIME);
         };
 
         const markContraryFleet = function (fleet) {

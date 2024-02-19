@@ -1084,6 +1084,7 @@ parcelHelpers.export(exports, "startTimer", ()=>startTimer);
 parcelHelpers.export(exports, "selectCellsAround", ()=>selectCellsAround);
 parcelHelpers.export(exports, "openUsernameForm", ()=>openUsernameForm);
 parcelHelpers.export(exports, "closeUsernameForm", ()=>closeUsernameForm);
+var _config = require("./config");
 var _gameStartControl = require("./gameStartControl");
 var _globalVars = require("./globalVars");
 var _showEndResults = require("./showEndResults");
@@ -1123,8 +1124,8 @@ const allowForbidClick = function(fleet, state) {
     fleet.style.pointerEvents = state;
 };
 const timerClock = function(time, labelTimer) {
-    const min = String(Math.trunc(time / 60)).padStart(2, 0);
-    const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+    const min = String(Math.trunc(time / (0, _config.TIME_DIVIDER))).padStart(2, 0);
+    const sec = String(Math.trunc(time % (0, _config.TIME_DIVIDER))).padStart(2, 0);
     labelTimer.textContent = `${min}:${sec}`;
     return `${min}:${sec}`;
 };
@@ -1157,7 +1158,7 @@ const startTimer = function(fleet, newGame = false) {
         }
         time--;
     };
-    let time = 100;
+    let time = 30;
     tick();
     timer = setInterval(tick, 1000);
 };
@@ -1215,13 +1216,14 @@ const closeUsernameForm = function(fleet, display) {
     toggleUsernameForm(fleet, display);
 };
 
-},{"./gameStartControl":"fXv0K","./globalVars":"gb5d6","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fXv0K":[function(require,module,exports) {
+},{"./gameStartControl":"fXv0K","./globalVars":"gb5d6","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs"}],"fXv0K":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "playingCheck", ()=>playingCheck);
 parcelHelpers.export(exports, "bothFleetsReady", ()=>bothFleetsReady);
 parcelHelpers.export(exports, "newGameAgreement", ()=>newGameAgreement);
 parcelHelpers.export(exports, "gameStartControl", ()=>gameStartControl);
+var _config = require("./config");
 var _globalVars = require("./globalVars");
 var _helpers = require("./helpers");
 const playingCheck = {
@@ -1460,7 +1462,7 @@ const gameStartControl = function(fleet, fleetParts) {
             const shipEl = fleet.querySelector(`.${ship.coords[0]}`);
             return ship.coords.length === 1;
         });
-        const rewardSubmarine = Math.trunc(Math.random() * 4) + 1;
+        const rewardSubmarine = Math.trunc(Math.random() * (0, _config.AMOUNT_OF_DESTROYERS)) + 1;
         submarines.forEach((submarine, i)=>{
             i + 1 === rewardSubmarine && fleet.querySelector(`.${submarine.coords[0]}`).nextElementSibling.classList.add("reward");
         });
@@ -1477,7 +1479,7 @@ const gameStartControl = function(fleet, fleetParts) {
                 ship.textContent = "";
             });
         }
-        bothFleetsReady.length === 2 && [
+        bothFleetsReady.length === (0, _config.BOTH_FLEETS_READY_COMPLETE_LENGTH) && [
             (0, _globalVars.mySideMyFleet),
             (0, _globalVars.enemySideEnemyFleet)
         ].forEach((fleet)=>{
@@ -1524,23 +1526,17 @@ const gameStartControl = function(fleet, fleetParts) {
             console.log("Game started \uD83E\uDD70");
             console.log(playingCheck.playing, "playing");
             // Disable right-click
-            // document.addEventListener("contextmenu", (e) => e.preventDefault());
-            // function ctrlShiftKey(e, key) {
-            //   return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
-            // }
-            // (document.onkeydown = (e) => {
-            //   // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
-            //   if (
-            //     e.key === 123 ||
-            //     ctrlShiftKey(e, "I") ||
-            //     ctrlShiftKey(e, "J") ||
-            //     ctrlShiftKey(e, "C") ||
-            //     (e.ctrlKey && e.key === "U".charCodeAt(0))
-            //   )
-            //     return false;
-            // });
+            document.addEventListener("contextmenu", (e)=>e.preventDefault());
+            function ctrlShiftKey(e, key) {
+                return e.ctrlKey && e.shiftKey && e.key === key.charCodeAt(0);
+            }
+            document.onkeydown = (e)=>{
+                // Disable F12, Ctrl + Shift + I, Ctrl + Shift + J, Ctrl + U
+                if (e.key === 123 || ctrlShiftKey(e, "I") || ctrlShiftKey(e, "J") || ctrlShiftKey(e, "C") || e.ctrlKey && e.key === "U".charCodeAt(0)) return false;
+            };
             // Making sure that I will not destroy my own ship ;)
-            (0, _helpers.allowForbidClick)((0, _globalVars.mySideMyFleet), "none"), (0, _helpers.allowForbidClick)((0, _globalVars.enemySideEnemyFleet), "none");
+            (0, _helpers.allowForbidClick)((0, _globalVars.mySideMyFleet), "none");
+            (0, _helpers.allowForbidClick)((0, _globalVars.enemySideEnemyFleet), "none");
         }
         console.log(firstTurn);
         if (!playingCheck.playing) return;
@@ -1564,7 +1560,23 @@ const gameStartControl = function(fleet, fleetParts) {
     fleet !== (0, _globalVars.mySideMyFleet) && fleet !== (0, _globalVars.enemySideEnemyFleet) && (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).addEventListener("click", startPlaying);
 };
 
-},{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs"}],"k5Hzs":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AMOUNT_OF_DESTROYERS", ()=>AMOUNT_OF_DESTROYERS);
+parcelHelpers.export(exports, "MIN_INPUT_LENGTH", ()=>MIN_INPUT_LENGTH);
+parcelHelpers.export(exports, "NEW_GAME_AGREEMENT_COMPLETE_LENGTH", ()=>NEW_GAME_AGREEMENT_COMPLETE_LENGTH);
+parcelHelpers.export(exports, "BOTH_FLEETS_READY_COMPLETE_LENGTH", ()=>BOTH_FLEETS_READY_COMPLETE_LENGTH);
+parcelHelpers.export(exports, "TIME_DIVIDER", ()=>TIME_DIVIDER);
+parcelHelpers.export(exports, "APPEAR_TIME", ()=>APPEAR_TIME);
+const AMOUNT_OF_DESTROYERS = 4;
+const MIN_INPUT_LENGTH = 2;
+const NEW_GAME_AGREEMENT_COMPLETE_LENGTH = 2;
+const BOTH_FLEETS_READY_COMPLETE_LENGTH = 2;
+const TIME_DIVIDER = 60;
+const APPEAR_TIME = 100;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
@@ -1865,7 +1877,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                     cellAround.style.visibility = "hidden";
                     setTimeout(function() {
                         cellAround.style.visibility = "visible";
-                    }, i * 100);
+                    }, i * (0, _config.APPEAR_TIME));
                 };
                 const markContraryFleet = function(fleet) {
                     const cellAroundContrarySide = fleet.querySelector(`.${cell}`);
@@ -1887,11 +1899,13 @@ var _showEndResults = require("./showEndResults");
 var _showEndResultsDefault = parcelHelpers.interopDefault(_showEndResults);
 var _gameStartControl = require("./gameStartControl");
 var _helpers = require("./helpers");
+var _config = require("./config");
 
-},{"./globalVars":"gb5d6","./showEndResults":"2csmh","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGRP7":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./showEndResults":"2csmh","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs"}],"hGRP7":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "startNewGame", ()=>startNewGame);
+var _config = require("./config");
 var _gameStartControl = require("./gameStartControl");
 var _globalVars = require("./globalVars");
 var _helpers = require("./helpers");
@@ -1916,7 +1930,7 @@ const startNewGame = function(fleet) {
                 return input.value.toLowerCase().slice(0, 1).toUpperCase() + input.value.slice(1).toLowerCase();
             };
             const playerUsername = checkUsernameCase(inputUsername).trim();
-            if (playerUsername.length < 2) {
+            if (playerUsername.length < (0, _config.MIN_INPUT_LENGTH)) {
                 console.log("Your username should contains at least 2 letters");
                 return;
             }
@@ -1936,7 +1950,7 @@ const startNewGame = function(fleet) {
     newGameBtn.addEventListener("click", function() {
         fleetIsMySideMyFleet && !(0, _gameStartControl.newGameAgreement).includes("mySideMyFleet") && (0, _gameStartControl.newGameAgreement).push("mySideMyFleet");
         fleet === (0, _globalVars.enemySideEnemyFleet) && !(0, _gameStartControl.newGameAgreement).includes("enemySideEnemyFleet") && (0, _gameStartControl.newGameAgreement).push("enemySideEnemyFleet");
-        if ((0, _gameStartControl.newGameAgreement).length !== 2) return;
+        if ((0, _gameStartControl.newGameAgreement).length !== (0, _config.NEW_GAME_AGREEMENT_COMPLETE_LENGTH)) return;
         const refreshFleets = function() {
             (0, _helpers.closeNotificationWindow1)();
             (0, _helpers.closeNotificationWindow2)();
@@ -1984,7 +1998,8 @@ const startNewGame = function(fleet) {
                         (0, _globalVars.mySideMyShips),
                         (0, _globalVars.createMyShips)
                     ]);
-                }), (0, _globalVars.createEnemyShips).forEach((ship)=>{
+                });
+                (0, _globalVars.createEnemyShips).forEach((ship)=>{
                     createShip(...ship, [
                         (0, _globalVars.enemySideEnemyFleet),
                         (0, _globalVars.enemySideEnemyShips),
@@ -2020,6 +2035,6 @@ const startNewGame = function(fleet) {
     });
 };
 
-},{"./gameStartControl":"fXv0K","./globalVars":"gb5d6","./helpers":"hGI1E","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
+},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./globalVars":"gb5d6","./helpers":"hGI1E","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
 //# sourceMappingURL=index.e37f48ea.js.map
