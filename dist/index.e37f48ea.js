@@ -1667,12 +1667,12 @@ let markupNumbers = ` ${(0, _globalVars.seaFleet).map((item, i)=>{
 },{"./globalVars":"gb5d6"}],"3iktl":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>function(fleet, fleetParts) {
+parcelHelpers.export(exports, "default", ()=>function(fleet) {
         let dragged;
         const shipEls = fleet.querySelectorAll(".ship");
-        const ships = fleetParts[1];
         shipEls.forEach((shipEl, i)=>{
             shipEl.classList.add(`cell${i + 1}`);
+            shipEl.setAttribute("draggable", true);
         });
         const cells = [
             ...fleet.querySelectorAll("td")
@@ -1682,18 +1682,14 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, fleetParts) {
         cells.forEach((cell)=>{
             cell.classList.add("dropzone");
         });
-        shipEls.forEach((shipEl)=>{
-            shipEl.setAttribute("draggable", true);
-        });
         fleet.addEventListener("dragstart", function(e) {
             console.log("DRAGSTART");
             console.log(e.target);
             dragged = e.target;
         });
-        fleet.addEventListener("dragend", function(e) {
-            console.log("DRAGEND", e.target);
-            fleet.querySelector(`.${dragged?.classList[dragged.classList.length - 1]}`);
-        });
+        // fleet.addEventListener("dragend", function (e) {
+        //   console.log("DRAGEND", e.target);
+        // });
         [
             "dragover",
             "dragenter",
@@ -1703,17 +1699,16 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, fleetParts) {
             fleet.addEventListener(ev, function(e) {
                 e.target.classList.contains("dropzone") && (console.log(ev), e.target.classList.remove("dragover"));
                 if (ev === "drop") {
-                    e.preventDefault(), console.log(dragged, e.target);
+                    e.preventDefault();
+                    console.log(dragged, e.target);
                     if (e.target.classList.contains("ship")) return;
-                    // !e.target.classList.contains("ship") &&
                     e.target.appendChild(dragged);
-                    const movedShipPart = dragged.classList[dragged.classList.length - 1];
-                    console.log(movedShipPart);
-                    fleet.querySelector(`.${movedShipPart}`).classList.replace(fleet.querySelector(`.${movedShipPart}`).classList[0], e.target.querySelector("div")?.classList[0]);
+                    const shipPartIdentifier = dragged.classList[dragged.classList.length - 1];
+                    console.log(shipPartIdentifier);
+                    fleet.querySelector(`.${shipPartIdentifier}`).classList.replace(fleet.querySelector(`.${shipPartIdentifier}`).classList[0], e.target.querySelector("div")?.classList[0]);
                 }
                 const checkDragoverE = function() {
                     e.preventDefault();
-                    console.log(e, "put");
                     if (ev !== "dragover") return;
                     if (e.target.classList.contains("ship") || e.target.classList.length === 0) return;
                     e.target.classList.add("dragover");
@@ -1816,7 +1811,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             if (destroyedShipCoords.includes(false)) return;
             const addBorder = function(borderSide, coord, color = "#ff6f6f") {
                 const selectTd = function(fleetSide) {
-                    fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = `1px solid ${color} `;
+                    fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = `2px solid ${color} `;
                 };
                 selectTd(fleet);
                 selectTd(fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet));

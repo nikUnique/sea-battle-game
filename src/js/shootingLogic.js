@@ -122,7 +122,7 @@ export default function (fleet, ships) {
       const selectTd = function (fleetSide) {
         fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[
           borderSide
-        ] = `1px solid ${color} `;
+        ] = `2px solid ${color} `;
       };
 
       selectTd(fleet);

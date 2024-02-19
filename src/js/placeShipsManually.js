@@ -1,9 +1,11 @@
-export default function (fleet, fleetParts) {
+export default function (fleet) {
   let dragged;
+
   const shipEls = fleet.querySelectorAll(".ship");
-  const ships = fleetParts[1];
+
   shipEls.forEach((shipEl, i) => {
     shipEl.classList.add(`cell${i + 1}`);
+    shipEl.setAttribute("draggable", true);
   });
 
   const cells = [...fleet.querySelectorAll("td")].filter((cell) => {
@@ -14,21 +16,16 @@ export default function (fleet, fleetParts) {
     cell.classList.add("dropzone");
   });
 
-  shipEls.forEach((shipEl) => {
-    shipEl.setAttribute("draggable", true);
-  });
-
   fleet.addEventListener("dragstart", function (e) {
     console.log("DRAGSTART");
     console.log(e.target);
     dragged = e.target;
   });
 
-  fleet.addEventListener("dragend", function (e) {
-    console.log("DRAGEND", e.target);
+  // fleet.addEventListener("dragend", function (e) {
+  //   console.log("DRAGEND", e.target);
 
-    fleet.querySelector(`.${dragged?.classList[dragged.classList.length - 1]}`);
-  });
+  // });
 
   ["dragover", "dragenter", "dragleave", "drop"].forEach((ev) => {
     fleet.addEventListener(
@@ -39,17 +36,22 @@ export default function (fleet, fleetParts) {
           : "";
 
         if (ev === "drop") {
-          e.preventDefault(), console.log(dragged, e.target);
+          e.preventDefault();
+          console.log(dragged, e.target);
 
           if (e.target.classList.contains("ship")) return;
-          // !e.target.classList.contains("ship") &&
+
           e.target.appendChild(dragged);
-          const movedShipPart = dragged.classList[dragged.classList.length - 1];
-          console.log(movedShipPart);
+
+          const shipPartIdentifier =
+            dragged.classList[dragged.classList.length - 1];
+
+          console.log(shipPartIdentifier);
+
           fleet
-            .querySelector(`.${movedShipPart}`)
+            .querySelector(`.${shipPartIdentifier}`)
             .classList.replace(
-              fleet.querySelector(`.${movedShipPart}`).classList[0],
+              fleet.querySelector(`.${shipPartIdentifier}`).classList[0],
               e.target.querySelector("div")?.classList[0]
             );
         }
@@ -57,15 +59,15 @@ export default function (fleet, fleetParts) {
         const checkDragoverE = function () {
           e.preventDefault();
 
-          console.log(e, "put");
-
           if (ev !== "dragover") return;
+
           if (
             e.target.classList.contains("ship") ||
             e.target.classList.length === 0
           ) {
             return;
           }
+
           e.target.classList.add("dragover");
         };
 
