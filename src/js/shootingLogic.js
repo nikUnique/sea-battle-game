@@ -10,7 +10,7 @@ import { playingCheck } from "./gameStartControl";
 
 import { buildShipBorder, startTimer, timerClock } from "./helpers";
 
-import { APPEAR_TIME } from "./config";
+import { APPEAR_TIME, TIME_LENGTHS } from "./config";
 
 export default function (fleet, ships) {
   const shootingLogic = function (e) {
@@ -176,7 +176,7 @@ export default function (fleet, ships) {
 
         time--;
       };
-      let time = 10;
+      let time = TIME_LENGTHS.bonusTime;
       tick();
       const timer = setInterval(tick, 1000);
     });

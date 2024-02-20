@@ -1112,9 +1112,7 @@ const buildShipBorder = function(borderParts) {
     const color = borderParts[5] && borderParts[5];
     console.log(ship);
     ship.direction === "column" ? i === 0 && addBorder("borderTop", coord, color) : i === 0 && addBorder("borderLeft", coord, color);
-    // 2. Add  bottom to the last cell
     ship.direction === "column" ? i === arr.length - 1 && addBorder("borderBottom", coord, color) : i === arr.length - 1 && addBorder("borderRight", coord, color);
-    // 3. Right and left
     ship.direction === "column" ? addBorder("borderLeft", coord, color) : addBorder("borderTop", coord, color);
     ship.direction === "column" ? addBorder("borderRight", coord, color) : addBorder("borderBottom", coord, color);
 };
@@ -1137,17 +1135,20 @@ const allowForbidClick = function(fleet, state) {
     fleet.style.pointerEvents = state;
 };
 const timerClock = function(time, labelTimer) {
+    // Define number of minutes
     const min = String(Math.trunc(time / (0, _config.TIME_DIVIDER))).padStart(2, 0);
+    // Define number of seconds
     const sec = String(Math.trunc(time % (0, _config.TIME_DIVIDER))).padStart(2, 0);
     labelTimer.textContent = `${min}:${sec}`;
     return `${min}:${sec}`;
 };
 const startTimer = function(fleet, newGame = false) {
-    // Timer feature
+    // When new game starts timer stops
     if (newGame) {
         clearInterval(timer);
         return;
     }
+    // Every time when turn changes I need to clear the previous timer because it won't go by itself
     if (timer) {
         console.log(timer);
         clearInterval(timer);
@@ -1171,8 +1172,9 @@ const startTimer = function(fleet, newGame = false) {
         }
         time--;
     };
-    let time = 30;
+    let time = (0, _config.TIME_LENGTHS).shotTime;
     tick();
+    // The function is called every second
     timer = setInterval(tick, 1000);
 };
 const selectCellsAround = function(cell) {
@@ -1195,6 +1197,7 @@ const selectCellsAround = function(cell) {
 };
 const toggleUsernameForm = function(fleet, display) {
     const fleetIsMySideMyFleet = fleet === (0, _globalVars.mySideMyFleet);
+    // Shows and hides items when it's required
     (fleetIsMySideMyFleet ? [
         (0, _globalVars.username1Input),
         (0, _globalVars.inputUsernameLabel1),
@@ -1229,7 +1232,30 @@ const closeUsernameForm = function(fleet, display) {
     toggleUsernameForm(fleet, display);
 };
 
-},{"./gameStartControl":"fXv0K","./globalVars":"gb5d6","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs"}],"fXv0K":[function(require,module,exports) {
+},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./globalVars":"gb5d6","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k5Hzs":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AMOUNT_OF_DESTROYERS", ()=>AMOUNT_OF_DESTROYERS);
+parcelHelpers.export(exports, "MIN_INPUT_LENGTH", ()=>MIN_INPUT_LENGTH);
+parcelHelpers.export(exports, "NEW_GAME_AGREEMENT_COMPLETE_LENGTH", ()=>NEW_GAME_AGREEMENT_COMPLETE_LENGTH);
+parcelHelpers.export(exports, "BOTH_FLEETS_READY_COMPLETE_LENGTH", ()=>BOTH_FLEETS_READY_COMPLETE_LENGTH);
+parcelHelpers.export(exports, "IN_BETWEEN_SHIP_PART_LENGTH", ()=>IN_BETWEEN_SHIP_PART_LENGTH);
+parcelHelpers.export(exports, "TIME_DIVIDER", ()=>TIME_DIVIDER);
+parcelHelpers.export(exports, "APPEAR_TIME", ()=>APPEAR_TIME);
+parcelHelpers.export(exports, "TIME_LENGTHS", ()=>TIME_LENGTHS);
+const AMOUNT_OF_DESTROYERS = 4;
+const MIN_INPUT_LENGTH = 2;
+const NEW_GAME_AGREEMENT_COMPLETE_LENGTH = 2;
+const BOTH_FLEETS_READY_COMPLETE_LENGTH = 2;
+const IN_BETWEEN_SHIP_PART_LENGTH = 4;
+const TIME_DIVIDER = 60;
+const APPEAR_TIME = 100;
+const TIME_LENGTHS = {
+    shotTime: 30,
+    bonusTime: 10
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fXv0K":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "playingCheck", ()=>playingCheck);
@@ -1470,7 +1496,7 @@ const gameStartControl = function(fleet, fleetParts) {
                 return false;
             };
             if (// The function call depends on what fleet is current one and later it checks whether 4-cell ship is whole or not
-            createManuallyPlacedShips(fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips, fleetIsEnemySideMyFleet ? (0, _globalVars.enemySideMyShips) : (0, _globalVars.mySideEnemyShips)).includes(false) || checkCells.flat(2).length !== 4) return resetWrongShipPlacement();
+            createManuallyPlacedShips(fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips, fleetIsEnemySideMyFleet ? (0, _globalVars.enemySideMyShips) : (0, _globalVars.mySideEnemyShips)).includes(false) || checkCells.flat(2).length !== (0, _config.IN_BETWEEN_SHIP_PART_LENGTH)) return resetWrongShipPlacement();
         };
         if (checkProperShipPlacement() === false) {
             console.log("Yeah, that is wrong");
@@ -1601,23 +1627,7 @@ const gameStartControl = function(fleet, fleetParts) {
     fleet !== (0, _globalVars.mySideMyFleet) && fleet !== (0, _globalVars.enemySideEnemyFleet) && (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).addEventListener("click", startPlaying);
 };
 
-},{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs"}],"k5Hzs":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "AMOUNT_OF_DESTROYERS", ()=>AMOUNT_OF_DESTROYERS);
-parcelHelpers.export(exports, "MIN_INPUT_LENGTH", ()=>MIN_INPUT_LENGTH);
-parcelHelpers.export(exports, "NEW_GAME_AGREEMENT_COMPLETE_LENGTH", ()=>NEW_GAME_AGREEMENT_COMPLETE_LENGTH);
-parcelHelpers.export(exports, "BOTH_FLEETS_READY_COMPLETE_LENGTH", ()=>BOTH_FLEETS_READY_COMPLETE_LENGTH);
-parcelHelpers.export(exports, "TIME_DIVIDER", ()=>TIME_DIVIDER);
-parcelHelpers.export(exports, "APPEAR_TIME", ()=>APPEAR_TIME);
-const AMOUNT_OF_DESTROYERS = 4;
-const MIN_INPUT_LENGTH = 2;
-const NEW_GAME_AGREEMENT_COMPLETE_LENGTH = 2;
-const BOTH_FLEETS_READY_COMPLETE_LENGTH = 2;
-const TIME_DIVIDER = 60;
-const APPEAR_TIME = 100;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
+},{"./globalVars":"gb5d6","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs"}],"2csmh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
@@ -1907,7 +1917,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                     }
                     time--;
                 };
-                let time = 10;
+                let time = (0, _config.TIME_LENGTHS).bonusTime;
                 tick();
                 const timer = setInterval(tick, 1000);
             });
@@ -1970,16 +1980,17 @@ var _placeShipsManually = require("./placeShipsManually");
 var _placeShipsManuallyDefault = parcelHelpers.interopDefault(_placeShipsManually);
 const startNewGame = function(fleet) {
     const fleetIsMySideMyFleet = fleet === (0, _globalVars.mySideMyFleet);
-    const defineFleetNumber = fleetIsMySideMyFleet ? 1 : 2;
+    const definePlayerNumber = fleetIsMySideMyFleet ? 1 : 2;
     const newGameBtn = fleetIsMySideMyFleet ? (0, _globalVars.newGameBtn1) : (0, _globalVars.newGameBtn2);
     const changeUsernameBtn = fleetIsMySideMyFleet ? (0, _globalVars.changeUsernameBtn1) : (0, _globalVars.changeUsernameBtn2);
     changeUsernameBtn.addEventListener("click", function(e) {
         (0, _helpers.openUsernameForm)(fleet, "flex");
     });
-    const submitBtn = document.querySelector(`.submit-username--fleet-${defineFleetNumber}`);
-    const inputUsername = document.querySelector(`.fill-username--player-${defineFleetNumber}`);
-    const usernameLabel = document.querySelector(`.username-${defineFleetNumber}`);
+    const submitBtn = document.querySelector(`.submit-username--fleet-${definePlayerNumber}`);
+    const inputUsername = document.querySelector(`.fill-username--player-${definePlayerNumber}`);
+    const usernameLabel = document.querySelector(`.username-${definePlayerNumber}`);
     const submitUsernames = function() {
+        // Default player name
         inputUsername.value = (fleetIsMySideMyFleet ? "First" : "Second") + "-player";
         submitBtn.addEventListener("click", function(e) {
             e.preventDefault();
@@ -2007,6 +2018,7 @@ const startNewGame = function(fleet) {
     newGameBtn.addEventListener("click", function() {
         fleetIsMySideMyFleet && !(0, _gameStartControl.newGameAgreement).includes("mySideMyFleet") && (0, _gameStartControl.newGameAgreement).push("mySideMyFleet");
         fleet === (0, _globalVars.enemySideEnemyFleet) && !(0, _gameStartControl.newGameAgreement).includes("enemySideEnemyFleet") && (0, _gameStartControl.newGameAgreement).push("enemySideEnemyFleet");
+        // Defines whether both player pressed "New Game" button or not
         if ((0, _gameStartControl.newGameAgreement).length !== (0, _config.NEW_GAME_AGREEMENT_COMPLETE_LENGTH)) return;
         const refreshFleets = function() {
             (0, _helpers.closeNotificationWindow1)();
@@ -2037,7 +2049,7 @@ const startNewGame = function(fleet) {
             ].forEach((item)=>(0, _helpers.allowForbidClick)(...item));
             (0, _globalVars.newGameBtn1).setAttribute("disabled", true);
             (0, _globalVars.newGameBtn2).setAttribute("disabled", true);
-            const clearFleets = function() {
+            const clearAndRefreshFleets = function() {
                 [
                     ...document.querySelectorAll("td")
                 ].forEach((cell)=>{
@@ -2076,7 +2088,7 @@ const startNewGame = function(fleet) {
                 (0, _gameStartControl.bothFleetsReady).splice(0);
                 (0, _globalVars.bothSideShips).splice(0);
             };
-            if (fleetIsMySideMyFleet || fleet === (0, _globalVars.enemySideEnemyFleet)) clearFleets();
+            if (fleetIsMySideMyFleet || fleet === (0, _globalVars.enemySideEnemyFleet)) clearAndRefreshFleets();
             (0, _placeShipsManuallyDefault.default)((0, _globalVars.mySideMyFleet), [
                 (0, _globalVars.mySideMyFleet),
                 (0, _globalVars.mySideMyShips),

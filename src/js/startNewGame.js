@@ -40,7 +40,7 @@ import placeShipsManually from "./placeShipsManually";
 export const startNewGame = function (fleet) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
 
-  const defineFleetNumber = fleetIsMySideMyFleet ? 1 : 2;
+  const definePlayerNumber = fleetIsMySideMyFleet ? 1 : 2;
 
   const newGameBtn = fleetIsMySideMyFleet ? newGameBtn1 : newGameBtn2;
 
@@ -53,18 +53,19 @@ export const startNewGame = function (fleet) {
   });
 
   const submitBtn = document.querySelector(
-    `.submit-username--fleet-${defineFleetNumber}`
+    `.submit-username--fleet-${definePlayerNumber}`
   );
 
   const inputUsername = document.querySelector(
-    `.fill-username--player-${defineFleetNumber}`
+    `.fill-username--player-${definePlayerNumber}`
   );
 
   const usernameLabel = document.querySelector(
-    `.username-${defineFleetNumber}`
+    `.username-${definePlayerNumber}`
   );
 
   const submitUsernames = function () {
+    // Default player name
     inputUsername.value =
       (fleetIsMySideMyFleet ? "First" : "Second") + "-player";
 
@@ -82,8 +83,10 @@ export const startNewGame = function (fleet) {
 
       if (playerUsername.length < MIN_INPUT_LENGTH) {
         console.log("Your username should contains at least 2 letters");
+
         return;
       }
+
       if (playerUsername.includes(" ")) {
         console.log(playerUsername, "username");
 
@@ -116,6 +119,7 @@ export const startNewGame = function (fleet) {
       !newGameAgreement.includes("enemySideEnemyFleet") &&
       newGameAgreement.push("enemySideEnemyFleet");
 
+    // Defines whether both player pressed "New Game" button or not
     if (newGameAgreement.length !== NEW_GAME_AGREEMENT_COMPLETE_LENGTH) return;
 
     const refreshFleets = function () {
@@ -143,7 +147,7 @@ export const startNewGame = function (fleet) {
 
       newGameBtn2.setAttribute("disabled", true);
 
-      const clearFleets = function () {
+      const clearAndRefreshFleets = function () {
         [...document.querySelectorAll("td")].forEach((cell) => {
           cell.querySelector(".ship")?.remove();
 
@@ -185,7 +189,7 @@ export const startNewGame = function (fleet) {
       };
 
       if (fleetIsMySideMyFleet || fleet === enemySideEnemyFleet) {
-        clearFleets();
+        clearAndRefreshFleets();
       }
 
       placeShipsManually(mySideMyFleet, [

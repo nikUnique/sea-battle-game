@@ -1,6 +1,7 @@
 import {
   AMOUNT_OF_DESTROYERS,
   BOTH_FLEETS_READY_COMPLETE_LENGTH,
+  IN_BETWEEN_SHIP_PART_LENGTH,
 } from "./config";
 
 import {
@@ -246,7 +247,7 @@ export const gameStartControl = function (fleet, fleetParts) {
           fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips,
           fleetIsEnemySideMyFleet ? enemySideMyShips : mySideEnemyShips
         ).includes(false) ||
-        checkCells.flat(2).length !== 4
+        checkCells.flat(2).length !== IN_BETWEEN_SHIP_PART_LENGTH
       ) {
         return resetWrongShipPlacement();
       }

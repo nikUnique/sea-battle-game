@@ -1,5 +1,7 @@
-import { TIME_DIVIDER } from "./config";
+import { TIME_DIVIDER, TIME_LENGTHS } from "./config";
+
 import { playingCheck } from "./gameStartControl";
+
 import {
   changeUsernameBtn1,
   changeUsernameBtn2,
@@ -21,6 +23,7 @@ import {
   username1Input,
   username2Input,
 } from "./globalVars";
+
 import showEndResults from "./showEndResults";
 
 let timer;
@@ -37,23 +40,28 @@ export const buildShipBorder = function (borderParts) {
   console.log(ship);
 
   ship.direction === "column"
-    ? i === 0 && addBorder("borderTop", coord, color)
-    : // 1. Add left to the top cell
+    ? // Add top to the first cell
+      i === 0 && addBorder("borderTop", coord, color)
+    : // Add left to the first cell
       i === 0 && addBorder("borderLeft", coord, color);
 
-  // 2. Add  bottom to the last cell
   ship.direction === "column"
-    ? i === arr.length - 1 && addBorder("borderBottom", coord, color)
-    : i === arr.length - 1 && addBorder("borderRight", coord, color);
-
-  // 3. Right and left
-  ship.direction === "column"
-    ? addBorder("borderLeft", coord, color)
-    : addBorder("borderTop", coord, color);
+    ? // Add  bottom to the last cell
+      i === arr.length - 1 && addBorder("borderBottom", coord, color)
+    : // Add right to the last cell
+      i === arr.length - 1 && addBorder("borderRight", coord, color);
 
   ship.direction === "column"
-    ? addBorder("borderRight", coord, color)
-    : addBorder("borderBottom", coord, color);
+    ? // Add left
+      addBorder("borderLeft", coord, color)
+    : // Add top
+      addBorder("borderTop", coord, color);
+
+  ship.direction === "column"
+    ? // Add right
+      addBorder("borderRight", coord, color)
+    : // Add bottom
+      addBorder("borderBottom", coord, color);
 };
 
 export const getSeaOpacityBack = function () {
@@ -67,6 +75,7 @@ export const closeNotificationWindow1 = function () {
 
   // overlay.classList.add("hidden");
 };
+
 export const closeNotificationWindow2 = function () {
   notificatonWindow2.classList.add("hidden");
   // overlay.classList.add("hidden");
@@ -77,8 +86,10 @@ export const allowForbidClick = function (fleet, state) {
 };
 
 export const timerClock = function (time, labelTimer) {
+  // Define number of minutes
   const min = String(Math.trunc(time / TIME_DIVIDER)).padStart(2, 0);
 
+  // Define number of seconds
   const sec = String(Math.trunc(time % TIME_DIVIDER)).padStart(2, 0);
 
   labelTimer.textContent = `${min}:${sec}`;
@@ -86,16 +97,18 @@ export const timerClock = function (time, labelTimer) {
 };
 
 export const startTimer = function (fleet, newGame = false) {
-  // Timer feature
+  // When new game starts timer stops
   if (newGame) {
     clearInterval(timer);
     return;
   }
 
+  // Every time when turn changes I need to clear the previous timer because it won't go by itself
   if (timer) {
     console.log(timer);
     clearInterval(timer);
   }
+
   const contraryFleet =
     fleet === enemySideMyFleet ? mySideMyFleet : enemySideEnemyFleet;
 
@@ -135,8 +148,9 @@ export const startTimer = function (fleet, newGame = false) {
     time--;
   };
 
-  let time = 30;
+  let time = TIME_LENGTHS.shotTime;
   tick();
+  // The function is called every second
   timer = setInterval(tick, 1000);
 };
 
@@ -168,6 +182,7 @@ export const selectCellsAround = function (cell) {
 const toggleUsernameForm = function (fleet, display) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
 
+  // Shows and hides items when it's required
   (fleetIsMySideMyFleet
     ? [username1Input, inputUsernameLabel1, submitUsername1]
     : [username2Input, inputUsernameLabel2, submitUsername2]
