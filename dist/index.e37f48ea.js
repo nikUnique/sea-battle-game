@@ -1239,22 +1239,30 @@ parcelHelpers.export(exports, "gameStartControl", ()=>gameStartControl);
 var _config = require("./config");
 var _globalVars = require("./globalVars");
 var _helpers = require("./helpers");
+// Shows the current state of the game
 const playingCheck = {
     playing: false
 };
+// Helpes to define whether both sides built their fleets and ready to start or not
 let bothFleetsReady = [];
+// Helpes to define whether both sides agree to start a new game or not
 let newGameAgreement = [];
-let firstTurn = "";
+// This variable is for random number to define who will be the first to start the game
+let firstTurn;
+// Helps to define whether all ships are placed in the right way or not
 let checkCells;
 const gameStartControl = function(fleet, fleetParts) {
     const fleetIsEnemySideMyFleet = fleet === (0, _globalVars.enemySideMyFleet);
     const startPlaying = function() {
         playingCheck.playing = false;
+        // Reset newGameAgreement
         newGameAgreement.splice(0);
         fleet === (0, _globalVars.mySideEnemyFleet) && (firstTurn = Math.random());
+        // Right now this isn't necessary because the button just disappers after being clicked
         (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).setAttribute("disabled", true);
         (0, _helpers.allowForbidClick)(fleet, "none");
         console.log(fleet);
+        // Finds all ship parts and takes their coords
         const findCell = function(cell) {
             return `${(fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet)).querySelector(`.${cell}`)?.classList[0]}`;
         };
@@ -1403,8 +1411,11 @@ const gameStartControl = function(fleet, fleetParts) {
             ]
         ];
         const createManuallyPlacedShips = function(createSource, ships) {
+            // Reset previous ships
             ships.splice(0);
+            // When fleet is built before manually placing ships, coords are sorted, but when one ship part moved to another place then ships coords may be messed up and so I sorted them again
             const sortCoords = createSource.map((ship)=>{
+                // ship contains fleet, coords, size and direction
                 const sortedLeters = ship[0].map((coord)=>{
                     return coord.slice(0, 1);
                 }).sort();
@@ -1416,13 +1427,16 @@ const gameStartControl = function(fleet, fleetParts) {
                 });
                 console.log(sortedCoords);
                 if (createShip(sortedCoords, ship[1], fleetParts) === false) return false;
+                // This part is required to keep 4-cell ships whole because unlike other ships when this ships divided into 2 part then condition when at least 1 cell to the right, left, top and bottom still will be fulfilled
                 if (sortedCoords.length === 4) {
                     const inBetweenShipParts = sortedCoords.filter((cell, i, arr)=>{
                         return i !== 0 && i !== arr.length - 1;
                     });
+                    // Here is a similar idea as before, but here the ship is whole only if in between ship parts have 2 neighbour ship parts each which will be checked later and based on that it will be defined whether the ship is whole or not
                     checkCells = inBetweenShipParts.map((cell)=>{
                         const cellAttrbs = (0, _helpers.selectCellsAround)(cell);
                         const selectCell = function(cell) {
+                            // Only cells which contain ships have nextElementSibling
                             return fleet.querySelector(`.${cell}`)?.nextElementSibling;
                         };
                         return [
@@ -1451,33 +1465,35 @@ const gameStartControl = function(fleet, fleetParts) {
                     cell.querySelector(".ship")?.remove();
                     cell.removeAttribute("style");
                     cell.querySelector(".cell").textContent = "";
-                }), console.log(fleetParts[1]);
+                }), // Clear ships arr
                 fleetParts[1].splice(0);
                 return false;
             };
-            if (createManuallyPlacedShips(fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips, fleetIsEnemySideMyFleet ? (0, _globalVars.enemySideMyShips) : (0, _globalVars.mySideEnemyShips)).includes(false) || checkCells.flat(2).length !== 4) return resetWrongShipPlacement();
+            if (// The function call depends on what fleet is current one and later it checks whether 4-cell ship is whole or not
+            createManuallyPlacedShips(fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips, fleetIsEnemySideMyFleet ? (0, _globalVars.enemySideMyShips) : (0, _globalVars.mySideEnemyShips)).includes(false) || checkCells.flat(2).length !== 4) return resetWrongShipPlacement();
         };
         if (checkProperShipPlacement() === false) {
             console.log("Yeah, that is wrong");
             return;
         }
         const ships = fleetParts[1];
+        // If ships were placed in the right way this means that the fleet is ready to play and ships are pushed in the arr bellow
         (0, _globalVars.bothSideShips).push(ships);
+        // If ships were placed in the wrong way and the "Ready to start" button was pressed, then an error message bellow the grid will appear showing that ship placement is wrong. But if after that ships were placed in the right way then after pressing the button that error message will be gone
         (fleetIsEnemySideMyFleet ? (0, _globalVars.errorMessage1) : (0, _globalVars.errorMessage2)).style.opacity = "0";
+        // If code execution reaches this place, this means that ships were placed in the right way and player is ready to play
         bothFleetsReady.push(true);
         (0, _helpers.allowForbidClick)(fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet), "none");
-        [
-            ...document.querySelectorAll(".ship")
-        ].forEach((shipEl)=>{
-            bothFleetsReady.length === 2 && (shipEl.textContent = "");
-        });
-        const submarines = ships.filter((ship)=>{
+        // Filtering out one-cell ships
+        const destroyers = ships.filter((ship)=>{
             const shipEl = fleet.querySelector(`.${ship.coords[0]}`);
             return ship.coords.length === 1;
         });
-        const rewardSubmarine = Math.trunc(Math.random() * (0, _config.AMOUNT_OF_DESTROYERS)) + 1;
-        submarines.forEach((submarine, i)=>{
-            i + 1 === rewardSubmarine && fleet.querySelector(`.${submarine.coords[0]}`).nextElementSibling.classList.add("reward");
+        // Randomly define which destroyer will contain reward
+        const rewardDestroyer = Math.trunc(Math.random() * (0, _config.AMOUNT_OF_DESTROYERS)) + 1;
+        // Assign reward
+        destroyers.forEach((destroyer, i)=>{
+            i + 1 === rewardDestroyer && fleet.querySelector(`.${destroyer.coords[0]}`).nextElementSibling.classList.add("reward");
         });
         const addBorder = function(borderSide, coord) {
             const fleetSide = fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
@@ -1492,6 +1508,12 @@ const gameStartControl = function(fleet, fleetParts) {
                 ship.textContent = "";
             });
         }
+        [
+            ...document.querySelectorAll(".ship")
+        ].forEach((shipEl)=>{
+            bothFleetsReady.length === 2 && (shipEl.textContent = "");
+        });
+        // Changes background-color of ships of the player who pressed "Ready to start" button the second
         bothFleetsReady.length === (0, _config.BOTH_FLEETS_READY_COMPLETE_LENGTH) && [
             (0, _globalVars.mySideMyFleet),
             (0, _globalVars.enemySideEnemyFleet)
@@ -1502,6 +1524,7 @@ const gameStartControl = function(fleet, fleetParts) {
         });
         ships.map((ship, i)=>{
             ship.coords.map((coord, i, arr)=>{
+                // Once player is ready to start, border will be built on ships
                 (0, _helpers.buildShipBorder)([
                     ship,
                     coord,
@@ -1511,27 +1534,32 @@ const gameStartControl = function(fleet, fleetParts) {
                 ]);
             });
         });
+        // All actions relative to your own fleet are finished, so there are left thing to do with the second sea part
         if (fleet !== (0, _globalVars.mySideEnemyFleet) && fleet !== (0, _globalVars.enemySideMyFleet)) return;
-        fleet === (0, _globalVars.mySideEnemyFleet) && (0, _globalVars.bothSideShips).push("mySideEnemyFleet");
-        fleetIsEnemySideMyFleet && (0, _globalVars.bothSideShips).push("enemySideMyFleet");
-        const flattenedBothSideShips = (0, _globalVars.bothSideShips).flat(2);
+        /* fleet === mySideEnemyFleet && bothSideShips.push("mySideEnemyFleet");
+
+    fleetIsEnemySideMyFleet && bothSideShips.push("enemySideMyFleet"); */ const flattenedBothSideShips = (0, _globalVars.bothSideShips).flat(2);
         console.log(flattenedBothSideShips, "both");
         (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).style.display = "none";
+        // When your opponent is ready to play, you will see a message informing about that
         (fleetIsEnemySideMyFleet ? (0, _globalVars.waitingForOpponentLabel1) : (0, _globalVars.waitingForOpponentLabel2)).style.opacity = "100";
-        if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2) [
+        // If both player are ready to play then informing messages will disappear
+        if (flattenedBothSideShips.length === createFleetShips.length * 2 /* + 2 */ ) [
             (0, _globalVars.waitingForOpponentLabel1),
             (0, _globalVars.waitingForOpponentLabel2)
         ].forEach((label)=>{
             label.style.opacity = "0";
         });
         console.log(flattenedBothSideShips);
-        if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2 && flattenedBothSideShips.includes("mySideEnemyFleet") && flattenedBothSideShips.includes("enemySideMyFleet")) {
+        if (// The condition which fulfillment shows that ships were placed in the right way
+        flattenedBothSideShips.length === createFleetShips.length * 2 /* + 2 &&
+      flattenedBothSideShips.includes("mySideEnemyFleet") &&
+      flattenedBothSideShips.includes("enemySideMyFleet") */ ) {
             [
                 (0, _globalVars.changeUsernameBtn1),
                 (0, _globalVars.changeUsernameBtn2)
             ].forEach((btn)=>{
                 btn.setAttribute("disabled", true);
-                btn.style.display = "block";
             });
             (0, _helpers.closeUsernameForm)((0, _globalVars.mySideMyFleet), "none");
             (0, _helpers.closeUsernameForm)((0, _globalVars.enemySideEnemyFleet), "none");

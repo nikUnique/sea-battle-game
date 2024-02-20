@@ -2,6 +2,7 @@ import {
   AMOUNT_OF_DESTROYERS,
   BOTH_FLEETS_READY_COMPLETE_LENGTH,
 } from "./config";
+
 import {
   mySideMyFleet,
   enemySideEnemyFleet,
@@ -21,6 +22,7 @@ import {
   errorMessage1,
   errorMessage2,
 } from "./globalVars";
+
 import {
   allowForbidClick,
   buildShipBorder,
@@ -30,11 +32,19 @@ import {
   startTimer,
 } from "./helpers";
 
+// Shows the current state of the game
 const playingCheck = { playing: false };
 
+// Helpes to define whether both sides built their fleets and ready to start or not
 let bothFleetsReady = [];
+
+// Helpes to define whether both sides agree to start a new game or not
 let newGameAgreement = [];
-let firstTurn = "";
+
+// This variable is for random number to define who will be the first to start the game
+let firstTurn;
+
+// Helps to define whether all ships are placed in the right way or not
 let checkCells;
 
 export { playingCheck, bothFleetsReady, newGameAgreement };
@@ -44,10 +54,13 @@ export const gameStartControl = function (fleet, fleetParts) {
 
   const startPlaying = function () {
     playingCheck.playing = false;
+
+    // Reset newGameAgreement
     newGameAgreement.splice(0);
 
     fleet === mySideEnemyFleet && (firstTurn = Math.random());
 
+    // Right now this isn't necessary because the button just disappers after being clicked
     (fleetIsEnemySideMyFleet ? startGameBtn1 : startGameBtn2).setAttribute(
       "disabled",
       true
@@ -56,6 +69,7 @@ export const gameStartControl = function (fleet, fleetParts) {
     allowForbidClick(fleet, "none");
     console.log(fleet);
 
+    // Finds all ship parts and takes their coords
     const findCell = function (cell) {
       return `${
         (fleetIsEnemySideMyFleet
@@ -135,9 +149,12 @@ export const gameStartControl = function (fleet, fleetParts) {
     ];
 
     const createManuallyPlacedShips = function (createSource, ships) {
+      // Reset previous ships
       ships.splice(0);
 
+      // When fleet is built before manually placing ships, coords are sorted, but when one ship part moved to another place then ships coords may be messed up and so I sorted them again
       const sortCoords = createSource.map((ship) => {
+        // ship contains fleet, coords, size and direction
         const sortedLeters = ship[0]
           .map((coord) => {
             return coord.slice(0, 1);
@@ -160,16 +177,19 @@ export const gameStartControl = function (fleet, fleetParts) {
           return false;
         }
 
+        // This part is required to keep 4-cell ships whole because unlike other ships when this ships divided into 2 part then condition when at least 1 cell to the right, left, top and bottom still will be fulfilled
         if (sortedCoords.length === 4) {
           const inBetweenShipParts = sortedCoords.filter((cell, i, arr) => {
             return i !== 0 && i !== arr.length - 1;
           });
 
+          // Here is a similar idea as before, but here the ship is whole only if in between ship parts have 2 neighbour ship parts each which will be checked later and based on that it will be defined whether the ship is whole or not
           checkCells = inBetweenShipParts
             .map((cell) => {
               const cellAttrbs = selectCellsAround(cell);
 
               const selectCell = function (cell) {
+                // Only cells which contain ships have nextElementSibling
                 return fleet.querySelector(`.${cell}`)?.nextElementSibling;
               };
               return [
@@ -214,12 +234,14 @@ export const gameStartControl = function (fleet, fleetParts) {
 
           cell.querySelector(".cell").textContent = "";
         }),
-          console.log(fleetParts[1]);
-        fleetParts[1].splice(0);
+          // Clear ships arr
+          fleetParts[1].splice(0);
 
         return false;
       };
+
       if (
+        // The function call depends on what fleet is current one and later it checks whether 4-cell ship is whole or not
         createManuallyPlacedShips(
           fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips,
           fleetIsEnemySideMyFleet ? enemySideMyShips : mySideEnemyShips
@@ -229,17 +251,22 @@ export const gameStartControl = function (fleet, fleetParts) {
         return resetWrongShipPlacement();
       }
     };
+
     if (checkProperShipPlacement() === false) {
       console.log("Yeah, that is wrong");
       return;
     }
 
     const ships = fleetParts[1];
+
+    // If ships were placed in the right way this means that the fleet is ready to play and ships are pushed in the arr bellow
     bothSideShips.push(ships);
 
+    // If ships were placed in the wrong way and the "Ready to start" button was pressed, then an error message bellow the grid will appear showing that ship placement is wrong. But if after that ships were placed in the right way then after pressing the button that error message will be gone
     (fleetIsEnemySideMyFleet ? errorMessage1 : errorMessage2).style.opacity =
       "0";
 
+    // If code execution reaches this place, this means that ships were placed in the right way and player is ready to play
     bothFleetsReady.push(true);
 
     allowForbidClick(
@@ -247,23 +274,22 @@ export const gameStartControl = function (fleet, fleetParts) {
       "none"
     );
 
-    [...document.querySelectorAll(".ship")].forEach((shipEl) => {
-      bothFleetsReady.length === 2 && (shipEl.textContent = "");
-    });
-
-    const submarines = ships.filter((ship) => {
+    // Filtering out one-cell ships
+    const destroyers = ships.filter((ship) => {
       const shipEl = fleet.querySelector(`.${ship.coords[0]}`);
 
       return ship.coords.length === 1;
     });
 
-    const rewardSubmarine =
+    // Randomly define which destroyer will contain reward
+    const rewardDestroyer =
       Math.trunc(Math.random() * AMOUNT_OF_DESTROYERS) + 1;
 
-    submarines.forEach((submarine, i) => {
-      i + 1 === rewardSubmarine
+    // Assign reward
+    destroyers.forEach((destroyer, i) => {
+      i + 1 === rewardDestroyer
         ? fleet
-            .querySelector(`.${submarine.coords[0]}`)
+            .querySelector(`.${destroyer.coords[0]}`)
             .nextElementSibling.classList.add("reward")
         : "";
     });
@@ -291,6 +317,11 @@ export const gameStartControl = function (fleet, fleetParts) {
       });
     }
 
+    [...document.querySelectorAll(".ship")].forEach((shipEl) => {
+      bothFleetsReady.length === 2 && (shipEl.textContent = "");
+    });
+
+    // Changes background-color of ships of the player who pressed "Ready to start" button the second
     bothFleetsReady.length === BOTH_FLEETS_READY_COMPLETE_LENGTH &&
       [mySideMyFleet, enemySideEnemyFleet].forEach((fleet) => {
         fleet.querySelectorAll(`.ship`).forEach((ship) => {
@@ -300,15 +331,17 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     ships.map((ship, i) => {
       ship.coords.map((coord, i, arr) => {
+        // Once player is ready to start, border will be built on ships
         buildShipBorder([ship, coord, i, arr, addBorder]);
       });
     });
 
+    // All actions relative to your own fleet are finished, so there are left thing to do with the second sea part
     if (fleet !== mySideEnemyFleet && fleet !== enemySideMyFleet) return;
 
-    fleet === mySideEnemyFleet && bothSideShips.push("mySideEnemyFleet");
+    /* fleet === mySideEnemyFleet && bothSideShips.push("mySideEnemyFleet");
 
-    fleetIsEnemySideMyFleet && bothSideShips.push("enemySideMyFleet");
+    fleetIsEnemySideMyFleet && bothSideShips.push("enemySideMyFleet"); */
 
     const flattenedBothSideShips = bothSideShips.flat(2);
 
@@ -317,12 +350,17 @@ export const gameStartControl = function (fleet, fleetParts) {
     (fleetIsEnemySideMyFleet ? startGameBtn1 : startGameBtn2).style.display =
       "none";
 
+    // When your opponent is ready to play, you will see a message informing about that
     (fleetIsEnemySideMyFleet
       ? waitingForOpponentLabel1
       : waitingForOpponentLabel2
     ).style.opacity = "100";
 
-    if (flattenedBothSideShips.length === createFleetShips.length * 2 + 2) {
+    // If both player are ready to play then informing messages will disappear
+    if (
+      flattenedBothSideShips.length ===
+      createFleetShips.length * 2 /* + 2 */
+    ) {
       [waitingForOpponentLabel1, waitingForOpponentLabel2].forEach((label) => {
         label.style.opacity = "0";
       });
@@ -330,14 +368,16 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     console.log(flattenedBothSideShips);
     if (
-      flattenedBothSideShips.length === createFleetShips.length * 2 + 2 &&
+      // The condition which fulfillment shows that ships were placed in the right way
+      flattenedBothSideShips.length ===
+      createFleetShips.length * 2 /* + 2 &&
       flattenedBothSideShips.includes("mySideEnemyFleet") &&
-      flattenedBothSideShips.includes("enemySideMyFleet")
+      flattenedBothSideShips.includes("enemySideMyFleet") */
     ) {
       [changeUsernameBtn1, changeUsernameBtn2].forEach((btn) => {
         btn.setAttribute("disabled", true);
-        btn.style.display = "block";
       });
+
       closeUsernameForm(mySideMyFleet, "none");
 
       closeUsernameForm(enemySideEnemyFleet, "none");

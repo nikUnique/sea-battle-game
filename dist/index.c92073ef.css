@@ -184,7 +184,7 @@ button:disabled {
   height: 100%;
 }
 
-.ship, .cell-around, .player-username-1, .player-username-2, .submit-username--fleet-2, .submit-username--fleet-1, .ship.injure {
+.ship, .cell-around, .player-username-1, .player-username-2, .submit-username--fleet-1, .submit-username--fleet-2, .new-game-btn.player-2, .new-game-btn.player-1 .ship.injure {
   justify-content: center;
   align-items: center;
 }
@@ -365,8 +365,6 @@ button:disabled {
 }
 
 .submit-username--fleet-2, .submit-username--fleet-1 {
-  justify-content: center;
-  align-items: center;
   display: none;
 }
 

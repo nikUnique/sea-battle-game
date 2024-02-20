@@ -262,9 +262,10 @@ button:disabled {
 .cell-around,
 .player-username-1,
 .player-username-2,
-.submit-username--fleet-2,
 .submit-username--fleet-1,
-.ship.injure {
+.submit-username--fleet-2,
+.new-game-btn.player-2,
+.new-game-btn.player-1 .ship.injure {
   align-items: center;
   justify-content: center;
 }
@@ -502,12 +503,9 @@ button:disabled {
 .submit-username--fleet-2,
 .submit-username--fleet-1 {
   display: none;
-  align-items: center;
 
-  justify-content: center;
   &::after {
     content: url("../icons/icons8-check.svg");
-
     height: 24px;
     width: 24px;
   }
@@ -529,7 +527,6 @@ button:disabled {
 .change-username-btn-1,
 .change-username-btn-2 {
   grid-column: 3/-1;
-
   justify-self: start;
 }
 
