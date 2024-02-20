@@ -70,7 +70,7 @@ const btnCloseNotificationWindow2 = document.querySelector(
 );
 // const overlay = document.querySelector(".overlay");
 
-// MENU
+// MENU BUTTONS
 const menuBtnsContainer1 = document.querySelector(".menu-btns-container-1");
 const menuBtnsContainer2 = document.querySelector(".menu-btns-container-2");
 const playerUsername1 = document.querySelector(".player-username-1");
