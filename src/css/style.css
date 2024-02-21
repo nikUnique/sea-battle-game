@@ -265,7 +265,8 @@ button:disabled {
 .submit-username--fleet-1,
 .submit-username--fleet-2,
 .new-game-btn.player-2,
-.new-game-btn.player-1 .ship.injure {
+.new-game-btn.player-1,
+.ship.injure {
   align-items: center;
   justify-content: center;
 }
@@ -451,6 +452,12 @@ button:disabled {
   left: 50%;
   transform: translate(-50%, -150%);
 }
+
+/* .username-1,
+.username-2 {
+  width: 100%;
+  left: 90%;
+} */
 
 .menu-btns--container-1,
 .menu-btns--container-2 {
