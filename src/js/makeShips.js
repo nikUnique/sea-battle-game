@@ -155,9 +155,10 @@ export default createShip = function (coords, size, fleetParts) {
 
   bigCoords.forEach((pos) => {
     const shipPartEl = fleet.querySelector(`.${pos}`);
-
-    shipPartEl?.classList.add("ship-color");
-    shipPartEl && (shipPartEl.textContent = size);
+    if (shipPartEl) {
+      shipPartEl.classList.add("ship-color");
+      shipPartEl.textContent = size;
+    }
 
     // This is needed for placement reasons, of course a better idea is not to have this at all, but it is as it is
     fleet
@@ -176,5 +177,42 @@ export default createShip = function (coords, size, fleetParts) {
   };
 
   ships.push(ship);
+
+  if (
+    fleet === GlobalVars.mySideMyFleet ||
+    fleet === GlobalVars.enemySideEnemyFleet
+  ) {
+    const twoCellShips = ships.filter((ship) => {
+      return ship.size === 2;
+    });
+
+    twoCellShips.forEach((ship, index) => {
+      ship.coords.forEach((coord, i) => {
+        index === 0 &&
+          (fleet.querySelector(
+            `.${coord}`
+          ).nextElementSibling.style.backgroundColor = "#22b8cf");
+        index === 1 &&
+          (fleet.querySelector(
+            `.${coord}`
+          ).nextElementSibling.style.backgroundColor = "#12b886");
+      });
+      // document.querySelector(`.${ship}`);
+    });
+
+    const threeCellShips = ships.filter((ship) => {
+      return ship.size === 3;
+    });
+
+    threeCellShips.forEach((ship, index) => {
+      ship.coords.forEach((coord, i) => {
+        index === 0 &&
+          (fleet.querySelector(
+            `.${coord}`
+          ).nextElementSibling.style.backgroundColor = "#cc5de8");
+      });
+    });
+  }
+
   console.log(ships, "ships");
 };

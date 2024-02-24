@@ -1064,8 +1064,10 @@ exports.default = createShip = function(coords, size, fleetParts) {
     console.log(bigCoords, "bigCoords");
     bigCoords.forEach((pos)=>{
         const shipPartEl = fleet.querySelector(`.${pos}`);
-        shipPartEl?.classList.add("ship-color");
-        shipPartEl && (shipPartEl.textContent = size);
+        if (shipPartEl) {
+            shipPartEl.classList.add("ship-color");
+            shipPartEl.textContent = size;
+        }
         // This is needed for placement reasons, of course a better idea is not to have this at all, but it is as it is
         fleet.querySelector(`.${pos}`)?.insertAdjacentHTML("beforebegin", `<div class="${pos} cell"></div`);
     });
@@ -1080,6 +1082,26 @@ exports.default = createShip = function(coords, size, fleetParts) {
         ].length ? "column" : "row"
     };
     ships.push(ship);
+    if (fleet === _globalVars.mySideMyFleet || fleet === _globalVars.enemySideEnemyFleet) {
+        const twoCellShips = ships.filter((ship)=>{
+            return ship.size === 2;
+        });
+        twoCellShips.forEach((ship, index)=>{
+            ship.coords.forEach((coord, i)=>{
+                index === 0 && (fleet.querySelector(`.${coord}`).nextElementSibling.style.backgroundColor = "#22b8cf");
+                index === 1 && (fleet.querySelector(`.${coord}`).nextElementSibling.style.backgroundColor = "#12b886");
+            });
+        // document.querySelector(`.${ship}`);
+        });
+        const threeCellShips = ships.filter((ship)=>{
+            return ship.size === 3;
+        });
+        threeCellShips.forEach((ship, index)=>{
+            ship.coords.forEach((coord, i)=>{
+                index === 0 && (fleet.querySelector(`.${coord}`).nextElementSibling.style.backgroundColor = "#cc5de8");
+            });
+        });
+    }
     console.log(ships, "ships");
 };
 
@@ -1136,9 +1158,9 @@ const allowForbidClick = function(fleet, state) {
 };
 const timerClock = function(time, labelTimer) {
     // Define number of minutes
-    const min = String(Math.trunc(time / (0, _config.TIME_DIVIDER))).padStart(2, 0);
+    const min = String(Math.trunc(time / (0, _config.SECONDS_IN_MINUTE))).padStart(2, 0);
     // Define number of seconds
-    const sec = String(Math.trunc(time % (0, _config.TIME_DIVIDER))).padStart(2, 0);
+    const sec = String(Math.trunc(time % (0, _config.SECONDS_IN_MINUTE))).padStart(2, 0);
     labelTimer.textContent = `${min}:${sec}`;
     return `${min}:${sec}`;
 };
@@ -1506,9 +1528,11 @@ const gameStartControl = function(fleet, fleetParts) {
             (fleet === (0, _globalVars.mySideEnemyFleet) ? (0, _globalVars.enemySideEnemyFleet) : (0, _globalVars.mySideMyFleet)).querySelectorAll(".ship").forEach((ship)=>{
                 ship.classList.remove("ship-color");
                 ship.textContent = "";
+                ship.style.backgroundColor = "#e6fcf5";
             });
             fleet.querySelectorAll(".ship").forEach((ship)=>{
                 ship.textContent = "";
+                ship.style.backgroundColor = "#e6fcf5";
             });
         }
         [
@@ -1612,7 +1636,7 @@ parcelHelpers.export(exports, "MIN_INPUT_LENGTH", ()=>MIN_INPUT_LENGTH);
 parcelHelpers.export(exports, "NEW_GAME_AGREEMENT_COMPLETE_LENGTH", ()=>NEW_GAME_AGREEMENT_COMPLETE_LENGTH);
 parcelHelpers.export(exports, "BOTH_FLEETS_READY_COMPLETE_LENGTH", ()=>BOTH_FLEETS_READY_COMPLETE_LENGTH);
 parcelHelpers.export(exports, "IN_BETWEEN_SHIP_PART_LENGTH", ()=>IN_BETWEEN_SHIP_PART_LENGTH);
-parcelHelpers.export(exports, "TIME_DIVIDER", ()=>TIME_DIVIDER);
+parcelHelpers.export(exports, "SECONDS_IN_MINUTE", ()=>SECONDS_IN_MINUTE);
 parcelHelpers.export(exports, "APPEAR_TIME", ()=>APPEAR_TIME);
 parcelHelpers.export(exports, "TIME_LENGTHS", ()=>TIME_LENGTHS);
 const AMOUNT_OF_DESTROYERS = 4;
@@ -1620,11 +1644,11 @@ const MIN_INPUT_LENGTH = 2;
 const NEW_GAME_AGREEMENT_COMPLETE_LENGTH = 2;
 const BOTH_FLEETS_READY_COMPLETE_LENGTH = 2;
 const IN_BETWEEN_SHIP_PART_LENGTH = 4;
-const TIME_DIVIDER = 60;
+const SECONDS_IN_MINUTE = 60;
 const APPEAR_TIME = 100;
 const TIME_LENGTHS = {
     shotTime: 30,
-    bonusTime: 10
+    bonusTime: 3
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {

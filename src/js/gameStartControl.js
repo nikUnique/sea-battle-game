@@ -312,9 +312,11 @@ export const gameStartControl = function (fleet, fleetParts) {
         .forEach((ship) => {
           ship.classList.remove("ship-color");
           ship.textContent = "";
+          ship.style.backgroundColor = "#e6fcf5";
         });
       fleet.querySelectorAll(".ship").forEach((ship) => {
         ship.textContent = "";
+        ship.style.backgroundColor = "#e6fcf5";
       });
     }
 

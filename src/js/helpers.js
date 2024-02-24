@@ -1,4 +1,4 @@
-import { TIME_DIVIDER, TIME_LENGTHS } from "./config";
+import { SECONDS_IN_MINUTE, TIME_LENGTHS } from "./config";
 
 import { playingCheck } from "./gameStartControl";
 
@@ -87,10 +87,10 @@ export const allowForbidClick = function (fleet, state) {
 
 export const timerClock = function (time, labelTimer) {
   // Define number of minutes
-  const min = String(Math.trunc(time / TIME_DIVIDER)).padStart(2, 0);
+  const min = String(Math.trunc(time / SECONDS_IN_MINUTE)).padStart(2, 0);
 
   // Define number of seconds
-  const sec = String(Math.trunc(time % TIME_DIVIDER)).padStart(2, 0);
+  const sec = String(Math.trunc(time % SECONDS_IN_MINUTE)).padStart(2, 0);
 
   labelTimer.textContent = `${min}:${sec}`;
   return `${min}:${sec}`;
