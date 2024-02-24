@@ -453,12 +453,6 @@ button:disabled {
   transform: translate(-50%, -150%);
 }
 
-/* .username-1,
-.username-2 {
-  width: 100%;
-  left: 90%;
-} */
-
 .menu-btns--container-1,
 .menu-btns--container-2 {
   position: absolute;

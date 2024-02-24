@@ -14,6 +14,10 @@ First you need to clone repository from github.
 To do that follow instructions from this site: https://dev.to/ceceliacreates/how-to-clone-a-github-repository-59hg.
 Then open the project in VS Code, open terminal and run command "npm install" which will install all dependencies for this project and after all of that run the project on a local machine.
 
+## Attribution for media used in the project
+
+In this project I used icons from https://icons8.com, also from https://ionic.io/ionicons and "Icon made by Freepik from https://www.flaticon.com/".
+
 ## How to Use the Project
 
 I included game rules right on the page itself, so you will be able to read them there.
