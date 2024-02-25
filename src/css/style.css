@@ -1,0 +1,629 @@
+/*
+--- 01 TYPOGRAPHY SYSTEM
+
+- Font sizes (px)
+10 / 12 / 14 / 16 / 18 / 20 / 24 / 30 / 36 / 44 / 52 / 62 / 74 / 86 / 98
+
+- Font weights
+Default: 400
+
+
+- Line heights
+Default: 1
+
+
+--- 02 COLORS
+
+- Primary:  #fcc419
+- Tints: #ffd43b- 
+- Shades:
+ #654e0a, 
+ #fab005
+
+- Accents:
+#087f5b
+
+Tints:
+#c3fae8
+#e6fcf5
+
+
+#22b8cf
+
+Tints:
+#99e9f2
+
+#FA5252
+
+- Greys: #555
+
+
+--- 05 SHADOWS
+
+0 3rem 5rem rgba(0, 0, 0, 0.3);
+
+
+--- 06 BORDER-RADIUS
+Small: 4px
+
+
+--- 07 WHITESPACE
+
+- Spacing system (px)
+2 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 80 / 96 / 128
+*/
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* font-size: 10px; */
+
+  /* 10px / 16px = 0.625 = 62.5% */
+  /* Percentage of user's browser font-size setting */
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "Rubik", sans-serif;
+  line-height: 1;
+  font-weight: 400;
+  color: #555;
+  background-color: #fff9e8;
+}
+
+/**************************/
+/* GRID AND CONTAINERS */
+/**************************/
+
+.container {
+  max-width: 335rem;
+  overflow: hidden;
+  /* min-width: 210rem; */
+  /* padding: 2.4rem; */
+  margin: 8rem auto;
+}
+
+.sea-container {
+  position: relative;
+}
+
+.sea {
+  border-radius: 4px;
+  border-right: 7px solid #087f5b;
+  border-bottom: 7px solid #087f5b;
+  border-left: 3.6rem solid #087f5b;
+}
+
+.grid {
+  display: grid;
+  column-gap: 2rem;
+  row-gap: 4.8rem;
+  margin-bottom: 4.8rem;
+}
+
+.grid--2-cols {
+  grid-template-columns: repeat(2, 1fr);
+  align-self: center;
+  justify-self: center;
+  margin-top: 12.8rem;
+}
+
+.grid--3-cols {
+  grid-template-columns: 49.9fr 0.2fr 49.9fr;
+}
+
+.grid-helper {
+  background-color: #fcc419;
+}
+
+/**************************/
+/* TABLE ELEMENTS */
+/**************************/
+
+table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  display: block;
+  transition: all 0.3s ease-in;
+  position: relative;
+}
+
+th,
+thead tr {
+  background-color: #087f5b;
+  color: #fff;
+  cursor: auto;
+}
+
+th {
+  cursor: auto;
+  user-select: none;
+  overflow: hidden;
+}
+
+.row-number {
+  position: absolute;
+  left: -27;
+  color: #fff;
+  user-select: none;
+  font-weight: 500;
+}
+
+.row-number-1 {
+  left: -26;
+  top: 50;
+}
+.row-number-2 {
+  top: 90;
+}
+.row-number-3 {
+  top: 133;
+}
+.row-number-4 {
+  top: 173;
+}
+.row-number-5 {
+  top: 213;
+}
+.row-number-6 {
+  top: 253;
+}
+.row-number-7 {
+  top: 294;
+}
+.row-number-8 {
+  top: 334;
+}
+.row-number-9 {
+  top: 374;
+}
+.row-number-10 {
+  left: -33;
+  top: 414;
+}
+
+td,
+th {
+  height: 3.6rem;
+  width: 3.6rem;
+  font-size: 1.6rem;
+  text-align: center;
+  user-select: none;
+}
+
+td {
+  font-size: 2.4rem;
+  background-color: #e6fcf5;
+  overflow: hidden;
+}
+
+td:hover {
+  background-color: #c3fae8;
+}
+
+/* Class of td */
+.dropzone {
+  border: 1px solid #fff;
+  /* border-color: rgba(255, 255, 255, 0.5); */
+}
+
+/**************************/
+/* GENERAL */
+/**************************/
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+p {
+  font-size: 1.8rem;
+  margin-bottom: 1.6rem;
+}
+
+label {
+  font-size: 1.6rem;
+}
+
+button,
+input {
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  border: none;
+
+  transition: all 0.3s;
+}
+
+ion-icon {
+  width: 24px;
+  height: 24px;
+  color: #22b8cf;
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+/**************************/
+/* REUSABLE PROPERTIES */
+/**************************/
+.ship,
+.miss,
+.cell-around {
+  width: 100%;
+  height: 100%;
+}
+
+.ship,
+.cell-around,
+.player-username-1,
+.player-username-2,
+.submit-username--fleet-1,
+.submit-username--fleet-2,
+.new-game-btn.player-2,
+.new-game-btn.player-1,
+.ship.injure {
+  align-items: center;
+  justify-content: center;
+}
+
+/**************************/
+/* FLEET ENVIRONMENT */
+/**************************/
+
+.ship {
+  user-select: none;
+  color: #654e0a;
+  display: flex;
+  font-size: 2.4rem !important;
+  overflow: hidden;
+}
+
+.ship-color {
+  background-color: #fcc419;
+  transition: all 0.3s;
+}
+
+.ship:hover {
+  background-color: #fab005;
+}
+
+.my-side--enemy-fleet .ship.injure:hover,
+.enemy-side--my-fleet .ship.injure:hover {
+  background-color: #e6fcf5;
+}
+
+.my-side--enemy-fleet.binoculars .ship:hover,
+.enemy-side--my-fleet.binoculars .ship:hover {
+  background-color: #e6fcf5;
+}
+
+.my-side--enemy-fleet .ship:hover,
+.enemy-side--my-fleet .ship:hover {
+  background-color: #c3fae8;
+}
+
+.binoculars-reward-label,
+.timer-label {
+  position: absolute;
+  left: 8%;
+  transform: translate(0, 180%);
+  transition: all 0.5s;
+  opacity: 0;
+}
+
+.timer-label {
+  left: 14%;
+  transform: translate(0, 40%);
+}
+
+.opponent-timer {
+  left: 6%;
+}
+
+.injure {
+  color: #fa5252;
+
+  &::after {
+    content: url("../icons/icons8-close.svg");
+    display: flex;
+    height: 3.2rem;
+    width: 3.2rem;
+  }
+}
+
+.miss {
+  color: #22b8cf;
+  font-size: 3.2rem;
+  background-color: #e6fcf5;
+}
+
+.cell-around {
+  color: #99e9f2;
+  background-color: #e6fcf5;
+  display: flex;
+}
+
+.ship.injure {
+  opacity: 100%;
+  display: flex;
+  /* box-shadow: inset 0 0 0 3px #22b8cf; */
+}
+
+.dropzone .ship.injure {
+  font-size: 3.2rem !important;
+  background-color: #e6fcf5;
+}
+
+.dragover {
+  background-color: #c3fae8;
+}
+
+.my-side--enemy-fleet,
+.enemy-side--my-fleet {
+  cursor: url(../icons/gun-target.png), auto;
+}
+
+.my-side--my-fleet .ship,
+.enemy-side--enemy-fleet .ship {
+  cursor: grab;
+}
+
+.my-side--enemy-fleet .ship,
+.enemy-side--my-fleet .ship {
+  background-color: #e6fcf5;
+}
+
+/* .border-0.75px {
+  border-color: rgba(255, 255, 255, 0.75);
+} */
+
+/**************************/
+/* NOTIFICATION WINDOW */
+/**************************/
+
+.notification-window {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, 50%);
+  width: 150%;
+  height: 50%;
+  background-color: #fff;
+  padding: 6rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+/* .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(3px);
+  z-index: 5;
+} */
+
+.show-notification-window {
+  font-size: 2rem;
+  font-weight: 600;
+  padding: 1.75rem 3.5rem;
+  margin: 5rem 2rem;
+  border: none;
+  background-color: #fff;
+  color: #444;
+  border-radius: 10rem;
+  cursor: pointer;
+}
+
+.close-notification-window,
+.close-notification-window-2 {
+  position: absolute;
+  top: 1.2rem;
+  right: 2rem;
+  font-size: 5rem;
+  color: #333;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.hidden {
+  display: none;
+}
+
+/**************************/
+/* INPUT DATA, BUTTONS, LABELS */
+/**************************/
+
+.username-1,
+.player-1--pronoun,
+.username-2,
+.player-2--pronoun {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -150%);
+}
+
+.menu-btns--container-1,
+.menu-btns--container-2 {
+  position: absolute;
+  top: -150;
+}
+
+.player-username-1,
+.player-username-2 {
+  margin-top: 0.8rem;
+  display: grid;
+  grid-template-columns: 29fr 20fr 10fr 20fr;
+  width: 203%;
+
+  column-gap: 0.8rem;
+}
+
+.data .new-game-btn.player-2,
+.data .new-game-btn.player-1 {
+  grid-column: 1;
+}
+
+.data .change-username-btn-1,
+.data .change-username-btn-2 {
+  grid-column: 2;
+}
+
+.data.player-username-1,
+.data.player-username-2 {
+  grid-template-columns: 45fr 50fr;
+}
+
+.start-game.fleet-1,
+.start-game.fleet-2,
+.submit-username--fleet-2,
+.submit-username--fleet-1,
+.new-game-btn.player-2,
+.new-game-btn.player-1,
+.change-username-btn-1,
+.change-username-btn-2 {
+  font-size: 1.8rem;
+  background-color: #fcc419;
+  color: #654e0a;
+  border: none;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: all 0.3s;
+}
+
+.submit-username--fleet-2,
+.submit-username--fleet-1 {
+  display: none;
+
+  &::after {
+    content: url("../icons/icons8-check.svg");
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.new-game-btn.player-2,
+.new-game-btn.player-1 {
+  grid-column: 1/3;
+  display: flex;
+  justify-self: end;
+}
+
+.player-username-1 input,
+.player-username-2 input {
+  height: 100%;
+  display: none;
+}
+
+.change-username-btn-1,
+.change-username-btn-2 {
+  grid-column: 3/-1;
+  justify-self: start;
+}
+
+.start-game.fleet-1,
+.start-game.fleet-2 {
+  font-size: 1.8rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-42%, -55%);
+  padding: 1.2rem 2.4rem;
+}
+
+.change-username-btn-1,
+.change-username-btn-2 {
+  font-size: 1.8rem;
+  display: flex;
+}
+
+.your-name-1,
+.your-name-2 {
+  justify-self: end;
+  display: none;
+}
+
+.start-game.fleet-1:hover,
+.start-game.fleet-2:hover,
+.submit-username--fleet-2:hover,
+.submit-username--fleet-1:hover,
+.change-username-btn-1:hover:enabled,
+.change-username-btn-2:hover:enabled,
+.new-game-btn.player-2:hover:enabled,
+.new-game-btn.player-1:hover:enabled {
+  background-color: #fab005;
+}
+
+.waiting-opponent-1,
+.waiting-opponent-2,
+.error-message-1,
+.error-message-2 {
+  transform: translate(24%, 50%);
+  opacity: 0;
+}
+
+.error-message-1,
+.error-message-2 {
+  position: absolute;
+}
+
+/**************************/
+/* GAME DESCRIPTION */
+/**************************/
+
+.game-description-container {
+  grid-column: 1/2;
+  display: grid;
+  width: 80%;
+  justify-self: center;
+}
+
+.game-description-container-2 {
+  grid-column: 3/-1;
+  display: grid;
+  width: 80%;
+  justify-self: center;
+}
+
+.ship-description {
+  display: flex;
+  align-items: center;
+}
+
+.ship-description-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 45rem;
+}
+
+.ship-name {
+  color: inherit;
+}
+
+.rules-caption {
+  text-align: center;
+  margin-bottom: 2.4rem;
+  font-size: 2.4rem;
+}
+
+.ship-types {
+  font-size: 1.6rem;
+  margin-bottom: 1.6rem;
+  display: grid;
+  list-style: none;
+  gap: 0.8rem;
+}
+
+.show-ship {
+  height: 4rem;
+}
