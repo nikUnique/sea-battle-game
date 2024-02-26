@@ -187,16 +187,17 @@ export default createShip = function (coords, size, fleetParts) {
       return ship.size === 2;
     });
 
+    const paintCell = function (coord, color) {
+      fleet.querySelector(
+        `.${coord}`
+      ).nextElementSibling.style.backgroundColor = color;
+    };
+
     twoCellShips.forEach((ship, index) => {
       ship.coords.forEach((coord, i) => {
-        index === 0 &&
-          (fleet.querySelector(
-            `.${coord}`
-          ).nextElementSibling.style.backgroundColor = "#22b8cf");
-        index === 1 &&
-          (fleet.querySelector(
-            `.${coord}`
-          ).nextElementSibling.style.backgroundColor = "#12b886");
+        index === 0 && paintCell(coord, "#22b8cf");
+
+        index === 1 && paintCell(coord, "#12b886");
       });
     });
 
@@ -206,10 +207,7 @@ export default createShip = function (coords, size, fleetParts) {
 
     threeCellShips.forEach((ship, index) => {
       ship.coords.forEach((coord, i) => {
-        index === 0 &&
-          (fleet.querySelector(
-            `.${coord}`
-          ).nextElementSibling.style.backgroundColor = "#cc5de8");
+        index === 0 && paintCell(coord, "#cc5de8");
       });
     });
   }
