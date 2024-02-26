@@ -22,4 +22,4 @@ In this project I used icons from https://icons8.com, also from https://ionic.io
 
 I included game rules right on the page itself, so you will be able to read them there.
 
-That's all for now, have a great time playing this game!
+That's all for now, have a great time!
