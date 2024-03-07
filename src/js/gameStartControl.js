@@ -33,6 +33,8 @@ import {
   startTimer,
 } from "./helpers.js";
 
+import createShip from "./makeShips.js";
+
 // Shows the current state of the game
 const playingCheck = { playing: false };
 
