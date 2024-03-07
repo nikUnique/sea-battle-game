@@ -1,7 +1,6 @@
 import {
   seaFleet,
   letters,
-  seaFleet,
   mySideMyFleet,
   mySideEnemyFleet,
   enemySideEnemyFleet,
