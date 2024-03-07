@@ -457,6 +457,7 @@ button:disabled {
 .menu-btns--container-2 {
   position: absolute;
   top: -150;
+  top: -30%;
 }
 
 .player-username-1,
