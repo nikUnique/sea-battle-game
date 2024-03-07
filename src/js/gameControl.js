@@ -3,11 +3,11 @@ import {
   mySideEnemyFleet,
   enemySideMyFleet,
   enemySideEnemyFleet,
-} from "./globalVars";
+} from "./globalVars.js";
 
-import { playingCheck } from "./gameStartControl";
+import { playingCheck } from "./gameStartControl.js";
 
-import { startTimer } from "./helpers";
+import { startTimer } from "./helpers.js";
 
 export default function () {
   // playingCheck.playing === true &&

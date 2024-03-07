@@ -2,15 +2,15 @@ import {
   mySideMyFleet,
   enemySideEnemyFleet,
   enemySideMyFleet,
-} from "./globalVars";
+} from "./globalVars.js";
 
-import showEndResults from "./showEndResults";
+import showEndResults from "./showEndResults.js";
 
-import { playingCheck } from "./gameStartControl";
+import { playingCheck } from "./gameStartControl.js";
 
-import { buildShipBorder, startTimer, timerClock } from "./helpers";
+import { buildShipBorder, startTimer, timerClock } from "./helpers.js";
 
-import { APPEAR_TIME, TIME_LENGTHS } from "./config";
+import { APPEAR_TIME, TIME_LENGTHS } from "./config.js";
 
 export default function (fleet, ships) {
   const shootingLogic = function (e) {

@@ -1,10 +1,13 @@
-import { MIN_INPUT_LENGTH, NEW_GAME_AGREEMENT_COMPLETE_LENGTH } from "./config";
+import {
+  MIN_INPUT_LENGTH,
+  NEW_GAME_AGREEMENT_COMPLETE_LENGTH,
+} from "./config.js";
 
 import {
   bothFleetsReady,
   newGameAgreement,
   playingCheck,
-} from "./gameStartControl";
+} from "./gameStartControl.js";
 
 import {
   allTimers,
@@ -23,7 +26,7 @@ import {
   newGameBtn2,
   startGameBtn1,
   startGameBtn2,
-} from "./globalVars";
+} from "./globalVars.js";
 
 import {
   allowForbidClick,
@@ -33,9 +36,9 @@ import {
   closeUsernameForm,
   openUsernameForm,
   startTimer,
-} from "./helpers";
+} from "./helpers.js";
 
-import placeShipsManually from "./placeShipsManually";
+import placeShipsManually from "./placeShipsManually.js";
 
 export const startNewGame = function (fleet) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
@@ -91,6 +94,14 @@ export const startNewGame = function (fleet) {
         console.log(playerUsername, "username");
 
         console.log("Your username should not contain empty spaces");
+
+        return;
+      }
+
+      if (playerUsername.includes("<")) {
+        console.log(playerUsername, "username");
+
+        console.log("Your username can contain only letters and numbers");
 
         return;
       }

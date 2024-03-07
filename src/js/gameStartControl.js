@@ -2,7 +2,7 @@ import {
   AMOUNT_OF_DESTROYERS,
   BOTH_FLEETS_READY_COMPLETE_LENGTH,
   IN_BETWEEN_SHIP_PART_LENGTH,
-} from "./config";
+} from "./config.js";
 
 import {
   mySideMyFleet,
@@ -22,7 +22,7 @@ import {
   changeUsernameBtn2,
   errorMessage1,
   errorMessage2,
-} from "./globalVars";
+} from "./globalVars.js";
 
 import {
   allowForbidClick,
@@ -31,7 +31,7 @@ import {
   getSeaOpacityBack,
   selectCellsAround,
   startTimer,
-} from "./helpers";
+} from "./helpers.js";
 
 // Shows the current state of the game
 const playingCheck = { playing: false };

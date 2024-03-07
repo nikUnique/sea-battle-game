@@ -1,5 +1,5 @@
-import * as GlobalVars from "./globalVars";
-import { selectCellsAround } from "./helpers";
+import * as GlobalVars from "./globalVars.js";
+import { selectCellsAround } from "./helpers.js";
 
 export default createShip = function (coords, size, fleetParts) {
   const fleet = fleetParts[0];
