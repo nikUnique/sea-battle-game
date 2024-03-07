@@ -13,7 +13,7 @@ export default function (coords, size, fleetParts) {
   // if (bigCoords === undefined) {
   //   return;
   // }
-
+  console.log("Test");
   // Check whether two or more ships were placed in the same cell, which is impossible now, but during development was
   const checkSpace = fleetParts[1]?.map((ship, i) => {
     return ship?.coords?.some((coord) => {
