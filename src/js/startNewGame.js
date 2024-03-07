@@ -40,7 +40,7 @@ import {
 
 import placeShipsManually from "./placeShipsManually.js";
 import createShip from "./makeShips.js";
-
+console.log("Test commit");
 export const startNewGame = function (fleet) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
 
