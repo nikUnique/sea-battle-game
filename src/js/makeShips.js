@@ -1,7 +1,7 @@
 import * as GlobalVars from "./globalVars.js";
 import { selectCellsAround } from "./helpers.js";
 
-export default createShip = function (coords, size, fleetParts) {
+export default function (coords, size, fleetParts) {
   const fleet = fleetParts[0];
   const ships = fleetParts[1];
   const letters = GlobalVars.letters;
@@ -213,4 +213,4 @@ export default createShip = function (coords, size, fleetParts) {
   }
 
   console.log(ships, "ships");
-};
+}
