@@ -147,43 +147,43 @@ th {
 
 .row-number {
   position: absolute;
-  left: -27;
+  left: -27px;
   color: #fff;
   user-select: none;
   font-weight: 500;
 }
 
 .row-number-1 {
-  left: -26;
-  top: 50;
+  left: -26px;
+  top: 50px;
 }
 .row-number-2 {
-  top: 90;
+  top: 90px;
 }
 .row-number-3 {
-  top: 133;
+  top: 133px;
 }
 .row-number-4 {
-  top: 173;
+  top: 173px;
 }
 .row-number-5 {
-  top: 213;
+  top: 213px;
 }
 .row-number-6 {
-  top: 253;
+  top: 253px;
 }
 .row-number-7 {
-  top: 294;
+  top: 294px;
 }
 .row-number-8 {
-  top: 334;
+  top: 334px;
 }
 .row-number-9 {
-  top: 374;
+  top: 374px;
 }
 .row-number-10 {
-  left: -33;
-  top: 414;
+  left: -33px;
+  top: 414px;
 }
 
 td,

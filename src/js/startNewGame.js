@@ -39,6 +39,7 @@ import {
 } from "./helpers.js";
 
 import placeShipsManually from "./placeShipsManually.js";
+import createShip from "./makeShips.js";
 
 export const startNewGame = function (fleet) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
@@ -52,6 +53,7 @@ export const startNewGame = function (fleet) {
     : changeUsernameBtn2;
 
   changeUsernameBtn.addEventListener("click", function (e) {
+    e.preventDefault();
     openUsernameForm(fleet, "flex");
   });
 
@@ -122,7 +124,8 @@ export const startNewGame = function (fleet) {
 
   submitUsernames();
 
-  newGameBtn.addEventListener("click", function () {
+  newGameBtn.addEventListener("click", function (e) {
+    e.preventDefault();
     fleetIsMySideMyFleet &&
       !newGameAgreement.includes("mySideMyFleet") &&
       newGameAgreement.push("mySideMyFleet");
