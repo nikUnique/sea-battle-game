@@ -178,6 +178,7 @@ export default createShip = function (coords, size, fleetParts) {
 
   ships.push(ship);
 
+  // Paint similar ships with different colors
   if (
     fleet === GlobalVars.mySideMyFleet ||
     fleet === GlobalVars.enemySideEnemyFleet
@@ -197,7 +198,6 @@ export default createShip = function (coords, size, fleetParts) {
             `.${coord}`
           ).nextElementSibling.style.backgroundColor = "#12b886");
       });
-      // document.querySelector(`.${ship}`);
     });
 
     const threeCellShips = ships.filter((ship) => {

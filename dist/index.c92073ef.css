@@ -207,7 +207,15 @@ button:disabled {
   background-color: #fab005;
 }
 
-.my-side--enemy-fleet .ship.injure:hover, .enemy-side--my-fleet .ship.injure:hover, .my-side--enemy-fleet.binoculars .ship:hover, .enemy-side--my-fleet.binoculars .ship:hover {
+.my-side--enemy-fleet, .enemy-side--my-fleet {
+  cursor: url("gun-target.4be8e5b3.png"), auto;
+}
+
+.my-side--my-fleet .ship, .enemy-side--enemy-fleet .ship {
+  cursor: grab;
+}
+
+.my-side--enemy-fleet .ship, .enemy-side--my-fleet .ship, .my-side--enemy-fleet .ship.injure:hover, .enemy-side--my-fleet .ship.injure:hover, .my-side--enemy-fleet.binoculars .ship:hover, .enemy-side--my-fleet.binoculars .ship:hover {
   background-color: #e6fcf5;
 }
 
@@ -267,18 +275,6 @@ button:disabled {
 
 .dragover {
   background-color: #c3fae8;
-}
-
-.my-side--enemy-fleet, .enemy-side--my-fleet {
-  cursor: url("gun-target.4be8e5b3.png"), auto;
-}
-
-.my-side--my-fleet .ship, .enemy-side--enemy-fleet .ship {
-  cursor: grab;
-}
-
-.my-side--enemy-fleet .ship, .enemy-side--my-fleet .ship {
-  background-color: #e6fcf5;
 }
 
 .notification-window {

@@ -3,7 +3,7 @@ import {
   mySideEnemyFleet,
   enemySideMyFleet,
   enemySideEnemyFleet,
-} from "./globalVars";
+} from "./globalVarsPause";
 
 import { playingCheck } from "./gameStartControl";
 

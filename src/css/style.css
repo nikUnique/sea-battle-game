@@ -292,6 +292,21 @@ button:disabled {
   background-color: #fab005;
 }
 
+.my-side--enemy-fleet,
+.enemy-side--my-fleet {
+  cursor: url(../icons/gun-target.png), auto;
+}
+
+.my-side--my-fleet .ship,
+.enemy-side--enemy-fleet .ship {
+  cursor: grab;
+}
+
+.my-side--enemy-fleet .ship,
+.enemy-side--my-fleet .ship {
+  background-color: #e6fcf5;
+}
+
 .my-side--enemy-fleet .ship.injure:hover,
 .enemy-side--my-fleet .ship.injure:hover {
   background-color: #e6fcf5;
@@ -361,21 +376,6 @@ button:disabled {
 
 .dragover {
   background-color: #c3fae8;
-}
-
-.my-side--enemy-fleet,
-.enemy-side--my-fleet {
-  cursor: url(../icons/gun-target.png), auto;
-}
-
-.my-side--my-fleet .ship,
-.enemy-side--enemy-fleet .ship {
-  cursor: grab;
-}
-
-.my-side--enemy-fleet .ship,
-.enemy-side--my-fleet .ship {
-  background-color: #e6fcf5;
 }
 
 /* .border-0.75px {

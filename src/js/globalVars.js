@@ -32,18 +32,122 @@ let createMyShips = [
   [["c9", "d9", "e9", "f9"], ["J4", "I4", "h4", "e4"].length],
 ];
 
-let createEnemyShips = [
-  [["a1"], ["d10"].length],
-  [["c1"], ["d10"].length],
-  [["e1"], ["d10"].length],
-  [["a3"], ["d10"].length],
+let fourCellShip, fourCellShipWithSurroundings;
+let threeCellShipOne, threeCellShipOneWithSurroundings;
+let threeCellShipTwo, threeCellShipTwoWithSurroundings;
+let twoCellShipOne, twoCellShipOneWithSurroundings;
+let twoCellShipTwo, twoCellShipTwoWithSurroundings;
+let twoCellShipThree, twoCellShipThreeWithSurroundings;
 
-  [["i5", "j5"], ["e6", "e7"].length],
-  [["i7", "j7"], ["e6", "e7"].length],
-  [["d4", "e4", "f4", "g4"], ["J4", "I4", "h4", "e4"].length],
-  [["h2", "i2", "j2"], ["J4", "I4", "h4"].length],
-  [["e9", "f9"], ["e6", "e7"].length],
-  [["b5", "b6", "b7"], ["J4", "I4", "h4"].length],
+const randomNumber = Math.floor(Math.random() * 10) + 1;
+const randomNumberForLetter = Math.floor(Math.random() * 10);
+console.log("randomNumberForLetter", randomNumberForLetter);
+
+const randomLetter = letters[randomNumberForLetter];
+
+function randomNumberFromRange(min, max) {
+  // min ≤ result ≤ max  (both inclusive)
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomLetterFun(min, max) {
+  const start = min.charCodeAt(0);
+  const end = max.charCodeAt(0);
+  const code = Math.floor(Math.random() * (end - start + 1)) + start;
+  return String.fromCharCode(code);
+}
+
+// Use it:
+
+const randomFrom4To7 = randomNumberFromRange(4, 7);
+const randomfromDtoG = randomLetterFun("d", "g");
+const randomCoordByNumber = randomLetter + randomFrom4To7;
+const randomCoordByLetter = randomfromDtoG + randomNumber;
+console.log("randomCoordByNumber", randomCoordByNumber);
+console.log("randomCoordByLetter", randomCoordByLetter);
+
+// Example:
+// → 4, 5, 6, or 7
+
+// Is horizontal or not
+const isHorizontal = Math.random() < 0.5;
+const isTop = Math.random() < 0.5;
+const isRight = Math.random() < 0.5;
+
+console.log("isHorizontalrand", isHorizontal);
+
+let firstCoord, secondCoord, thirdCoord, fourthCoord;
+if (!isHorizontal && isTop) {
+  console.log("is vertical and toprand");
+
+  console.log("randomfrom4To7rand", randomFrom4To7);
+  firstCoord = randomCoordByNumber;
+  secondCoord = randomLetter + (randomFrom4To7 - 1);
+  thirdCoord = randomLetter + (randomFrom4To7 - 2);
+  fourthCoord = randomLetter + (randomFrom4To7 - 3);
+
+  fourCellShip = [firstCoord, secondCoord, thirdCoord, fourthCoord];
+  console.log("four celled auto placed ship rand", fourCellShip);
+}
+
+if (!isHorizontal && !isTop) {
+  console.log("is vertical and bottomrand");
+
+  console.log("randomfrom4To7rand", randomFrom4To7);
+  firstCoord = randomCoordByNumber;
+  secondCoord = randomLetter + (randomFrom4To7 + 1);
+  thirdCoord = randomLetter + (randomFrom4To7 + 2);
+  fourthCoord = randomLetter + (randomFrom4To7 + 3);
+  fourCellShip = [firstCoord, secondCoord, thirdCoord, fourthCoord];
+  console.log("four celled auto placed ship rand", fourCellShip);
+}
+
+if (isHorizontal && isRight) {
+  console.log("ishorizontal and is rightrand");
+
+  console.log("randomfromDtoG", randomfromDtoG);
+  firstCoord = randomCoordByLetter;
+  secondCoord =
+    letters[letters.indexOf(randomfromDtoG.toUpperCase()) + 1] + randomNumber;
+  thirdCoord =
+    letters[letters.indexOf(randomfromDtoG.toUpperCase()) + 2] + randomNumber;
+  fourthCoord =
+    letters[letters.indexOf(randomfromDtoG.toUpperCase()) + 3] + randomNumber;
+  fourCellShip = [firstCoord, secondCoord, thirdCoord, fourthCoord];
+  console.log("four celled auto placed ship rand", fourCellShip);
+}
+
+if (isHorizontal && !isRight) {
+  console.log("ishorizontal and is leftrand");
+
+  console.log("randomfromDtoG", randomfromDtoG);
+  firstCoord = randomCoordByLetter;
+  secondCoord =
+    letters[letters.indexOf(randomfromDtoG.toUpperCase()) - 1] + randomNumber;
+  thirdCoord =
+    letters[letters.indexOf(randomfromDtoG.toUpperCase()) - 2] + randomNumber;
+  fourthCoord =
+    letters[letters.indexOf(randomfromDtoG.toUpperCase()) - 3] + randomNumber;
+  fourCellShip = [firstCoord, secondCoord, thirdCoord, fourthCoord];
+  console.log("four celled auto placed ship rand", fourCellShip);
+}
+
+// }
+// Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
+let createEnemyShips = [
+  [fourCellShip, ["J4", "I4", "h4", "e4"].length],
+  // [["d4", "e4", "f4", "g4"], ["J4", "I4", "h4", "e4"].length],
+
+  // [["a1"], ["d10"].length],
+  // [["c1"], ["d10"].length],
+  // [["e1"], ["d10"].length],
+  // [["a3"], ["d10"].length],
+
+  // [["i5", "j5"], ["e6", "e7"].length],
+  // [["i7", "j7"], ["e6", "e7"].length],
+  // [["h2", "i2", "j2"], ["J4", "I4", "h4"].length],
+  // [["e9", "f9"], ["e6", "e7"].length],
+  // [["b5", "b6", "b7"], ["J4", "I4", "h4"].length],
 ];
 
 let mySideMyShips = [];

@@ -22,7 +22,7 @@ import {
   submitUsername2,
   username1Input,
   username2Input,
-} from "./globalVars";
+} from "./globalVarsPause";
 
 import showEndResults from "./showEndResults";
 

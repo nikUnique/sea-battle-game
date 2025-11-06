@@ -22,7 +22,7 @@ import {
   changeUsernameBtn2,
   errorMessage1,
   errorMessage2,
-} from "./globalVars";
+} from "./globalVarsPause";
 
 import {
   allowForbidClick,
@@ -36,7 +36,7 @@ import {
 // Shows the current state of the game
 const playingCheck = { playing: false };
 
-// Helpes to define whether both sides built their fleets and ready to start or not
+// Helps to define whether both sides built their fleets and ready to start or not
 let bothFleetsReady = [];
 
 // Helpes to define whether both sides agree to start a new game or not
@@ -316,7 +316,7 @@ export const gameStartControl = function (fleet, fleetParts) {
         });
       fleet.querySelectorAll(".ship").forEach((ship) => {
         ship.textContent = "";
-        ship.style.backgroundColor = "#e6fcf5";
+        // ship.style.backgroundColor = "#e6fcf5";
       });
     }
 

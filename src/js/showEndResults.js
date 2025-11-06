@@ -11,7 +11,7 @@ import {
   player1,
   player2,
   // overlay,
-} from "./globalVars";
+} from "./globalVarsPause";
 
 import { playingCheck } from "./gameStartControl";
 
