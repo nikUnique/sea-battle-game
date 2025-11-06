@@ -6,6 +6,7 @@ const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
 const seaContainers = document.querySelectorAll(".sea-container");
 const seas = document.querySelectorAll(".sea");
 const letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+const lowerLetters = letters.map((letter) => letter.toLowerCase());
 const seaFleet = Array.from({ length: 10 }, (_, i) => i + 1);
 const startGameBtn1 = document.querySelector(".fleet-1");
 const startGameBtn2 = document.querySelector(".fleet-2");
@@ -32,18 +33,12 @@ let createMyShips = [
   [["c9", "d9", "e9", "f9"], ["J4", "I4", "h4", "e4"].length],
 ];
 
-let fourCellShip, fourCellShipWithSurroundings;
-let threeCellShipOne, threeCellShipOneWithSurroundings;
-let threeCellShipTwo, threeCellShipTwoWithSurroundings;
-let twoCellShipOne, twoCellShipOneWithSurroundings;
-let twoCellShipTwo, twoCellShipTwoWithSurroundings;
-let twoCellShipThree, twoCellShipThreeWithSurroundings;
+let readyEnemyShips = [];
 
 const randomNumber = Math.floor(Math.random() * 10) + 1;
 const randomNumberForLetter = Math.floor(Math.random() * 10);
-console.log("randomNumberForLetter", randomNumberForLetter);
 
-const randomLetter = letters[randomNumberForLetter];
+const randomLetter = lowerLetters[randomNumberForLetter];
 
 function randomNumberFromRange(min, max) {
   // min ≤ result ≤ max  (both inclusive)
@@ -54,91 +49,182 @@ function randomLetterFun(min, max) {
   const start = min.charCodeAt(0);
   const end = max.charCodeAt(0);
   const code = Math.floor(Math.random() * (end - start + 1)) + start;
-  return String.fromCharCode(code);
+  return String.fromCharCode(code).toLowerCase();
 }
 
-// Use it:
+function createShip({ randomRange, randomLetterRangeProp, size }) {
+  const randomFromRange = randomNumberFromRange(randomRange[0], randomRange[1]);
+  const randomLetterRange = randomLetterFun(
+    randomLetterRangeProp[0],
+    randomLetterRangeProp[1]
+  );
 
-const randomFrom4To7 = randomNumberFromRange(4, 7);
-const randomfromDtoG = randomLetterFun("d", "g");
-const randomCoordByNumber = randomLetter + randomFrom4To7;
-const randomCoordByLetter = randomfromDtoG + randomNumber;
-console.log("randomCoordByNumber", randomCoordByNumber);
-console.log("randomCoordByLetter", randomCoordByLetter);
+  // Is horizontal or not
+  const isHorizontal = Math.random() < 0.5;
+  const isTop = Math.random() < 0.5;
+  const isRight = Math.random() < 0.5;
 
-// Example:
-// → 4, 5, 6, or 7
+  // console.log("isHorizontalrand", isHorizontal);
 
-// Is horizontal or not
-const isHorizontal = Math.random() < 0.5;
-const isTop = Math.random() < 0.5;
-const isRight = Math.random() < 0.5;
+  const randomCoordByNumber = randomLetter + randomFromRange;
+  const randomCoordByLetter = randomLetterRange + randomNumber;
+  console.log("randomCoordByNumber", randomCoordByNumber);
+  console.log("randomCoordByLetter", randomCoordByLetter);
 
-console.log("isHorizontalrand", isHorizontal);
+  let firstCoord, secondCoord, thirdCoord, fourthCoord;
+  if (!isHorizontal && isTop) {
+    firstCoord = randomCoordByNumber;
 
-let firstCoord, secondCoord, thirdCoord, fourthCoord;
-if (!isHorizontal && isTop) {
-  console.log("is vertical and toprand");
+    secondCoord = randomLetter + (randomFromRange - 1);
 
-  console.log("randomfrom4To7rand", randomFrom4To7);
-  firstCoord = randomCoordByNumber;
-  secondCoord = randomLetter + (randomFrom4To7 - 1);
-  thirdCoord = randomLetter + (randomFrom4To7 - 2);
-  fourthCoord = randomLetter + (randomFrom4To7 - 3);
+    thirdCoord = randomLetter + (randomFromRange - 2);
 
-  fourCellShip = [firstCoord, secondCoord, thirdCoord, fourthCoord];
-  console.log("four celled auto placed ship rand", fourCellShip);
+    fourthCoord = randomLetter + (randomFromRange - 3);
+  }
+
+  if (!isHorizontal && !isTop) {
+    firstCoord = randomCoordByNumber;
+    secondCoord = randomLetter + (randomFromRange + 1);
+    thirdCoord = randomLetter + (randomFromRange + 2);
+    fourthCoord = randomLetter + (randomFromRange + 3);
+  }
+
+  if (isHorizontal && isRight) {
+    firstCoord = randomCoordByLetter;
+    secondCoord =
+      letters[letters.indexOf(randomLetterRange.toUpperCase()) + 1] +
+      randomNumber;
+    thirdCoord =
+      letters[letters.indexOf(randomLetterRange.toUpperCase()) + 2] +
+      randomNumber;
+    fourthCoord =
+      letters[letters.indexOf(randomLetterRange.toUpperCase()) + 3] +
+      randomNumber;
+  }
+
+  if (isHorizontal && !isRight) {
+    firstCoord = randomCoordByLetter;
+    secondCoord =
+      letters[letters.indexOf(randomLetterRange.toUpperCase()) - 1] +
+      randomNumber;
+    thirdCoord =
+      letters[letters.indexOf(randomLetterRange.toUpperCase()) - 2] +
+      randomNumber;
+    fourthCoord =
+      letters[letters.indexOf(randomLetterRange.toUpperCase()) - 3] +
+      randomNumber;
+  }
+
+  if (size === 1) {
+    const oneCellShipWithSurroundings = [
+      firstCoord,
+
+      // Top and Bottom
+      firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
+      firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
+
+      // Right top and bottom
+      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
+        (Number(firstCoord.slice(1)) - 1),
+      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
+        (Number(firstCoord.slice(1)) + 1),
+
+      // Left and Right
+      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
+        Number(firstCoord.slice(1)),
+      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
+        Number(firstCoord.slice(1)),
+
+      // Left top and bottom
+      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
+        (Number(firstCoord.slice(1)) - 1),
+      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
+        (Number(firstCoord.slice(1)) + 1),
+    ];
+
+    const checkFleetBusiness = readyEnemyShips.flat();
+
+    const isShipDangerous = oneCellShipWithSurroundings.filter((coord) =>
+      checkFleetBusiness.find((point) => point === coord)
+    ).length;
+
+    if (isShipDangerous) {
+      const [oneCellShipOne, oneCellShipOneWithSurroundings] = createShip?.({
+        randomRange,
+        randomLetterRangeProp,
+        size,
+      });
+      return [oneCellShipOne, oneCellShipOneWithSurroundings];
+    }
+
+    readyEnemyShips = [...readyEnemyShips, firstCoord];
+
+    return [[firstCoord], oneCellShipWithSurroundings];
+  }
+  if (size === 2) {
+    readyEnemyShips = [...readyEnemyShips, [firstCoord, secondCoord]];
+    return [[firstCoord, secondCoord]];
+  }
+  if (size === 3) {
+    readyEnemyShips = [
+      ...readyEnemyShips,
+      [firstCoord, secondCoord, thirdCoord],
+    ];
+    return [[firstCoord, secondCoord, thirdCoord]];
+  }
+
+  readyEnemyShips = [
+    ...readyEnemyShips,
+    [firstCoord, secondCoord, thirdCoord, fourthCoord],
+  ];
+  return [[firstCoord, secondCoord, thirdCoord, fourthCoord]];
 }
 
-if (!isHorizontal && !isTop) {
-  console.log("is vertical and bottomrand");
+// const [fourCellShip] = createShip({
+//   randomRange: [4, 7],
+//   randomLetterRangeProp: ["d", "g"],
+//   size: 4,
+// });
 
-  console.log("randomfrom4To7rand", randomFrom4To7);
-  firstCoord = randomCoordByNumber;
-  secondCoord = randomLetter + (randomFrom4To7 + 1);
-  thirdCoord = randomLetter + (randomFrom4To7 + 2);
-  fourthCoord = randomLetter + (randomFrom4To7 + 3);
-  fourCellShip = [firstCoord, secondCoord, thirdCoord, fourthCoord];
-  console.log("four celled auto placed ship rand", fourCellShip);
-}
+// const [threeCellShipOne] = createShip({
+//   randomRange: [3, 8],
+//   randomLetterRangeProp: ["c", "h"],
+//   size: 3,
+// });
 
-if (isHorizontal && isRight) {
-  console.log("ishorizontal and is rightrand");
-
-  console.log("randomfromDtoG", randomfromDtoG);
-  firstCoord = randomCoordByLetter;
-  secondCoord =
-    letters[letters.indexOf(randomfromDtoG.toUpperCase()) + 1] + randomNumber;
-  thirdCoord =
-    letters[letters.indexOf(randomfromDtoG.toUpperCase()) + 2] + randomNumber;
-  fourthCoord =
-    letters[letters.indexOf(randomfromDtoG.toUpperCase()) + 3] + randomNumber;
-  fourCellShip = [firstCoord, secondCoord, thirdCoord, fourthCoord];
-  console.log("four celled auto placed ship rand", fourCellShip);
-}
-
-if (isHorizontal && !isRight) {
-  console.log("ishorizontal and is leftrand");
-
-  console.log("randomfromDtoG", randomfromDtoG);
-  firstCoord = randomCoordByLetter;
-  secondCoord =
-    letters[letters.indexOf(randomfromDtoG.toUpperCase()) - 1] + randomNumber;
-  thirdCoord =
-    letters[letters.indexOf(randomfromDtoG.toUpperCase()) - 2] + randomNumber;
-  fourthCoord =
-    letters[letters.indexOf(randomfromDtoG.toUpperCase()) - 3] + randomNumber;
-  fourCellShip = [firstCoord, secondCoord, thirdCoord, fourthCoord];
-  console.log("four celled auto placed ship rand", fourCellShip);
-}
+const [oneCellShipOne, oneCellShipOneWithSurroundings] = createShip?.({
+  randomRange: [1, 10],
+  randomLetterRangeProp: ["a", "j"],
+  size: 1,
+});
+const [oneCellShipTwo] = createShip?.({
+  randomRange: [1, 10],
+  randomLetterRangeProp: ["a", "j"],
+  size: 1,
+});
+const [oneCellShipThree] = createShip?.({
+  randomRange: [1, 10],
+  randomLetterRangeProp: ["a", "j"],
+  size: 1,
+});
+const [oneCellShipFour] = createShip?.({
+  randomRange: [1, 10],
+  randomLetterRangeProp: ["a", "j"],
+  size: 1,
+});
 
 // }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
 let createEnemyShips = [
-  [fourCellShip, ["J4", "I4", "h4", "e4"].length],
+  // [fourCellShip, ["J4", "I4", "h4", "e4"].length],
   // [["d4", "e4", "f4", "g4"], ["J4", "I4", "h4", "e4"].length],
+  // [threeCellShipOne, threeCellShipOne.length],
+  // [["b5", "b6", "b7"], ["J4", "I4", "h4"].length],
 
-  // [["a1"], ["d10"].length],
+  [oneCellShipOne, ["d10"].length],
+  [oneCellShipTwo, ["d10"].length],
+  [oneCellShipThree, ["d10"].length],
+  [oneCellShipFour, ["d10"].length],
   // [["c1"], ["d10"].length],
   // [["e1"], ["d10"].length],
   // [["a3"], ["d10"].length],
@@ -147,7 +233,6 @@ let createEnemyShips = [
   // [["i7", "j7"], ["e6", "e7"].length],
   // [["h2", "i2", "j2"], ["J4", "I4", "h4"].length],
   // [["e9", "f9"], ["e6", "e7"].length],
-  // [["b5", "b6", "b7"], ["J4", "I4", "h4"].length],
 ];
 
 let mySideMyShips = [];

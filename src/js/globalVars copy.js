@@ -39,6 +39,32 @@ let twoCellShipOne, twoCellShipOneWithSurroundings;
 let twoCellShipTwo, twoCellShipTwoWithSurroundings;
 let twoCellShipThree, twoCellShipThreeWithSurroundings;
 
+fourCellShipWithSurroundings = [
+  randomCoord,
+  letters[randomNumberForLetter - 1] + Number(fourCellShip[0].slice(1)),
+  letters[randomNumberForLetter + 1] + Number(fourCellShip[0].slice(1)),
+
+  secondCoord,
+  letters[randomNumberForLetter - 1] + Number(secondCoord.slice(1)),
+  letters[randomNumberForLetter + 1] + Number(secondCoord.slice(1)),
+
+  thirdCoord,
+  letters[randomNumberForLetter - 1] + Number(thirdCoord.slice(1)),
+  letters[randomNumberForLetter + 1] + Number(thirdCoord.slice(1)),
+
+  fourthCoord,
+  letters[randomNumberForLetter - 1] + Number(fourthCoord.slice(1)),
+  letters[randomNumberForLetter + 1] + Number(fourthCoord.slice(1)),
+
+  letters[randomNumberForLetter] + (+randomNumber + 1),
+  letters[randomNumberForLetter - 1] + (randomNumber + 1),
+  letters[randomNumberForLetter + 1] + (randomNumber + 1),
+
+  letters[randomNumberForLetter] + (randomNumber + 4),
+  letters[randomNumberForLetter - 1] + (randomNumber + 4),
+  letters[randomNumberForLetter + 1] + (randomNumber + 4),
+];
+
 // function createFourCellShip() {
 //   const randomNumber = Math.floor(Math.random() * 10) + 1;
 //   const randomNumberForLetter = Math.floor(Math.random() * 10);
