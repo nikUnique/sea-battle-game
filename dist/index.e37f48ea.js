@@ -854,7 +854,31 @@ function randomLetterFun(min, max) {
     const code = Math.floor(Math.random() * (end - start + 1)) + start;
     return String.fromCharCode(code).toLowerCase();
 }
+function checkShipSafety(fullShipWithSurroundings, checkFleetBusiness) {
+    console.log("fullShipWithSurroundingsrand", fullShipWithSurroundings, fullShipWithSurroundings.filter((coord)=>typeof coord === "string").filter((coord)=>checkFleetBusiness.find((point)=>point?.toLowerCase() === coord?.toLowerCase())).length);
+    return fullShipWithSurroundings.filter((coord)=>typeof coord === "string").filter((coord)=>checkFleetBusiness.find((point)=>point === coord)).length;
+}
+function remakeShip(randomRange, randomLetterRangeProp, size) {
+    const [ship, shipWithSurroundings] = createShip?.({
+        randomRange,
+        randomLetterRangeProp,
+        size
+    });
+    // console.log(
+    //   "remakeShipRand",
+    //   randomRange,
+    //   randomLetterRangeProp,
+    //   size,
+    //   ship,
+    //   shipWithSurroundings
+    // );
+    return [
+        ship,
+        shipWithSurroundings
+    ];
+}
 function createShip({ randomRange, randomLetterRangeProp, size }) {
+    const checkFleetBusiness = readyEnemyShips.flatMap((coord)=>coord.toLowerCase());
     const randomFromRange = randomNumberFromRange(randomRange[0], randomRange[1]);
     const randomLetterRange = randomLetterFun(randomLetterRangeProp[0], randomLetterRangeProp[1]);
     // Is horizontal or not
@@ -864,8 +888,8 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
     // console.log("isHorizontalrand", isHorizontal);
     const randomCoordByNumber = randomLetter + randomFromRange;
     const randomCoordByLetter = randomLetterRange + randomNumber;
-    console.log("randomCoordByNumber", randomCoordByNumber);
-    console.log("randomCoordByLetter", randomCoordByLetter);
+    // console.log("randomCoordByNumber", randomCoordByNumber);
+    // console.log("randomCoordByLetter", randomCoordByLetter);
     let firstCoord, secondCoord, thirdCoord, fourthCoord;
     if (!isHorizontal && isTop) {
         firstCoord = randomCoordByNumber;
@@ -881,15 +905,15 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
     }
     if (isHorizontal && isRight) {
         firstCoord = randomCoordByLetter;
-        secondCoord = letters[letters.indexOf(randomLetterRange.toUpperCase()) + 1] + randomNumber;
-        thirdCoord = letters[letters.indexOf(randomLetterRange.toUpperCase()) + 2] + randomNumber;
-        fourthCoord = letters[letters.indexOf(randomLetterRange.toUpperCase()) + 3] + randomNumber;
+        secondCoord = lowerLetters[lowerLetters.indexOf(randomLetterRange) + 1] + randomNumber;
+        thirdCoord = lowerLetters[lowerLetters.indexOf(randomLetterRange) + 2] + randomNumber;
+        fourthCoord = lowerLetters[lowerLetters.indexOf(randomLetterRange) + 3] + randomNumber;
     }
     if (isHorizontal && !isRight) {
         firstCoord = randomCoordByLetter;
-        secondCoord = letters[letters.indexOf(randomLetterRange.toUpperCase()) - 1] + randomNumber;
-        thirdCoord = letters[letters.indexOf(randomLetterRange.toUpperCase()) - 2] + randomNumber;
-        fourthCoord = letters[letters.indexOf(randomLetterRange.toUpperCase()) - 3] + randomNumber;
+        secondCoord = lowerLetters[lowerLetters.indexOf(randomLetterRange) - 1] + randomNumber;
+        thirdCoord = lowerLetters[lowerLetters.indexOf(randomLetterRange) - 2] + randomNumber;
+        fourthCoord = lowerLetters[lowerLetters.indexOf(randomLetterRange) - 3] + randomNumber;
     }
     if (size === 1) {
         const oneCellShipWithSurroundings = [
@@ -907,19 +931,8 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
             lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) - 1),
             lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) + 1)
         ];
-        const checkFleetBusiness = readyEnemyShips.flat();
-        const isShipDangerous = oneCellShipWithSurroundings.filter((coord)=>checkFleetBusiness.find((point)=>point === coord)).length;
-        if (isShipDangerous) {
-            const [oneCellShipOne, oneCellShipOneWithSurroundings] = createShip?.({
-                randomRange,
-                randomLetterRangeProp,
-                size
-            });
-            return [
-                oneCellShipOne,
-                oneCellShipOneWithSurroundings
-            ];
-        }
+        const isShipDangerous = checkShipSafety(oneCellShipWithSurroundings, checkFleetBusiness);
+        if (isShipDangerous) return remakeShip(randomRange, randomLetterRangeProp, size);
         readyEnemyShips = [
             ...readyEnemyShips,
             firstCoord
@@ -932,6 +945,112 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
         ];
     }
     if (size === 2) {
+        let twoCellShipWithSurroundings;
+        if (isHorizontal && isRight) {
+            console.log("Horizontal and Rightrand", firstCoord);
+            twoCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                // First coord
+                // Top and Bottom
+                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
+                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
+                // Left
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + Number(firstCoord.slice(1)),
+                // Left top and bottom
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) - 1),
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) + 1),
+                // Second coord
+                // Top and Bottom
+                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
+                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
+                // Right
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + Number(secondCoord.slice(1)),
+                // Right top and bottom
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) - 1),
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) + 1)
+            ];
+        }
+        if (isHorizontal && !isRight) {
+            console.log("Horizontal and Leftrand", firstCoord);
+            twoCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                // First coord
+                // Top and Bottom
+                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
+                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
+                // Right
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + Number(firstCoord.slice(1)),
+                // Right top and bottom
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) - 1),
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) + 1),
+                // Second coord
+                // Top and Bottom
+                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
+                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
+                // Left
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + Number(secondCoord.slice(1)),
+                // Left top and bottom
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + (Number(secondCoord.slice(1)) - 1),
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + (Number(secondCoord.slice(1)) + 1)
+            ];
+            console.log("superLeftrand", twoCellShipWithSurroundings);
+        }
+        if (!isHorizontal && isTop) {
+            console.log("Vertical and Toprand", firstCoord);
+            twoCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                // First coord
+                // Left and Right
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + Number(firstCoord.slice(1)),
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + Number(firstCoord.slice(1)),
+                // Bottom
+                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
+                // Bottom left and Bottom right
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) + 1),
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) + 1),
+                // Second coord
+                // Left and Right
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + Number(secondCoord.slice(1)),
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + Number(secondCoord.slice(1)),
+                // Top
+                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
+                // Top left and right
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + (Number(secondCoord.slice(1)) - 1),
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) - 1)
+            ];
+        }
+        if (!isHorizontal && !isTop) {
+            console.log("Vertical and Bottomrand", firstCoord);
+            twoCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                // First coord
+                // Left and Right
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + Number(firstCoord.slice(1)),
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + Number(firstCoord.slice(1)),
+                // Top
+                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
+                // Top left and right
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) - 1),
+                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) - 1),
+                // Second coord
+                // Left and Right
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + Number(secondCoord.slice(1)),
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + Number(secondCoord.slice(1)),
+                // Bottom
+                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
+                // Bottom left and Bottom right
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + (Number(secondCoord.slice(1)) + 1),
+                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) + 1)
+            ];
+        }
+        const isShipDangerous = checkShipSafety(twoCellShipWithSurroundings, checkFleetBusiness);
+        if (isShipDangerous) return remakeShip(randomRange, randomLetterRangeProp, size);
+        console.log("checkFleetForBusinessrand", checkFleetBusiness);
+        console.log(firstCoord, secondCoord, "randcoords");
         readyEnemyShips = [
             ...readyEnemyShips,
             [
@@ -991,7 +1110,7 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
 //   randomLetterRangeProp: ["c", "h"],
 //   size: 3,
 // });
-const [oneCellShipOne, oneCellShipOneWithSurroundings] = createShip?.({
+const [oneCellShipOne] = createShip?.({
     randomRange: [
         1,
         10
@@ -1035,6 +1154,17 @@ const [oneCellShipFour] = createShip?.({
     ],
     size: 1
 });
+const [twoCellShipOne] = createShip?.({
+    randomRange: [
+        2,
+        9
+    ],
+    randomLetterRangeProp: [
+        "b",
+        "i"
+    ],
+    size: 2
+});
 // }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
 let createEnemyShips = [
@@ -1057,6 +1187,10 @@ let createEnemyShips = [
     [
         oneCellShipFour,
         1
+    ],
+    [
+        twoCellShipOne,
+        twoCellShipOne.length
     ]
 ];
 let mySideMyShips = [];
