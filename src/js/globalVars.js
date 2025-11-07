@@ -1,3 +1,9 @@
+import {
+  randomNumberFromRange,
+  randomLetterFun,
+  checkShipSafety,
+  remakeShip,
+} from "./shipMakeHelpers";
 // FLEET ENVIRONMENT
 const mySideMyFleet = document.querySelector(".my-side--my-fleet");
 const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
@@ -34,65 +40,20 @@ let createMyShips = [
 ];
 
 let readyEnemyShips = [];
-
-const randomNumber = Math.floor(Math.random() * 10) + 1;
-const randomNumberForLetter = Math.floor(Math.random() * 10);
-
-const randomLetter = lowerLetters[randomNumberForLetter];
-
-function randomNumberFromRange(min, max) {
-  // min ≤ result ≤ max  (both inclusive)
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function randomLetterFun(min, max) {
-  const start = min.charCodeAt(0);
-  const end = max.charCodeAt(0);
-  const code = Math.floor(Math.random() * (end - start + 1)) + start;
-  return String.fromCharCode(code).toLowerCase();
-}
-
-function checkShipSafety(fullShipWithSurroundings, checkFleetBusiness) {
-  console.log(
-    "fullShipWithSurroundingsrand",
-    fullShipWithSurroundings,
-    fullShipWithSurroundings
-      .filter((coord) => typeof coord === "string")
-      .filter((coord) =>
-        checkFleetBusiness.find(
-          (point) => point?.toLowerCase() === coord?.toLowerCase()
-        )
-      ).length
-  );
-
-  return fullShipWithSurroundings
-    .filter((coord) => typeof coord === "string")
-    .filter((coord) => checkFleetBusiness.find((point) => point === coord))
-    .length;
-}
-
-function remakeShip(randomRange, randomLetterRangeProp, size) {
-  const [ship, shipWithSurroundings] = createShip?.({
-    randomRange,
-    randomLetterRangeProp,
-    size,
-  });
-
-  // console.log(
-  //   "remakeShipRand",
-  //   randomRange,
-  //   randomLetterRangeProp,
-  //   size,
-  //   ship,
-  //   shipWithSurroundings
-  // );
-  return [ship, shipWithSurroundings];
-}
+let createShipCount = 0;
 
 function createShip({ randomRange, randomLetterRangeProp, size }) {
-  const checkFleetBusiness = readyEnemyShips.flatMap((coord) =>
-    coord.toLowerCase()
+  createShipCount++;
+  console.log("createShipCountrand", createShipCount);
+
+  const checkFleetBusiness = readyEnemyShips?.flatMap((coord) =>
+    coord?.toLowerCase()
   );
+
+  const randomNumber = Math.floor(Math.random() * 10) + 1;
+  const randomNumberForLetter = Math.floor(Math.random() * 10);
+
+  const randomLetter = lowerLetters[randomNumberForLetter];
   const randomFromRange = randomNumberFromRange(randomRange[0], randomRange[1]);
   const randomLetterRange = randomLetterFun(
     randomLetterRangeProp[0],
@@ -104,21 +65,21 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
   const isTop = Math.random() < 0.5;
   const isRight = Math.random() < 0.5;
 
-  // console.log("isHorizontalrand", isHorizontal);
-
   const randomCoordByNumber = randomLetter + randomFromRange;
   const randomCoordByLetter = randomLetterRange + randomNumber;
-  // console.log("randomCoordByNumber", randomCoordByNumber);
-  // console.log("randomCoordByLetter", randomCoordByLetter);
+
+  if (isHorizontal) {
+    console.log("randomCoordbyLetter", randomCoordByLetter);
+  }
+  if (!isHorizontal) {
+    console.log("randomCoordByNumber", randomCoordByNumber);
+  }
 
   let firstCoord, secondCoord, thirdCoord, fourthCoord;
   if (!isHorizontal && isTop) {
     firstCoord = randomCoordByNumber;
-
     secondCoord = randomLetter + (randomFromRange - 1);
-
     thirdCoord = randomLetter + (randomFromRange - 2);
-
     fourthCoord = randomLetter + (randomFromRange - 3);
   }
 
@@ -182,10 +143,11 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
     );
 
     if (isShipDangerous) {
-      return remakeShip(randomRange, randomLetterRangeProp, size);
+      return remakeShip(randomRange, randomLetterRangeProp, size, createShip);
     }
 
     readyEnemyShips = [...readyEnemyShips, firstCoord];
+    console.log("readyEnemeyShipsrand", readyEnemyShips);
 
     return [[firstCoord], oneCellShipWithSurroundings];
   }
@@ -352,20 +314,20 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
       ];
     }
 
+    console.log("checkFleetForBusinessrand", checkFleetBusiness);
     const isShipDangerous = checkShipSafety(
       twoCellShipWithSurroundings,
       checkFleetBusiness
     );
 
     if (isShipDangerous) {
-      return remakeShip(randomRange, randomLetterRangeProp, size);
+      return remakeShip(randomRange, randomLetterRangeProp, size, createShip);
     }
 
-    console.log("checkFleetForBusinessrand", checkFleetBusiness);
-
+    readyEnemyShips = [...readyEnemyShips, firstCoord, secondCoord];
     console.log(firstCoord, secondCoord, "randcoords");
+    console.log("readyEnemeyShipsrand", readyEnemyShips);
 
-    readyEnemyShips = [...readyEnemyShips, [firstCoord, secondCoord]];
     return [[firstCoord, secondCoord]];
   }
 
@@ -396,6 +358,24 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
 //   size: 3,
 // });
 
+const [twoCellShipOne] = createShip?.({
+  randomRange: [2, 9],
+  randomLetterRangeProp: ["b", "i"],
+  size: 2,
+});
+
+const [twoCellShipTwo] = createShip?.({
+  randomRange: [2, 9],
+  randomLetterRangeProp: ["b", "i"],
+  size: 2,
+});
+
+const [twoCellShipThree] = createShip?.({
+  randomRange: [2, 9],
+  randomLetterRangeProp: ["b", "i"],
+  size: 2,
+});
+
 const [oneCellShipOne] = createShip?.({
   randomRange: [1, 10],
   randomLetterRangeProp: ["a", "j"],
@@ -417,11 +397,13 @@ const [oneCellShipFour] = createShip?.({
   size: 1,
 });
 
-const [twoCellShipOne] = createShip?.({
-  randomRange: [2, 9],
-  randomLetterRangeProp: ["b", "i"],
-  size: 2,
-});
+// const [twoCellShipThree] = createShip?.({
+//   randomRange: [2, 9],
+//   randomLetterRangeProp: ["b", "i"],
+//   size: 2,
+// });
+
+createShipCount = 0;
 
 // }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
@@ -437,6 +419,8 @@ let createEnemyShips = [
   [oneCellShipFour, ["d10"].length],
 
   [twoCellShipOne, twoCellShipOne.length],
+  [twoCellShipTwo, twoCellShipTwo.length],
+  [twoCellShipThree, twoCellShipThree.length],
 
   // [["c1"], ["d10"].length],
   // [["e1"], ["d10"].length],

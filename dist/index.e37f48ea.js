@@ -688,7 +688,6 @@ var _startNewGame = require("./startNewGame");
  // All code is refactored and right now I am writing comments for my code
 
 },{"./globalVars":"gb5d6","./makeShips":"8mnMH","./fleetEnvironment":"iXTJE","./placeShipsManually":"3iktl","./gameStartControl":"fXv0K","./gameControl":"dx0uc","./shootingLogic":"6WpIw","./startNewGame":"hGRP7","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gb5d6":[function(require,module,exports) {
-// FLEET ENVIRONMENT
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "bothSideShips", ()=>bothSideShips);
@@ -735,6 +734,8 @@ parcelHelpers.export(exports, "resultsMessage1", ()=>resultsMessage1);
 parcelHelpers.export(exports, "resultsMessage2", ()=>resultsMessage2);
 parcelHelpers.export(exports, "player1", ()=>player1);
 parcelHelpers.export(exports, "player2", ()=>player2);
+var _shipMakeHelpers = require("./shipMakeHelpers");
+// FLEET ENVIRONMENT
 const mySideMyFleet = document.querySelector(".my-side--my-fleet");
 const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
 const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
@@ -841,55 +842,24 @@ let createMyShips = [
     ]
 ];
 let readyEnemyShips = [];
-const randomNumber = Math.floor(Math.random() * 10) + 1;
-const randomNumberForLetter = Math.floor(Math.random() * 10);
-const randomLetter = lowerLetters[randomNumberForLetter];
-function randomNumberFromRange(min, max) {
-    // min ≤ result ≤ max  (both inclusive)
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function randomLetterFun(min, max) {
-    const start = min.charCodeAt(0);
-    const end = max.charCodeAt(0);
-    const code = Math.floor(Math.random() * (end - start + 1)) + start;
-    return String.fromCharCode(code).toLowerCase();
-}
-function checkShipSafety(fullShipWithSurroundings, checkFleetBusiness) {
-    console.log("fullShipWithSurroundingsrand", fullShipWithSurroundings, fullShipWithSurroundings.filter((coord)=>typeof coord === "string").filter((coord)=>checkFleetBusiness.find((point)=>point?.toLowerCase() === coord?.toLowerCase())).length);
-    return fullShipWithSurroundings.filter((coord)=>typeof coord === "string").filter((coord)=>checkFleetBusiness.find((point)=>point === coord)).length;
-}
-function remakeShip(randomRange, randomLetterRangeProp, size) {
-    const [ship, shipWithSurroundings] = createShip?.({
-        randomRange,
-        randomLetterRangeProp,
-        size
-    });
-    // console.log(
-    //   "remakeShipRand",
-    //   randomRange,
-    //   randomLetterRangeProp,
-    //   size,
-    //   ship,
-    //   shipWithSurroundings
-    // );
-    return [
-        ship,
-        shipWithSurroundings
-    ];
-}
+let createShipCount = 0;
 function createShip({ randomRange, randomLetterRangeProp, size }) {
-    const checkFleetBusiness = readyEnemyShips.flatMap((coord)=>coord.toLowerCase());
-    const randomFromRange = randomNumberFromRange(randomRange[0], randomRange[1]);
-    const randomLetterRange = randomLetterFun(randomLetterRangeProp[0], randomLetterRangeProp[1]);
+    createShipCount++;
+    console.log("createShipCountrand", createShipCount);
+    const checkFleetBusiness = readyEnemyShips?.flatMap((coord)=>coord?.toLowerCase());
+    const randomNumber = Math.floor(Math.random() * 10) + 1;
+    const randomNumberForLetter = Math.floor(Math.random() * 10);
+    const randomLetter = lowerLetters[randomNumberForLetter];
+    const randomFromRange = (0, _shipMakeHelpers.randomNumberFromRange)(randomRange[0], randomRange[1]);
+    const randomLetterRange = (0, _shipMakeHelpers.randomLetterFun)(randomLetterRangeProp[0], randomLetterRangeProp[1]);
     // Is horizontal or not
     const isHorizontal = Math.random() < 0.5;
     const isTop = Math.random() < 0.5;
     const isRight = Math.random() < 0.5;
-    // console.log("isHorizontalrand", isHorizontal);
     const randomCoordByNumber = randomLetter + randomFromRange;
     const randomCoordByLetter = randomLetterRange + randomNumber;
-    // console.log("randomCoordByNumber", randomCoordByNumber);
-    // console.log("randomCoordByLetter", randomCoordByLetter);
+    if (isHorizontal) console.log("randomCoordbyLetter", randomCoordByLetter);
+    if (!isHorizontal) console.log("randomCoordByNumber", randomCoordByNumber);
     let firstCoord, secondCoord, thirdCoord, fourthCoord;
     if (!isHorizontal && isTop) {
         firstCoord = randomCoordByNumber;
@@ -931,12 +901,13 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
             lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) - 1),
             lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) + 1)
         ];
-        const isShipDangerous = checkShipSafety(oneCellShipWithSurroundings, checkFleetBusiness);
-        if (isShipDangerous) return remakeShip(randomRange, randomLetterRangeProp, size);
+        const isShipDangerous = (0, _shipMakeHelpers.checkShipSafety)(oneCellShipWithSurroundings, checkFleetBusiness);
+        if (isShipDangerous) return (0, _shipMakeHelpers.remakeShip)(randomRange, randomLetterRangeProp, size, createShip);
         readyEnemyShips = [
             ...readyEnemyShips,
             firstCoord
         ];
+        console.log("readyEnemeyShipsrand", readyEnemyShips);
         return [
             [
                 firstCoord
@@ -1047,17 +1018,16 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
                 lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) + 1)
             ];
         }
-        const isShipDangerous = checkShipSafety(twoCellShipWithSurroundings, checkFleetBusiness);
-        if (isShipDangerous) return remakeShip(randomRange, randomLetterRangeProp, size);
         console.log("checkFleetForBusinessrand", checkFleetBusiness);
-        console.log(firstCoord, secondCoord, "randcoords");
+        const isShipDangerous = (0, _shipMakeHelpers.checkShipSafety)(twoCellShipWithSurroundings, checkFleetBusiness);
+        if (isShipDangerous) return (0, _shipMakeHelpers.remakeShip)(randomRange, randomLetterRangeProp, size, createShip);
         readyEnemyShips = [
             ...readyEnemyShips,
-            [
-                firstCoord,
-                secondCoord
-            ]
+            firstCoord,
+            secondCoord
         ];
+        console.log(firstCoord, secondCoord, "randcoords");
+        console.log("readyEnemeyShipsrand", readyEnemyShips);
         return [
             [
                 firstCoord,
@@ -1110,6 +1080,39 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
 //   randomLetterRangeProp: ["c", "h"],
 //   size: 3,
 // });
+const [twoCellShipOne] = createShip?.({
+    randomRange: [
+        2,
+        9
+    ],
+    randomLetterRangeProp: [
+        "b",
+        "i"
+    ],
+    size: 2
+});
+const [twoCellShipTwo] = createShip?.({
+    randomRange: [
+        2,
+        9
+    ],
+    randomLetterRangeProp: [
+        "b",
+        "i"
+    ],
+    size: 2
+});
+const [twoCellShipThree] = createShip?.({
+    randomRange: [
+        2,
+        9
+    ],
+    randomLetterRangeProp: [
+        "b",
+        "i"
+    ],
+    size: 2
+});
 const [oneCellShipOne] = createShip?.({
     randomRange: [
         1,
@@ -1154,17 +1157,12 @@ const [oneCellShipFour] = createShip?.({
     ],
     size: 1
 });
-const [twoCellShipOne] = createShip?.({
-    randomRange: [
-        2,
-        9
-    ],
-    randomLetterRangeProp: [
-        "b",
-        "i"
-    ],
-    size: 2
-});
+// const [twoCellShipThree] = createShip?.({
+//   randomRange: [2, 9],
+//   randomLetterRangeProp: ["b", "i"],
+//   size: 2,
+// });
+createShipCount = 0;
 // }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
 let createEnemyShips = [
@@ -1191,6 +1189,14 @@ let createEnemyShips = [
     [
         twoCellShipOne,
         twoCellShipOne.length
+    ],
+    [
+        twoCellShipTwo,
+        twoCellShipTwo.length
+    ],
+    [
+        twoCellShipThree,
+        twoCellShipThree.length
     ]
 ];
 let mySideMyShips = [];
@@ -1222,6 +1228,39 @@ const inputUsernameLabel2 = document.querySelector(".your-name-2");
 const inputUsernameLabel1 = document.querySelector(".your-name-1");
 const submitUsername1 = document.querySelector(".submit-username--fleet-1");
 const submitUsername2 = document.querySelector(".submit-username--fleet-2");
+
+},{"./shipMakeHelpers":"2URfe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2URfe":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "randomNumberFromRange", ()=>randomNumberFromRange);
+parcelHelpers.export(exports, "randomLetterFun", ()=>randomLetterFun);
+parcelHelpers.export(exports, "checkShipSafety", ()=>checkShipSafety);
+parcelHelpers.export(exports, "remakeShip", ()=>remakeShip);
+function randomNumberFromRange(min, max) {
+    // min ≤ result ≤ max  (both inclusive)
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randomLetterFun(min, max) {
+    const start = min.charCodeAt(0);
+    const end = max.charCodeAt(0);
+    const code = Math.floor(Math.random() * (end - start + 1)) + start;
+    return String.fromCharCode(code).toLowerCase();
+}
+function checkShipSafety(fullShipWithSurroundings, checkFleetBusiness) {
+    console.log("fullShipWithSurroundingsrand", fullShipWithSurroundings, fullShipWithSurroundings.filter((coord)=>typeof coord === "string").filter((coord)=>checkFleetBusiness.find((point)=>point?.toLowerCase() === coord?.toLowerCase())).length);
+    return fullShipWithSurroundings.filter((coord)=>typeof coord === "string").filter((coord)=>checkFleetBusiness.find((point)=>point === coord)).length;
+}
+function remakeShip(randomRange, randomLetterRangeProp, size, createShip) {
+    const [ship, shipWithSurroundings] = createShip?.({
+        randomRange,
+        randomLetterRangeProp,
+        size
+    });
+    return [
+        ship,
+        shipWithSurroundings
+    ];
+}
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
