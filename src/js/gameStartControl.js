@@ -12,6 +12,7 @@ import {
   enemySideMyShips,
   mySideEnemyShips,
   bothSideShips,
+  createEnemyShips,
   newGameBtn2,
   newGameBtn1,
   startGameBtn1,
@@ -22,7 +23,7 @@ import {
   changeUsernameBtn2,
   errorMessage1,
   errorMessage2,
-} from "./globalVarsPause";
+} from "./globalVars";
 
 import {
   allowForbidClick,
@@ -115,46 +116,53 @@ export const gameStartControl = function (fleet, fleetParts) {
       ],
     ];
 
-    let createMoreShips = [
-      [[findCell("cell1")], [0].length],
-      [[findCell("cell2")], [0].length],
-      [[findCell("cell3")], [0].length],
-      [[findCell("cell7")], [0].length],
+    let enemyUpperCaseShips = createEnemyShips.map((el) => {
+      const properArray = [el[0].map((coord) => coord.toUpperCase()), el[1]];
 
-      [[findCell("cell13"), findCell("cell14")], [0, 0].length],
+      return properArray;
+    });
 
-      [[findCell("cell17"), findCell("cell18")], [0, 0].length],
+    let createMoreShips = enemyUpperCaseShips;
+    //  [
+    //   [[findCell("cell1")], [0].length],
+    //   [[findCell("cell2")], [0].length],
+    //   [[findCell("cell3")], [0].length],
+    //   [[findCell("cell7")], [0].length],
 
-      [[findCell("cell19"), findCell("cell20")], [0, 0].length],
+    //   [[findCell("cell13"), findCell("cell14")], [0, 0].length],
 
-      [
-        [findCell("cell4"), findCell("cell5"), findCell("cell6")],
-        [0, 0, 0].length,
-      ],
+    //   [[findCell("cell17"), findCell("cell18")], [0, 0].length],
 
-      [
-        [findCell("cell12"), findCell("cell15"), findCell("cell16")],
-        [0, 0, 0].length,
-      ],
+    //   [[findCell("cell19"), findCell("cell20")], [0, 0].length],
 
-      [
-        [
-          findCell("cell8"),
-          findCell("cell9"),
-          findCell("cell10"),
-          findCell("cell11"),
-        ],
+    //   [
+    //     [findCell("cell4"), findCell("cell5"), findCell("cell6")],
+    //     [0, 0, 0].length,
+    //   ],
 
-        [0, 0, 0, 0].length,
-      ],
-    ];
+    //   [
+    //     [findCell("cell12"), findCell("cell15"), findCell("cell16")],
+    //     [0, 0, 0].length,
+    //   ],
+
+    //   [
+    //     [
+    //       findCell("cell8"),
+    //       findCell("cell9"),
+    //       findCell("cell10"),
+    //       findCell("cell11"),
+    //     ],
+
+    //     [0, 0, 0, 0].length,
+    //   ],
+    // ];
 
     const createManuallyPlacedShips = function (createSource, ships) {
       // Reset previous ships
       ships.splice(0);
 
       // When fleet is built before manually placing ships, coords are sorted, but when one ship part moved to another place then ships coords may be messed up and so I sorted them again
-      const sortCoords = createSource.map((ship) => {
+      let sortCoords = createSource.map((ship) => {
         // ship contains fleet, coords, size and direction
         const sortedLeters = ship[0]
           .map((coord) => {
@@ -211,6 +219,18 @@ export const gameStartControl = function (fleet, fleetParts) {
         }
       });
 
+      // if (fleet === mySideEnemyFleet || fleet === enemySideEnemyFleet) {
+      //   sortCoords = sortCoords.map((coord) =>
+      //     coord === false ? undefined : coord
+      //   );
+      //   checkCells = [
+      //     [true, true],
+      //     [true, true],
+      //   ];
+      // }
+
+      console.log("checksells", checkCells);
+
       return sortCoords;
     };
 
@@ -243,17 +263,22 @@ export const gameStartControl = function (fleet, fleetParts) {
 
       if (
         // The function call depends on what fleet is current one and later it checks whether 4-cell ship is whole or not
+
         createManuallyPlacedShips(
           fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips,
           fleetIsEnemySideMyFleet ? enemySideMyShips : mySideEnemyShips
         ).includes(false) ||
-        checkCells.flat(2).length !== IN_BETWEEN_SHIP_PART_LENGTH
+        checkCells?.flat(2).length !== IN_BETWEEN_SHIP_PART_LENGTH
       ) {
         return resetWrongShipPlacement();
       }
     };
 
-    if (checkProperShipPlacement() === false) {
+    if (
+      checkProperShipPlacement() === false /* &&
+      fleet !== enemySideEnemyFleet &&
+      fleet !== mySideEnemyFleet */
+    ) {
       console.log("Yeah, that is wrong");
       return;
     }

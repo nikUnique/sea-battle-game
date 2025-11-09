@@ -36,6 +36,7 @@ import {
 } from "./helpers";
 
 import placeShipsManually from "./placeShipsManually";
+import createShip from "./makeShips";
 
 export const startNewGame = function (fleet) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;

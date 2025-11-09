@@ -43,3 +43,101 @@ export function remakeShip(
 
   return [ship, shipWithSurroundings];
 }
+
+export function generateSurroundingFields({
+  coord,
+  lowerLetters,
+  top,
+  bottom,
+  left,
+  right,
+  topRight,
+  topLeft,
+  bottomRight,
+  bottomLeft,
+}) {
+  let shipSurroundings = [];
+
+  if (top) {
+    shipSurroundings = [coord.slice(0, 1) + (Number(coord.slice(1)) - 1)];
+  }
+
+  if (bottom) {
+    shipSurroundings = [
+      ...shipSurroundings,
+      coord.slice(0, 1) + (Number(coord.slice(1)) + 1),
+    ];
+  }
+
+  if (left) {
+    shipSurroundings = [
+      ...shipSurroundings,
+      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+        Number(coord.slice(1)),
+      ,
+    ];
+  }
+
+  if (right) {
+    shipSurroundings = [
+      ...shipSurroundings,
+      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+        Number(coord.slice(1)),
+    ];
+  }
+
+  if (topLeft) {
+    shipSurroundings = [
+      ...shipSurroundings,
+      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+        (Number(coord.slice(1)) - 1),
+    ];
+  }
+
+  if (topRight) {
+    shipSurroundings = [
+      ...shipSurroundings,
+      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+        (Number(coord.slice(1)) - 1),
+    ];
+  }
+
+  if (bottomLeft) {
+    shipSurroundings = [
+      ...shipSurroundings,
+      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+        (Number(coord.slice(1)) + 1),
+    ];
+  }
+
+  if (bottomRight) {
+    shipSurroundings = [
+      ...shipSurroundings,
+      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+        (Number(coord.slice(1)) + 1),
+    ];
+  }
+
+  // shipSurroundings = [
+  //   // Top and Bottom
+  //   coord.slice(0, 1) + (Number(coord.slice(1)) + 1),
+  //   coord.slice(0, 1) + (Number(coord.slice(1)) - 1),
+  //   // Right top and bottom
+  //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+  //     (Number(coord.slice(1)) - 1),
+  //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+  //     (Number(coord.slice(1)) + 1),
+  //   // Left and Right
+  //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+  //     Number(coord.slice(1)),
+  //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+  //     Number(coord.slice(1)),
+  //   // Left top and bottom
+  //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+  //     (Number(coord.slice(1)) - 1),
+  //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+  //     (Number(coord.slice(1)) + 1),
+  // ];
+
+  return shipSurroundings;
+}

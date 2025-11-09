@@ -888,18 +888,18 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
     if (size === 1) {
         const oneCellShipWithSurroundings = [
             firstCoord,
-            // Top and Bottom
-            firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
-            firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
-            // Right top and bottom
-            lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) - 1),
-            lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) + 1),
-            // Left and Right
-            lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + Number(firstCoord.slice(1)),
-            lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + Number(firstCoord.slice(1)),
-            // Left top and bottom
-            lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) - 1),
-            lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) + 1)
+            ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                coord: firstCoord,
+                lowerLetters,
+                top: "top",
+                bottom: "bottom",
+                right: "right",
+                left: "left",
+                topLeft: "topLeft",
+                topRight: "topRight",
+                bottomLeft: "bottomLeft",
+                bottomRight: "bottomRight"
+            })
         ];
         const isShipDangerous = (0, _shipMakeHelpers.checkShipSafety)(oneCellShipWithSurroundings, checkFleetBusiness);
         if (isShipDangerous) return (0, _shipMakeHelpers.remakeShip)(randomRange, randomLetterRangeProp, size, createShip);
@@ -922,24 +922,24 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
             twoCellShipWithSurroundings = [
                 firstCoord,
                 secondCoord,
-                // First coord
-                // Top and Bottom
-                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
-                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
-                // Left
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + Number(firstCoord.slice(1)),
-                // Left top and bottom
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) - 1),
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) + 1),
-                // Second coord
-                // Top and Bottom
-                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
-                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
-                // Right
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + Number(secondCoord.slice(1)),
-                // Right top and bottom
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) - 1),
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) + 1)
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    left: "left",
+                    topLeft: "topLeft",
+                    bottomLeft: "bottomLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    right: "right",
+                    topRight: "topRight",
+                    bottomRight: "bottomRight"
+                })
             ];
         }
         if (isHorizontal && !isRight) {
@@ -947,24 +947,24 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
             twoCellShipWithSurroundings = [
                 firstCoord,
                 secondCoord,
-                // First coord
-                // Top and Bottom
-                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
-                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
-                // Right
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + Number(firstCoord.slice(1)),
-                // Right top and bottom
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) - 1),
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) + 1),
-                // Second coord
-                // Top and Bottom
-                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
-                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
-                // Left
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + Number(secondCoord.slice(1)),
-                // Left top and bottom
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + (Number(secondCoord.slice(1)) - 1),
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + (Number(secondCoord.slice(1)) + 1)
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    right: "right",
+                    topRight: "topRight",
+                    bottomRight: "bottomRight"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    left: "left",
+                    topLeft: "topLeft",
+                    bottomLeft: "bottomLeft"
+                })
             ];
             console.log("superLeftrand", twoCellShipWithSurroundings);
         }
@@ -974,23 +974,24 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
                 firstCoord,
                 secondCoord,
                 // First coord
-                // Left and Right
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + Number(firstCoord.slice(1)),
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + Number(firstCoord.slice(1)),
-                // Bottom
-                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
-                // Bottom left and Bottom right
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) + 1),
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) + 1),
-                // Second coord
-                // Left and Right
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + Number(secondCoord.slice(1)),
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + Number(secondCoord.slice(1)),
-                // Top
-                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
-                // Top left and right
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + (Number(secondCoord.slice(1)) - 1),
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) - 1)
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    bottomRight: "bottomRight",
+                    bottom: "bottom",
+                    left: "left",
+                    right: "right",
+                    bottomLeft: "bottomLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    top: "top",
+                    left: "left",
+                    right: "right",
+                    topRight: "topRight",
+                    topLeft: "topLeft"
+                })
             ];
         }
         if (!isHorizontal && !isTop) {
@@ -998,24 +999,24 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
             twoCellShipWithSurroundings = [
                 firstCoord,
                 secondCoord,
-                // First coord
-                // Left and Right
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + Number(firstCoord.slice(1)),
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + Number(firstCoord.slice(1)),
-                // Top
-                firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
-                // Top left and right
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] + (Number(firstCoord.slice(1)) - 1),
-                lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] + (Number(firstCoord.slice(1)) - 1),
-                // Second coord
-                // Left and Right
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + Number(secondCoord.slice(1)),
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + Number(secondCoord.slice(1)),
-                // Bottom
-                secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
-                // Bottom left and Bottom right
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] + (Number(secondCoord.slice(1)) + 1),
-                lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] + (Number(secondCoord.slice(1)) + 1)
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    left: "left",
+                    right: "right",
+                    topRight: "topRight",
+                    topLeft: "topLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    bottomRight: "bottomRight",
+                    bottom: "bottom",
+                    left: "left",
+                    right: "right",
+                    bottomLeft: "bottomLeft"
+                })
             ];
         }
         console.log("checkFleetForBusinessrand", checkFleetBusiness);
@@ -1036,13 +1037,143 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
         ];
     }
     if (size === 3) {
-        readyEnemyShips = [
-            ...readyEnemyShips,
-            [
+        let threeCellShipWithSurroundings;
+        if (isHorizontal && isRight) {
+            console.log("Horizontal and Rightrand", firstCoord);
+            threeCellShipWithSurroundings = [
                 firstCoord,
                 secondCoord,
-                thirdCoord
-            ]
+                thirdCoord,
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    left: "left",
+                    topLeft: "topLeft",
+                    bottomLeft: "bottomLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    top: "top",
+                    bottom: "bottom"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: thirdCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    right: "right",
+                    topRight: "topRight",
+                    bottomRight: "bottomRight"
+                })
+            ];
+        }
+        if (isHorizontal && !isRight) {
+            console.log("Horizontal and Leftrand", firstCoord);
+            threeCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                thirdCoord,
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    right: "right",
+                    topRight: "topRight",
+                    bottomRight: "bottomRight"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    top: "top",
+                    bottom: "bottom"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: thirdCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    left: "left",
+                    topLeft: "topLeft",
+                    bottomLeft: "bottomLeft"
+                })
+            ];
+        }
+        if (!isHorizontal && isTop) {
+            console.log("Vertical and Toprand", firstCoord);
+            threeCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                thirdCoord,
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    bottomRight: "bottomRight",
+                    bottom: "bottom",
+                    left: "left",
+                    right: "right",
+                    bottomLeft: "bottomLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    left: "left",
+                    right: "right"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: thirdCoord,
+                    top: "top",
+                    left: "left",
+                    right: "right",
+                    topRight: "topRight",
+                    topLeft: "topLeft"
+                })
+            ];
+        }
+        if (!isHorizontal && !isTop) {
+            console.log("Vertical and Bottomrand", firstCoord);
+            threeCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                thirdCoord,
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    left: "left",
+                    right: "right",
+                    topRight: "topRight",
+                    topLeft: "topLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    left: "left",
+                    right: "right"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: thirdCoord,
+                    bottomRight: "bottomRight",
+                    bottom: "bottom",
+                    left: "left",
+                    right: "right",
+                    bottomLeft: "bottomLeft"
+                })
+            ];
+        }
+        console.log("checkFleetForBusinessrand", checkFleetBusiness);
+        const isShipDangerous = (0, _shipMakeHelpers.checkShipSafety)(threeCellShipWithSurroundings, checkFleetBusiness);
+        if (isShipDangerous) return (0, _shipMakeHelpers.remakeShip)(randomRange, randomLetterRangeProp, size, createShip);
+        readyEnemyShips = [
+            ...readyEnemyShips,
+            firstCoord,
+            secondCoord,
+            thirdCoord
         ];
         return [
             [
@@ -1052,34 +1183,218 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
             ]
         ];
     }
-    readyEnemyShips = [
-        ...readyEnemyShips,
-        [
+    if (size === 4) {
+        // size 4
+        let fourCellShipWithSurroundings;
+        if (isHorizontal && isRight) {
+            console.log("Horizontal and Rightrand", firstCoord);
+            fourCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                thirdCoord,
+                fourthCoord,
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    left: "left",
+                    topLeft: "topLeft",
+                    bottomLeft: "bottomLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    top: "top",
+                    bottom: "bottom"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: thirdCoord,
+                    top: "top",
+                    bottom: "bottom"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: fourthCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    right: "right",
+                    topRight: "topRight",
+                    bottomRight: "bottomRight"
+                })
+            ];
+        }
+        if (isHorizontal && !isRight) {
+            console.log("Horizontal and Leftrand", firstCoord);
+            fourCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                thirdCoord,
+                fourthCoord,
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    right: "right",
+                    topRight: "topRight",
+                    bottomRight: "bottomRight"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    top: "top",
+                    bottom: "bottom"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: thirdCoord,
+                    top: "top",
+                    bottom: "bottom"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: fourthCoord,
+                    top: "top",
+                    bottom: "bottom",
+                    left: "left",
+                    topLeft: "topLeft",
+                    bottomLeft: "bottomLeft"
+                })
+            ];
+        }
+        if (!isHorizontal && isTop) {
+            console.log("Vertical and Toprand", firstCoord);
+            fourCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                thirdCoord,
+                fourthCoord,
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    bottomRight: "bottomRight",
+                    bottom: "bottom",
+                    left: "left",
+                    right: "right",
+                    bottomLeft: "bottomLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    left: "left",
+                    right: "right"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: thirdCoord,
+                    left: "left",
+                    right: "right"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: fourthCoord,
+                    top: "top",
+                    left: "left",
+                    right: "right",
+                    topRight: "topRight",
+                    topLeft: "topLeft"
+                })
+            ];
+        }
+        if (!isHorizontal && !isTop) {
+            console.log("Vertical and Bottomrand", firstCoord);
+            fourCellShipWithSurroundings = [
+                firstCoord,
+                secondCoord,
+                thirdCoord,
+                fourthCoord,
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: firstCoord,
+                    top: "top",
+                    left: "left",
+                    right: "right",
+                    topRight: "topRight",
+                    topLeft: "topLeft"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: secondCoord,
+                    left: "left",
+                    right: "right"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: thirdCoord,
+                    left: "left",
+                    right: "right"
+                }),
+                ...(0, _shipMakeHelpers.generateSurroundingFields)({
+                    lowerLetters,
+                    coord: fourthCoord,
+                    bottomRight: "bottomRight",
+                    bottom: "bottom",
+                    left: "left",
+                    right: "right",
+                    bottomLeft: "bottomLeft"
+                })
+            ];
+        }
+        console.log("checkFleetForBusinessrand", checkFleetBusiness);
+        const isShipDangerous = (0, _shipMakeHelpers.checkShipSafety)(fourCellShipWithSurroundings, checkFleetBusiness);
+        if (isShipDangerous) return (0, _shipMakeHelpers.remakeShip)(randomRange, randomLetterRangeProp, size, createShip);
+        readyEnemyShips = [
+            ...readyEnemyShips,
             firstCoord,
             secondCoord,
             thirdCoord,
             fourthCoord
-        ]
-    ];
-    return [
-        [
-            firstCoord,
-            secondCoord,
-            thirdCoord,
-            fourthCoord
-        ]
-    ];
+        ];
+        return [
+            [
+                firstCoord,
+                secondCoord,
+                thirdCoord,
+                fourthCoord
+            ]
+        ];
+    }
 }
-// const [fourCellShip] = createShip({
-//   randomRange: [4, 7],
-//   randomLetterRangeProp: ["d", "g"],
-//   size: 4,
-// });
-// const [threeCellShipOne] = createShip({
-//   randomRange: [3, 8],
-//   randomLetterRangeProp: ["c", "h"],
-//   size: 3,
-// });
+const [fourCellShip] = createShip?.({
+    randomRange: [
+        4,
+        7
+    ],
+    randomLetterRangeProp: [
+        "d",
+        "g"
+    ],
+    size: 4
+});
+const [threeCellShipOne] = createShip?.({
+    randomRange: [
+        3,
+        8
+    ],
+    randomLetterRangeProp: [
+        "c",
+        "h"
+    ],
+    size: 3
+});
+const [threeCellShipTwo] = createShip?.({
+    randomRange: [
+        3,
+        8
+    ],
+    randomLetterRangeProp: [
+        "c",
+        "h"
+    ],
+    size: 3
+});
 const [twoCellShipOne] = createShip?.({
     randomRange: [
         2,
@@ -1166,25 +1481,21 @@ createShipCount = 0;
 // }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
 let createEnemyShips = [
-    // [fourCellShip, ["J4", "I4", "h4", "e4"].length],
-    // [["d4", "e4", "f4", "g4"], ["J4", "I4", "h4", "e4"].length],
-    // [threeCellShipOne, threeCellShipOne.length],
-    // [["b5", "b6", "b7"], ["J4", "I4", "h4"].length],
     [
         oneCellShipOne,
-        1
+        oneCellShipOne.length
     ],
     [
         oneCellShipTwo,
-        1
+        oneCellShipTwo.length
     ],
     [
         oneCellShipThree,
-        1
+        oneCellShipThree.length
     ],
     [
         oneCellShipFour,
-        1
+        oneCellShipFour.length
     ],
     [
         twoCellShipOne,
@@ -1197,6 +1508,18 @@ let createEnemyShips = [
     [
         twoCellShipThree,
         twoCellShipThree.length
+    ],
+    [
+        threeCellShipOne,
+        threeCellShipOne.length
+    ],
+    [
+        threeCellShipTwo,
+        threeCellShipTwo.length
+    ],
+    [
+        fourCellShip,
+        fourCellShip.length
     ]
 ];
 let mySideMyShips = [];
@@ -1236,6 +1559,7 @@ parcelHelpers.export(exports, "randomNumberFromRange", ()=>randomNumberFromRange
 parcelHelpers.export(exports, "randomLetterFun", ()=>randomLetterFun);
 parcelHelpers.export(exports, "checkShipSafety", ()=>checkShipSafety);
 parcelHelpers.export(exports, "remakeShip", ()=>remakeShip);
+parcelHelpers.export(exports, "generateSurroundingFields", ()=>generateSurroundingFields);
 function randomNumberFromRange(min, max) {
     // min ≤ result ≤ max  (both inclusive)
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -1260,6 +1584,62 @@ function remakeShip(randomRange, randomLetterRangeProp, size, createShip) {
         ship,
         shipWithSurroundings
     ];
+}
+function generateSurroundingFields({ coord, lowerLetters, top, bottom, left, right, topRight, topLeft, bottomRight, bottomLeft }) {
+    let shipSurroundings = [];
+    if (top) shipSurroundings = [
+        coord.slice(0, 1) + (Number(coord.slice(1)) - 1)
+    ];
+    if (bottom) shipSurroundings = [
+        ...shipSurroundings,
+        coord.slice(0, 1) + (Number(coord.slice(1)) + 1)
+    ];
+    if (left) shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] + Number(coord.slice(1)),
+        , 
+    ];
+    if (right) shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] + Number(coord.slice(1))
+    ];
+    if (topLeft) shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] + (Number(coord.slice(1)) - 1)
+    ];
+    if (topRight) shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] + (Number(coord.slice(1)) - 1)
+    ];
+    if (bottomLeft) shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] + (Number(coord.slice(1)) + 1)
+    ];
+    if (bottomRight) shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] + (Number(coord.slice(1)) + 1)
+    ];
+    // shipSurroundings = [
+    //   // Top and Bottom
+    //   coord.slice(0, 1) + (Number(coord.slice(1)) + 1),
+    //   coord.slice(0, 1) + (Number(coord.slice(1)) - 1),
+    //   // Right top and bottom
+    //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+    //     (Number(coord.slice(1)) - 1),
+    //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+    //     (Number(coord.slice(1)) + 1),
+    //   // Left and Right
+    //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+    //     Number(coord.slice(1)),
+    //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+    //     Number(coord.slice(1)),
+    //   // Left top and bottom
+    //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+    //     (Number(coord.slice(1)) - 1),
+    //   lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+    //     (Number(coord.slice(1)) + 1),
+    // ];
+    return shipSurroundings;
 }
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
@@ -1606,7 +1986,7 @@ parcelHelpers.export(exports, "bothFleetsReady", ()=>bothFleetsReady);
 parcelHelpers.export(exports, "newGameAgreement", ()=>newGameAgreement);
 parcelHelpers.export(exports, "gameStartControl", ()=>gameStartControl);
 var _config = require("./config");
-var _globalVarsPause = require("./globalVarsPause");
+var _globalVars = require("./globalVars");
 var _helpers = require("./helpers");
 // Shows the current state of the game
 const playingCheck = {
@@ -1621,19 +2001,19 @@ let firstTurn;
 // Helps to define whether all ships are placed in the right way or not
 let checkCells;
 const gameStartControl = function(fleet, fleetParts) {
-    const fleetIsEnemySideMyFleet = fleet === (0, _globalVarsPause.enemySideMyFleet);
+    const fleetIsEnemySideMyFleet = fleet === (0, _globalVars.enemySideMyFleet);
     const startPlaying = function() {
         playingCheck.playing = false;
         // Reset newGameAgreement
         newGameAgreement.splice(0);
-        fleet === (0, _globalVarsPause.mySideEnemyFleet) && (firstTurn = Math.random());
+        fleet === (0, _globalVars.mySideEnemyFleet) && (firstTurn = Math.random());
         // Right now this isn't necessary because the button just disappers after being clicked
-        (fleetIsEnemySideMyFleet ? (0, _globalVarsPause.startGameBtn1) : (0, _globalVarsPause.startGameBtn2)).setAttribute("disabled", true);
+        (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).setAttribute("disabled", true);
         (0, _helpers.allowForbidClick)(fleet, "none");
         console.log(fleet);
         // Finds all ship parts and takes their coords
         const findCell = function(cell) {
-            return `${(fleetIsEnemySideMyFleet ? (0, _globalVarsPause.mySideMyFleet) : (0, _globalVarsPause.enemySideEnemyFleet)).querySelector(`.${cell}`)?.classList[0]}`;
+            return `${(fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet)).querySelector(`.${cell}`)?.classList[0]}`;
         };
         let createFleetShips = [
             [
@@ -1707,83 +2087,45 @@ const gameStartControl = function(fleet, fleetParts) {
                 4
             ]
         ];
-        let createMoreShips = [
-            [
-                [
-                    findCell("cell1")
-                ],
-                1
-            ],
-            [
-                [
-                    findCell("cell2")
-                ],
-                1
-            ],
-            [
-                [
-                    findCell("cell3")
-                ],
-                1
-            ],
-            [
-                [
-                    findCell("cell7")
-                ],
-                1
-            ],
-            [
-                [
-                    findCell("cell13"),
-                    findCell("cell14")
-                ],
-                2
-            ],
-            [
-                [
-                    findCell("cell17"),
-                    findCell("cell18")
-                ],
-                2
-            ],
-            [
-                [
-                    findCell("cell19"),
-                    findCell("cell20")
-                ],
-                2
-            ],
-            [
-                [
-                    findCell("cell4"),
-                    findCell("cell5"),
-                    findCell("cell6")
-                ],
-                3
-            ],
-            [
-                [
-                    findCell("cell12"),
-                    findCell("cell15"),
-                    findCell("cell16")
-                ],
-                3
-            ],
-            [
-                [
-                    findCell("cell8"),
-                    findCell("cell9"),
-                    findCell("cell10"),
-                    findCell("cell11")
-                ],
-                4
-            ]
-        ];
+        let enemyUpperCaseShips = (0, _globalVars.createEnemyShips).map((el)=>{
+            const properArray = [
+                el[0].map((coord)=>coord.toUpperCase()),
+                el[1]
+            ];
+            return properArray;
+        });
+        let createMoreShips = enemyUpperCaseShips;
+        //  [
+        //   [[findCell("cell1")], [0].length],
+        //   [[findCell("cell2")], [0].length],
+        //   [[findCell("cell3")], [0].length],
+        //   [[findCell("cell7")], [0].length],
+        //   [[findCell("cell13"), findCell("cell14")], [0, 0].length],
+        //   [[findCell("cell17"), findCell("cell18")], [0, 0].length],
+        //   [[findCell("cell19"), findCell("cell20")], [0, 0].length],
+        //   [
+        //     [findCell("cell4"), findCell("cell5"), findCell("cell6")],
+        //     [0, 0, 0].length,
+        //   ],
+        //   [
+        //     [findCell("cell12"), findCell("cell15"), findCell("cell16")],
+        //     [0, 0, 0].length,
+        //   ],
+        //   [
+        //     [
+        //       findCell("cell8"),
+        //       findCell("cell9"),
+        //       findCell("cell10"),
+        //       findCell("cell11"),
+        //     ],
+        //     [0, 0, 0, 0].length,
+        //   ],
+        // ];
         const createManuallyPlacedShips = function(createSource, ships) {
             // Reset previous ships
             ships.splice(0);
             // When fleet is built before manually placing ships, coords are sorted, but when one ship part moved to another place then ships coords may be messed up and so I sorted them again
-            const sortCoords = createSource.map((ship)=>{
+            let sortCoords = createSource.map((ship)=>{
                 // ship contains fleet, coords, size and direction
                 const sortedLeters = ship[0].map((coord)=>{
                     return coord.slice(0, 1);
@@ -1821,13 +2163,23 @@ const gameStartControl = function(fleet, fleetParts) {
                     });
                 }
             });
+            // if (fleet === mySideEnemyFleet || fleet === enemySideEnemyFleet) {
+            //   sortCoords = sortCoords.map((coord) =>
+            //     coord === false ? undefined : coord
+            //   );
+            //   checkCells = [
+            //     [true, true],
+            //     [true, true],
+            //   ];
+            // }
+            console.log("checksells", checkCells);
             return sortCoords;
         };
         const checkProperShipPlacement = function() {
             const resetWrongShipPlacement = function() {
                 console.log("Place your ships in the right way, \uD83D\uDC12");
-                (fleetIsEnemySideMyFleet ? (0, _globalVarsPause.startGameBtn1) : (0, _globalVarsPause.startGameBtn2)).removeAttribute("disabled", true);
-                (fleetIsEnemySideMyFleet ? (0, _globalVarsPause.errorMessage1) : (0, _globalVarsPause.errorMessage2)).style.opacity = "100";
+                (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).removeAttribute("disabled", true);
+                (fleetIsEnemySideMyFleet ? (0, _globalVars.errorMessage1) : (0, _globalVars.errorMessage2)).style.opacity = "100";
                 [
                     ...fleet.querySelectorAll("td")
                 ].forEach((cell)=>{
@@ -1839,7 +2191,7 @@ const gameStartControl = function(fleet, fleetParts) {
                 return false;
             };
             if (// The function call depends on what fleet is current one and later it checks whether 4-cell ship is whole or not
-            createManuallyPlacedShips(fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips, fleetIsEnemySideMyFleet ? (0, _globalVarsPause.enemySideMyShips) : (0, _globalVarsPause.mySideEnemyShips)).includes(false) || checkCells.flat(2).length !== (0, _config.IN_BETWEEN_SHIP_PART_LENGTH)) return resetWrongShipPlacement();
+            createManuallyPlacedShips(fleetIsEnemySideMyFleet ? createFleetShips : createMoreShips, fleetIsEnemySideMyFleet ? (0, _globalVars.enemySideMyShips) : (0, _globalVars.mySideEnemyShips)).includes(false) || checkCells?.flat(2).length !== (0, _config.IN_BETWEEN_SHIP_PART_LENGTH)) return resetWrongShipPlacement();
         };
         if (checkProperShipPlacement() === false) {
             console.log("Yeah, that is wrong");
@@ -1847,12 +2199,12 @@ const gameStartControl = function(fleet, fleetParts) {
         }
         const ships = fleetParts[1];
         // If ships were placed in the right way this means that the fleet is ready to play and ships are pushed in the arr bellow
-        (0, _globalVarsPause.bothSideShips).push(ships);
+        (0, _globalVars.bothSideShips).push(ships);
         // If ships were placed in the wrong way and the "Ready to start" button was pressed, then an error message bellow the grid will appear showing that ship placement is wrong. But if after that ships were placed in the right way then after pressing the button that error message will be gone
-        (fleetIsEnemySideMyFleet ? (0, _globalVarsPause.errorMessage1) : (0, _globalVarsPause.errorMessage2)).style.opacity = "0";
+        (fleetIsEnemySideMyFleet ? (0, _globalVars.errorMessage1) : (0, _globalVars.errorMessage2)).style.opacity = "0";
         // If code execution reaches this place, this means that ships were placed in the right way and player is ready to play
         bothFleetsReady.push(true);
-        (0, _helpers.allowForbidClick)(fleetIsEnemySideMyFleet ? (0, _globalVarsPause.mySideMyFleet) : (0, _globalVarsPause.enemySideEnemyFleet), "none");
+        (0, _helpers.allowForbidClick)(fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet), "none");
         // Filtering out one-cell ships
         const destroyers = ships.filter((ship)=>{
             const shipEl = fleet.querySelector(`.${ship.coords[0]}`);
@@ -1865,11 +2217,11 @@ const gameStartControl = function(fleet, fleetParts) {
             i + 1 === rewardDestroyer && fleet.querySelector(`.${destroyer.coords[0]}`).nextElementSibling.classList.add("reward");
         });
         const addBorder = function(borderSide, coord) {
-            const fleetSide = fleetIsEnemySideMyFleet ? (0, _globalVarsPause.mySideMyFleet) : (0, _globalVarsPause.enemySideEnemyFleet);
+            const fleetSide = fleetIsEnemySideMyFleet ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet);
             fleetSide && (fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = "2px solid  #22b8cf");
         };
         if (bothFleetsReady.length === 1) {
-            (fleet === (0, _globalVarsPause.mySideEnemyFleet) ? (0, _globalVarsPause.enemySideEnemyFleet) : (0, _globalVarsPause.mySideMyFleet)).querySelectorAll(".ship").forEach((ship)=>{
+            (fleet === (0, _globalVars.mySideEnemyFleet) ? (0, _globalVars.enemySideEnemyFleet) : (0, _globalVars.mySideMyFleet)).querySelectorAll(".ship").forEach((ship)=>{
                 ship.classList.remove("ship-color");
                 ship.textContent = "";
                 ship.style.backgroundColor = "#e6fcf5";
@@ -1886,8 +2238,8 @@ const gameStartControl = function(fleet, fleetParts) {
         });
         // Changes background-color of ships of the player who pressed "Ready to start" button the second
         bothFleetsReady.length === (0, _config.BOTH_FLEETS_READY_COMPLETE_LENGTH) && [
-            (0, _globalVarsPause.mySideMyFleet),
-            (0, _globalVarsPause.enemySideEnemyFleet)
+            (0, _globalVars.mySideMyFleet),
+            (0, _globalVars.enemySideEnemyFleet)
         ].forEach((fleet)=>{
             fleet.querySelectorAll(`.ship`).forEach((ship)=>{
                 ship.style.backgroundColor = "#e6fcf5";
@@ -1906,18 +2258,18 @@ const gameStartControl = function(fleet, fleetParts) {
             });
         });
         // All actions relative to your own fleet are finished, so there are left thing to do with the second sea part
-        if (fleet !== (0, _globalVarsPause.mySideEnemyFleet) && fleet !== (0, _globalVarsPause.enemySideMyFleet)) return;
+        if (fleet !== (0, _globalVars.mySideEnemyFleet) && fleet !== (0, _globalVars.enemySideMyFleet)) return;
         /* fleet === mySideEnemyFleet && bothSideShips.push("mySideEnemyFleet");
 
-    fleetIsEnemySideMyFleet && bothSideShips.push("enemySideMyFleet"); */ const flattenedBothSideShips = (0, _globalVarsPause.bothSideShips).flat(2);
+    fleetIsEnemySideMyFleet && bothSideShips.push("enemySideMyFleet"); */ const flattenedBothSideShips = (0, _globalVars.bothSideShips).flat(2);
         console.log(flattenedBothSideShips, "both");
-        (fleetIsEnemySideMyFleet ? (0, _globalVarsPause.startGameBtn1) : (0, _globalVarsPause.startGameBtn2)).style.display = "none";
+        (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).style.display = "none";
         // When your opponent is ready to play, you will see a message informing about that
-        (fleetIsEnemySideMyFleet ? (0, _globalVarsPause.waitingForOpponentLabel1) : (0, _globalVarsPause.waitingForOpponentLabel2)).style.opacity = "100";
+        (fleetIsEnemySideMyFleet ? (0, _globalVars.waitingForOpponentLabel1) : (0, _globalVars.waitingForOpponentLabel2)).style.opacity = "100";
         // If both player are ready to play then informing messages will disappear
         if (flattenedBothSideShips.length === createFleetShips.length * 2 /* + 2 */ ) [
-            (0, _globalVarsPause.waitingForOpponentLabel1),
-            (0, _globalVarsPause.waitingForOpponentLabel2)
+            (0, _globalVars.waitingForOpponentLabel1),
+            (0, _globalVars.waitingForOpponentLabel2)
         ].forEach((label)=>{
             label.style.opacity = "0";
         });
@@ -1927,13 +2279,13 @@ const gameStartControl = function(fleet, fleetParts) {
       flattenedBothSideShips.includes("mySideEnemyFleet") &&
       flattenedBothSideShips.includes("enemySideMyFleet") */ ) {
             [
-                (0, _globalVarsPause.changeUsernameBtn1),
-                (0, _globalVarsPause.changeUsernameBtn2)
+                (0, _globalVars.changeUsernameBtn1),
+                (0, _globalVars.changeUsernameBtn2)
             ].forEach((btn)=>{
                 btn.setAttribute("disabled", true);
             });
-            (0, _helpers.closeUsernameForm)((0, _globalVarsPause.mySideMyFleet), "none");
-            (0, _helpers.closeUsernameForm)((0, _globalVarsPause.enemySideEnemyFleet), "none");
+            (0, _helpers.closeUsernameForm)((0, _globalVars.mySideMyFleet), "none");
+            (0, _helpers.closeUsernameForm)((0, _globalVars.enemySideEnemyFleet), "none");
             playingCheck.playing = true;
             console.log("Game started \uD83E\uDD70");
             console.log(playingCheck.playing, "playing");
@@ -1947,8 +2299,8 @@ const gameStartControl = function(fleet, fleetParts) {
                 if (e.key === 123 || ctrlShiftKey(e, "I") || ctrlShiftKey(e, "J") || ctrlShiftKey(e, "C") || e.ctrlKey && e.key === "U".charCodeAt(0)) return false;
             };
             // Making sure that I will not destroy my own ship ;)
-            (0, _helpers.allowForbidClick)((0, _globalVarsPause.mySideMyFleet), "none");
-            (0, _helpers.allowForbidClick)((0, _globalVarsPause.enemySideEnemyFleet), "none");
+            (0, _helpers.allowForbidClick)((0, _globalVars.mySideMyFleet), "none");
+            (0, _helpers.allowForbidClick)((0, _globalVars.enemySideEnemyFleet), "none");
         }
         console.log(firstTurn);
         if (!playingCheck.playing) return;
@@ -1958,21 +2310,89 @@ const gameStartControl = function(fleet, fleetParts) {
             (0, _helpers.startTimer)(fleet);
             contraryFleet.closest(".sea").style.opacity = "0.7";
         };
-        if (fleet === (0, _globalVarsPause.mySideEnemyFleet) || fleet === (0, _globalVarsPause.enemySideMyFleet)) {
-            firstTurn < 0.5 && defineFirstTurn((0, _globalVarsPause.mySideEnemyFleet), (0, _globalVarsPause.enemySideMyFleet));
-            firstTurn >= 0.5 && defineFirstTurn((0, _globalVarsPause.enemySideMyFleet), (0, _globalVarsPause.mySideEnemyFleet));
+        if (fleet === (0, _globalVars.mySideEnemyFleet) || fleet === (0, _globalVars.enemySideMyFleet)) {
+            firstTurn < 0.5 && defineFirstTurn((0, _globalVars.mySideEnemyFleet), (0, _globalVars.enemySideMyFleet));
+            firstTurn >= 0.5 && defineFirstTurn((0, _globalVars.enemySideMyFleet), (0, _globalVars.mySideEnemyFleet));
         }
         [
-            (0, _globalVarsPause.newGameBtn1),
-            (0, _globalVarsPause.newGameBtn2)
+            (0, _globalVars.newGameBtn1),
+            (0, _globalVars.newGameBtn2)
         ].forEach((btn)=>{
             btn.removeAttribute("disabled", true);
         });
     };
-    fleet !== (0, _globalVarsPause.mySideMyFleet) && fleet !== (0, _globalVarsPause.enemySideEnemyFleet) && (fleetIsEnemySideMyFleet ? (0, _globalVarsPause.startGameBtn1) : (0, _globalVarsPause.startGameBtn2)).addEventListener("click", startPlaying);
+    fleet !== (0, _globalVars.mySideMyFleet) && fleet !== (0, _globalVars.enemySideEnemyFleet) && (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).addEventListener("click", startPlaying);
 };
 
-},{"./config":"k5Hzs","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause":"bAcK9"}],"bAcK9":[function(require,module,exports) {
+},{"./config":"k5Hzs","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars":"gb5d6"}],"2csmh":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
+        const allShips = [
+            ...fleet.querySelectorAll(".ship")
+        ];
+        const injuredShips = allShips.filter((ship)=>{
+            // Checks all ships on the fleet and those which are destroyed will be returned
+            if (ship.classList.contains("injure")) return ship;
+        });
+        // .filter((ship, i, arr) => {
+        //   if (ship) {
+        //     return ship;
+        //   }
+        // });
+        console.log(fleet);
+        const areAllShipsInjured = injuredShips.length === allShips.length;
+        const runOutOfTime = noTime ? true : false;
+        if (!areAllShipsInjured && !runOutOfTime) return;
+        // If code execution is at this point - this means the game is finished
+        clearInterval((0, _helpers.timer));
+        console.log(areAllShipsInjured, "areAll");
+        console.log(runOutOfTime, "areAll");
+        // Composing the result message
+        const composeMessage = function(messageEl, fleetSide) {
+            messageEl.textContent !== "" && (messageEl.textContent = "");
+            messageEl.insertAdjacentHTML("afterbegin", `You ${fleet === fleetSide ? "won" : "lost"} the battle! ${fleet === fleetSide ? "Congratulations! \uD83C\uDF8A" : "Get lucky other time \uD83D\uDE10"}`);
+        };
+        // Show notification window
+        const openNotificationWindow = function() {
+            const addNotification = function() {
+                composeMessage((0, _globalVarsPause.resultsMessage1), (0, _globalVarsPause.enemySideMyFleet));
+                composeMessage((0, _globalVarsPause.resultsMessage2), (0, _globalVarsPause.mySideEnemyFleet));
+            };
+            fleet === (0, _globalVarsPause.mySideEnemyFleet) && addNotification((0, _globalVarsPause.player1));
+            fleet !== (0, _globalVarsPause.mySideEnemyFleet) && addNotification((0, _globalVarsPause.player2));
+            (0, _globalVarsPause.notificatonWindow1).classList.remove("hidden");
+            (0, _globalVarsPause.notificatonWindow2).classList.remove("hidden");
+            // overlay.classList.remove("hidden");
+            [
+                (0, _globalVarsPause.mySideEnemyFleet),
+                (0, _globalVarsPause.enemySideMyFleet)
+            ].forEach((fleet)=>{
+                fleet.style.pointerEvents = "none";
+                (0, _helpers.getSeaOpacityBack)();
+            });
+        };
+        (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
+        (areAllShipsInjured || runOutOfTime) && (0, _globalVarsPause.allTimers).forEach((timerEl)=>{
+            timerEl.style.opacity = "0";
+        });
+        (0, _globalVarsPause.btnCloseNotificationWindow1).addEventListener("click", (0, _helpers.closeNotificationWindow1));
+        // overlay.addEventListener("click", closeNotificationWindow);
+        (0, _globalVarsPause.btnCloseNotificationWindow2).addEventListener("click", (0, _helpers.closeNotificationWindow2));
+    // overlay.addEventListener("click", closeNotificationWindow2);
+    // document.addEventListener("keydown", function (e) {
+    //   // console.log(e.key);
+    //   e.key === "Escape" &&
+    //     !notificatonWindow.classList.contains("hidden") &&
+    //     !notificatonWindow2.classList.contains("hidden") &&
+    //     closeNotificationWindow();
+    // });
+    });
+var _globalVarsPause = require("./globalVarsPause");
+var _gameStartControl = require("./gameStartControl");
+var _helpers = require("./helpers");
+
+},{"./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause":"bAcK9"}],"bAcK9":[function(require,module,exports) {
 // FLEET ENVIRONMENT
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -2226,75 +2646,7 @@ const inputUsernameLabel1 = document.querySelector(".your-name-1");
 const submitUsername1 = document.querySelector(".submit-username--fleet-1");
 const submitUsername2 = document.querySelector(".submit-username--fleet-2");
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2csmh":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
-        const allShips = [
-            ...fleet.querySelectorAll(".ship")
-        ];
-        const injuredShips = allShips.filter((ship)=>{
-            // Checks all ships on the fleet and those which are destroyed will be returned
-            if (ship.classList.contains("injure")) return ship;
-        });
-        // .filter((ship, i, arr) => {
-        //   if (ship) {
-        //     return ship;
-        //   }
-        // });
-        console.log(fleet);
-        const areAllShipsInjured = injuredShips.length === allShips.length;
-        const runOutOfTime = noTime ? true : false;
-        if (!areAllShipsInjured && !runOutOfTime) return;
-        // If code execution is at this point - this means the game is finished
-        clearInterval((0, _helpers.timer));
-        console.log(areAllShipsInjured, "areAll");
-        console.log(runOutOfTime, "areAll");
-        // Composing the result message
-        const composeMessage = function(messageEl, fleetSide) {
-            messageEl.textContent !== "" && (messageEl.textContent = "");
-            messageEl.insertAdjacentHTML("afterbegin", `You ${fleet === fleetSide ? "won" : "lost"} the battle! ${fleet === fleetSide ? "Congratulations! \uD83C\uDF8A" : "Get lucky other time \uD83D\uDE10"}`);
-        };
-        // Show notification window
-        const openNotificationWindow = function() {
-            const addNotification = function() {
-                composeMessage((0, _globalVarsPause.resultsMessage1), (0, _globalVarsPause.enemySideMyFleet));
-                composeMessage((0, _globalVarsPause.resultsMessage2), (0, _globalVarsPause.mySideEnemyFleet));
-            };
-            fleet === (0, _globalVarsPause.mySideEnemyFleet) && addNotification((0, _globalVarsPause.player1));
-            fleet !== (0, _globalVarsPause.mySideEnemyFleet) && addNotification((0, _globalVarsPause.player2));
-            (0, _globalVarsPause.notificatonWindow1).classList.remove("hidden");
-            (0, _globalVarsPause.notificatonWindow2).classList.remove("hidden");
-            // overlay.classList.remove("hidden");
-            [
-                (0, _globalVarsPause.mySideEnemyFleet),
-                (0, _globalVarsPause.enemySideMyFleet)
-            ].forEach((fleet)=>{
-                fleet.style.pointerEvents = "none";
-                (0, _helpers.getSeaOpacityBack)();
-            });
-        };
-        (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
-        (areAllShipsInjured || runOutOfTime) && (0, _globalVarsPause.allTimers).forEach((timerEl)=>{
-            timerEl.style.opacity = "0";
-        });
-        (0, _globalVarsPause.btnCloseNotificationWindow1).addEventListener("click", (0, _helpers.closeNotificationWindow1));
-        // overlay.addEventListener("click", closeNotificationWindow);
-        (0, _globalVarsPause.btnCloseNotificationWindow2).addEventListener("click", (0, _helpers.closeNotificationWindow2));
-    // overlay.addEventListener("click", closeNotificationWindow2);
-    // document.addEventListener("keydown", function (e) {
-    //   // console.log(e.key);
-    //   e.key === "Escape" &&
-    //     !notificatonWindow.classList.contains("hidden") &&
-    //     !notificatonWindow2.classList.contains("hidden") &&
-    //     closeNotificationWindow();
-    // });
-    });
-var _globalVarsPause = require("./globalVarsPause");
-var _gameStartControl = require("./gameStartControl");
-var _helpers = require("./helpers");
-
-},{"./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause":"bAcK9"}],"iXTJE":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iXTJE":[function(require,module,exports) {
 var _globalVars = require("./globalVars");
 /* <th>${item}</th> */ // Creates fleet cells
 let markup = (0, _globalVars.seaFleet).map((item, i)=>`
@@ -2595,6 +2947,8 @@ var _globalVars = require("./globalVars");
 var _helpers = require("./helpers");
 var _placeShipsManually = require("./placeShipsManually");
 var _placeShipsManuallyDefault = parcelHelpers.interopDefault(_placeShipsManually);
+var _makeShips = require("./makeShips");
+var _makeShipsDefault = parcelHelpers.interopDefault(_makeShips);
 const startNewGame = function(fleet) {
     const fleetIsMySideMyFleet = fleet === (0, _globalVars.mySideMyFleet);
     const definePlayerNumber = fleetIsMySideMyFleet ? 1 : 2;
@@ -2679,14 +3033,14 @@ const startNewGame = function(fleet) {
                 (0, _globalVars.mySideMyShips).splice(0);
                 (0, _globalVars.enemySideEnemyShips).splice(0);
                 (0, _globalVars.createMyShips).forEach((ship)=>{
-                    createShip(...ship, [
+                    (0, _makeShipsDefault.default)(...ship, [
                         (0, _globalVars.mySideMyFleet),
                         (0, _globalVars.mySideMyShips),
                         (0, _globalVars.createMyShips)
                     ]);
                 });
                 (0, _globalVars.createEnemyShips).forEach((ship)=>{
-                    createShip(...ship, [
+                    (0, _makeShipsDefault.default)(...ship, [
                         (0, _globalVars.enemySideEnemyFleet),
                         (0, _globalVars.enemySideEnemyShips),
                         (0, _globalVars.createEnemyShips)
@@ -2721,6 +3075,6 @@ const startNewGame = function(fleet) {
     });
 };
 
-},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./globalVars":"gb5d6","./helpers":"hGI1E","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
+},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./globalVars":"gb5d6","./helpers":"hGI1E","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./makeShips":"8mnMH"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
 //# sourceMappingURL=index.e37f48ea.js.map

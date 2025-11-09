@@ -3,6 +3,7 @@ import {
   randomLetterFun,
   checkShipSafety,
   remakeShip,
+  generateSurroundingFields,
 } from "./shipMakeHelpers";
 // FLEET ENVIRONMENT
 const mySideMyFleet = document.querySelector(".my-side--my-fleet");
@@ -114,27 +115,18 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
     const oneCellShipWithSurroundings = [
       firstCoord,
 
-      // Top and Bottom
-      firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
-      firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
-
-      // Right top and bottom
-      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-        (Number(firstCoord.slice(1)) - 1),
-      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-        (Number(firstCoord.slice(1)) + 1),
-
-      // Left and Right
-      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-        Number(firstCoord.slice(1)),
-      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-        Number(firstCoord.slice(1)),
-
-      // Left top and bottom
-      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-        (Number(firstCoord.slice(1)) - 1),
-      lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-        (Number(firstCoord.slice(1)) + 1),
+      ...generateSurroundingFields({
+        coord: firstCoord,
+        lowerLetters,
+        top: "top",
+        bottom: "bottom",
+        right: "right",
+        left: "left",
+        topLeft: "topLeft",
+        topRight: "topRight",
+        bottomLeft: "bottomLeft",
+        bottomRight: "bottomRight",
+      }),
     ];
 
     const isShipDangerous = checkShipSafety(
@@ -161,35 +153,25 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
         firstCoord,
         secondCoord,
 
-        // First coord
-        // Top and Bottom
-        firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
-        firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          bottom: "bottom",
+          left: "left",
+          topLeft: "topLeft",
+          bottomLeft: "bottomLeft",
+        }),
 
-        // Left
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-          Number(firstCoord.slice(1)),
-
-        // Left top and bottom
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-          (Number(firstCoord.slice(1)) - 1),
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-          (Number(firstCoord.slice(1)) + 1),
-
-        // Second coord
-        // Top and Bottom
-        secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
-        secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
-
-        // Right
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] +
-          Number(secondCoord.slice(1)),
-
-        // Right top and bottom
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] +
-          (Number(secondCoord.slice(1)) - 1),
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] +
-          (Number(secondCoord.slice(1)) + 1),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          top: "top",
+          bottom: "bottom",
+          right: "right",
+          topRight: "topRight",
+          bottomRight: "bottomRight",
+        }),
       ];
     }
 
@@ -200,35 +182,24 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
         firstCoord,
         secondCoord,
 
-        // First coord
-        // Top and Bottom
-        firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
-        firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
-
-        // Right
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-          Number(firstCoord.slice(1)),
-
-        // Right top and bottom
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-          (Number(firstCoord.slice(1)) - 1),
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-          (Number(firstCoord.slice(1)) + 1),
-
-        // Second coord
-        // Top and Bottom
-        secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
-        secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
-
-        // Left
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] +
-          Number(secondCoord.slice(1)),
-
-        // Left top and bottom
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] +
-          (Number(secondCoord.slice(1)) - 1),
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] +
-          (Number(secondCoord.slice(1)) + 1),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          bottom: "bottom",
+          right: "right",
+          topRight: "topRight",
+          bottomRight: "bottomRight",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          top: "top",
+          bottom: "bottom",
+          left: "left",
+          topLeft: "topLeft",
+          bottomLeft: "bottomLeft",
+        }),
       ];
 
       console.log("superLeftrand", twoCellShipWithSurroundings);
@@ -241,36 +212,24 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
         secondCoord,
 
         // First coord
-        // Left and Right
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-          Number(firstCoord.slice(1)),
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-          Number(firstCoord.slice(1)),
-
-        // Bottom
-        firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) + 1),
-
-        // Bottom left and Bottom right
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-          (Number(firstCoord.slice(1)) + 1),
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-          (Number(firstCoord.slice(1)) + 1),
-
-        // Second coord
-        // Left and Right
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] +
-          Number(secondCoord.slice(1)),
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] +
-          Number(secondCoord.slice(1)),
-
-        // Top
-        secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) - 1),
-
-        // Top left and right
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] +
-          (Number(secondCoord.slice(1)) - 1),
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] +
-          (Number(secondCoord.slice(1)) - 1),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          bottomRight: "bottomRight",
+          bottom: "bottom",
+          left: "left",
+          right: "right",
+          bottomLeft: "bottomLeft",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          top: "top",
+          left: "left",
+          right: "right",
+          topRight: "topRight",
+          topLeft: "topLeft",
+        }),
       ];
     }
 
@@ -280,37 +239,24 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
         firstCoord,
         secondCoord,
 
-        // First coord
-        // Left and Right
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-          Number(firstCoord.slice(1)),
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-          Number(firstCoord.slice(1)),
-
-        // Top
-        firstCoord.slice(0, 1) + (Number(firstCoord.slice(1)) - 1),
-
-        // Top left and right
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) - 1] +
-          (Number(firstCoord.slice(1)) - 1),
-        lowerLetters[lowerLetters.indexOf(firstCoord.slice(0, 1)) + 1] +
-          (Number(firstCoord.slice(1)) - 1),
-
-        // Second coord
-        // Left and Right
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] +
-          Number(secondCoord.slice(1)),
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] +
-          Number(secondCoord.slice(1)),
-
-        // Bottom
-        secondCoord.slice(0, 1) + (Number(secondCoord.slice(1)) + 1),
-
-        // Bottom left and Bottom right
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) - 1] +
-          (Number(secondCoord.slice(1)) + 1),
-        lowerLetters[lowerLetters.indexOf(secondCoord.slice(0, 1)) + 1] +
-          (Number(secondCoord.slice(1)) + 1),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          left: "left",
+          right: "right",
+          topRight: "topRight",
+          topLeft: "topLeft",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          bottomRight: "bottomRight",
+          bottom: "bottom",
+          left: "left",
+          right: "right",
+          bottomLeft: "bottomLeft",
+        }),
       ];
     }
 
@@ -332,31 +278,377 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
   }
 
   if (size === 3) {
-    readyEnemyShips = [
-      ...readyEnemyShips,
-      [firstCoord, secondCoord, thirdCoord],
-    ];
+    let threeCellShipWithSurroundings;
+    if (isHorizontal && isRight) {
+      console.log("Horizontal and Rightrand", firstCoord);
+
+      threeCellShipWithSurroundings = [
+        firstCoord,
+        secondCoord,
+        thirdCoord,
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          bottom: "bottom",
+          left: "left",
+          topLeft: "topLeft",
+          bottomLeft: "bottomLeft",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          top: "top",
+          bottom: "bottom",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: thirdCoord,
+          top: "top",
+          bottom: "bottom",
+          right: "right",
+          topRight: "topRight",
+          bottomRight: "bottomRight",
+        }),
+      ];
+    }
+
+    if (isHorizontal && !isRight) {
+      console.log("Horizontal and Leftrand", firstCoord);
+
+      threeCellShipWithSurroundings = [
+        firstCoord,
+        secondCoord,
+        thirdCoord,
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          bottom: "bottom",
+          right: "right",
+          topRight: "topRight",
+          bottomRight: "bottomRight",
+        }),
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          top: "top",
+          bottom: "bottom",
+        }),
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: thirdCoord,
+          top: "top",
+          bottom: "bottom",
+          left: "left",
+          topLeft: "topLeft",
+          bottomLeft: "bottomLeft",
+        }),
+      ];
+    }
+
+    if (!isHorizontal && isTop) {
+      console.log("Vertical and Toprand", firstCoord);
+
+      threeCellShipWithSurroundings = [
+        firstCoord,
+        secondCoord,
+        thirdCoord,
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          bottomRight: "bottomRight",
+          bottom: "bottom",
+          left: "left",
+          right: "right",
+          bottomLeft: "bottomLeft",
+        }),
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          left: "left",
+          right: "right",
+        }),
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: thirdCoord,
+          top: "top",
+          left: "left",
+          right: "right",
+          topRight: "topRight",
+          topLeft: "topLeft",
+        }),
+      ];
+    }
+
+    if (!isHorizontal && !isTop) {
+      console.log("Vertical and Bottomrand", firstCoord);
+
+      threeCellShipWithSurroundings = [
+        firstCoord,
+        secondCoord,
+        thirdCoord,
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          left: "left",
+          right: "right",
+          topRight: "topRight",
+          topLeft: "topLeft",
+        }),
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          left: "left",
+          right: "right",
+        }),
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: thirdCoord,
+          bottomRight: "bottomRight",
+          bottom: "bottom",
+          left: "left",
+          right: "right",
+          bottomLeft: "bottomLeft",
+        }),
+      ];
+    }
+
+    console.log("checkFleetForBusinessrand", checkFleetBusiness);
+    const isShipDangerous = checkShipSafety(
+      threeCellShipWithSurroundings,
+      checkFleetBusiness
+    );
+
+    if (isShipDangerous) {
+      return remakeShip(randomRange, randomLetterRangeProp, size, createShip);
+    }
+
+    readyEnemyShips = [...readyEnemyShips, firstCoord, secondCoord, thirdCoord];
     return [[firstCoord, secondCoord, thirdCoord]];
   }
 
-  readyEnemyShips = [
-    ...readyEnemyShips,
-    [firstCoord, secondCoord, thirdCoord, fourthCoord],
-  ];
-  return [[firstCoord, secondCoord, thirdCoord, fourthCoord]];
+  if (size === 4) {
+    // size 4
+    let fourCellShipWithSurroundings;
+    if (isHorizontal && isRight) {
+      console.log("Horizontal and Rightrand", firstCoord);
+
+      fourCellShipWithSurroundings = [
+        firstCoord,
+        secondCoord,
+        thirdCoord,
+        fourthCoord,
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          bottom: "bottom",
+          left: "left",
+          topLeft: "topLeft",
+          bottomLeft: "bottomLeft",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          top: "top",
+          bottom: "bottom",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: thirdCoord,
+          top: "top",
+          bottom: "bottom",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: fourthCoord,
+          top: "top",
+          bottom: "bottom",
+          right: "right",
+          topRight: "topRight",
+          bottomRight: "bottomRight",
+        }),
+      ];
+    }
+
+    if (isHorizontal && !isRight) {
+      console.log("Horizontal and Leftrand", firstCoord);
+
+      fourCellShipWithSurroundings = [
+        firstCoord,
+        secondCoord,
+        thirdCoord,
+        fourthCoord,
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          bottom: "bottom",
+          right: "right",
+          topRight: "topRight",
+          bottomRight: "bottomRight",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          top: "top",
+          bottom: "bottom",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: thirdCoord,
+          top: "top",
+          bottom: "bottom",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: fourthCoord,
+          top: "top",
+          bottom: "bottom",
+          left: "left",
+          topLeft: "topLeft",
+          bottomLeft: "bottomLeft",
+        }),
+      ];
+    }
+
+    if (!isHorizontal && isTop) {
+      console.log("Vertical and Toprand", firstCoord);
+
+      fourCellShipWithSurroundings = [
+        firstCoord,
+        secondCoord,
+        thirdCoord,
+        fourthCoord,
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          bottomRight: "bottomRight",
+          bottom: "bottom",
+          left: "left",
+          right: "right",
+          bottomLeft: "bottomLeft",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          left: "left",
+          right: "right",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: thirdCoord,
+          left: "left",
+          right: "right",
+        }),
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: fourthCoord,
+          top: "top",
+          left: "left",
+          right: "right",
+          topRight: "topRight",
+          topLeft: "topLeft",
+        }),
+      ];
+    }
+
+    if (!isHorizontal && !isTop) {
+      console.log("Vertical and Bottomrand", firstCoord);
+
+      fourCellShipWithSurroundings = [
+        firstCoord,
+        secondCoord,
+        thirdCoord,
+        fourthCoord,
+
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: firstCoord,
+          top: "top",
+          left: "left",
+          right: "right",
+          topRight: "topRight",
+          topLeft: "topLeft",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: secondCoord,
+          left: "left",
+          right: "right",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: thirdCoord,
+          left: "left",
+          right: "right",
+        }),
+        ...generateSurroundingFields({
+          lowerLetters,
+          coord: fourthCoord,
+          bottomRight: "bottomRight",
+          bottom: "bottom",
+          left: "left",
+          right: "right",
+          bottomLeft: "bottomLeft",
+        }),
+      ];
+    }
+
+    console.log("checkFleetForBusinessrand", checkFleetBusiness);
+    const isShipDangerous = checkShipSafety(
+      fourCellShipWithSurroundings,
+      checkFleetBusiness
+    );
+
+    if (isShipDangerous) {
+      return remakeShip(randomRange, randomLetterRangeProp, size, createShip);
+    }
+
+    readyEnemyShips = [
+      ...readyEnemyShips,
+      firstCoord,
+      secondCoord,
+      thirdCoord,
+      fourthCoord,
+    ];
+    return [[firstCoord, secondCoord, thirdCoord, fourthCoord]];
+  }
 }
 
-// const [fourCellShip] = createShip({
-//   randomRange: [4, 7],
-//   randomLetterRangeProp: ["d", "g"],
-//   size: 4,
-// });
+const [fourCellShip] = createShip?.({
+  randomRange: [4, 7],
+  randomLetterRangeProp: ["d", "g"],
+  size: 4,
+});
 
-// const [threeCellShipOne] = createShip({
-//   randomRange: [3, 8],
-//   randomLetterRangeProp: ["c", "h"],
-//   size: 3,
-// });
+const [threeCellShipOne] = createShip?.({
+  randomRange: [3, 8],
+  randomLetterRangeProp: ["c", "h"],
+  size: 3,
+});
+
+const [threeCellShipTwo] = createShip?.({
+  randomRange: [3, 8],
+  randomLetterRangeProp: ["c", "h"],
+  size: 3,
+});
 
 const [twoCellShipOne] = createShip?.({
   randomRange: [2, 9],
@@ -408,28 +700,30 @@ createShipCount = 0;
 // }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
 let createEnemyShips = [
-  // [fourCellShip, ["J4", "I4", "h4", "e4"].length],
-  // [["d4", "e4", "f4", "g4"], ["J4", "I4", "h4", "e4"].length],
-  // [threeCellShipOne, threeCellShipOne.length],
-  // [["b5", "b6", "b7"], ["J4", "I4", "h4"].length],
-
-  [oneCellShipOne, ["d10"].length],
-  [oneCellShipTwo, ["d10"].length],
-  [oneCellShipThree, ["d10"].length],
-  [oneCellShipFour, ["d10"].length],
+  [oneCellShipOne, oneCellShipOne.length],
+  [oneCellShipTwo, oneCellShipTwo.length],
+  [oneCellShipThree, oneCellShipThree.length],
+  [oneCellShipFour, oneCellShipFour.length],
 
   [twoCellShipOne, twoCellShipOne.length],
   [twoCellShipTwo, twoCellShipTwo.length],
   [twoCellShipThree, twoCellShipThree.length],
+  [threeCellShipOne, threeCellShipOne.length],
+  [threeCellShipTwo, threeCellShipTwo.length],
 
+  [fourCellShip, fourCellShip.length],
+
+  // [["a1"], ["d10"].length],
   // [["c1"], ["d10"].length],
   // [["e1"], ["d10"].length],
   // [["a3"], ["d10"].length],
 
   // [["i5", "j5"], ["e6", "e7"].length],
   // [["i7", "j7"], ["e6", "e7"].length],
+  // [["d4", "e4", "f4", "g4"], ["J4", "I4", "h4", "e4"].length],
   // [["h2", "i2", "j2"], ["J4", "I4", "h4"].length],
   // [["e9", "f9"], ["e6", "e7"].length],
+  // [["b5", "b6", "b7"], ["J4", "I4", "h4"].length],
 ];
 
 let mySideMyShips = [];
