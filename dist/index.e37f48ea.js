@@ -2363,6 +2363,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             }
             const miss = "&#x1F30A;";
             const whoseFleet = fleet === (0, _globalVars.mySideEnemyFleet) ? (0, _globalVars.enemySideEnemyFleet) : (0, _globalVars.mySideMyFleet);
+            // Removing visual indicators to last missed field in all 4 sea containers
             if (fleet === (0, _globalVars.mySideEnemyFleet)) {
                 (0, _globalVars.mySideEnemyFleet).querySelector(".last-shot")?.classList.remove("last-shot");
                 (0, _globalVars.enemySideEnemyFleet).querySelector(".last-shot")?.classList.remove("last-shot");
@@ -2371,47 +2372,18 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 (0, _globalVars.mySideMyFleet).querySelector(".last-shot")?.classList.remove("last-shot");
                 (0, _globalVars.enemySideMyFleet).querySelector(".last-shot")?.classList.remove("last-shot");
             }
+            // Adding visual indicators to last missed field in all 4 sea containers
+            // For missed fields
             if (e.target.classList.contains("dropzone")) {
                 e.target.querySelector(".cell").classList.add("last-shot");
                 whoseFleet.querySelector(`.${e.target.querySelector("div").classList[0]}`).classList.add("last-shot");
             }
+            // For shipped fields
             if (e.target.classList[0] !== "dropzone") {
-                console.log("Our ship target:", e.target);
+                // console.log("Our ship target:", e.target);
                 e.target.classList.add("last-shot");
-                console.log("Opposite", whoseFleet.querySelector(`.${e.target.classList[0]}`).nextElementSibling);
-                whoseFleet.querySelector(`.${e.target.classList[0]}`).nextElementSibling.classList.add("last-shot");
+                whoseFleet.querySelector(`.${e.target.classList[0]}`).nextElementSibling?.classList.add("last-shot");
             }
-            // addLastShotMark(mySideMyFleet, addMarkToFleet(mySideMyFleet));
-            // addLastShotMark(enemySideEnemyFleet, addMarkToFleet(enemySideEnemyFleet));
-            // addLastShotMark(fleet, e);
-            // addLastShotMark(mySideEnemyFleet ? enemySideEnemyFleet : mySideMyFleet, e);
-            // addLastShotMark(fleet, e);
-            // if (fleet === mySideEnemyFleet && e.target.classList[0] !== "dropzone") {
-            //   console.log("Sandwish");
-            //   addLastShotMark(
-            //     enemySideMyFleet,
-            //     enemySideMyFleet.querySelector(`.${e.target.querySelector(".ship")}`)
-            //   );
-            // }
-            // if (fleet === mySideEnemyFleet) {
-            //   addLastShotMark(
-            //     enemySideEnemyFleet,
-            //     enemySideEnemyFleet.querySelector(`.${e.target.querySelector(".ship")}`)
-            //   );
-            // }
-            // if (selectChosenCell) {
-            //   addLastShotMark(mySideMyFleet, e.target.querySelector(".cell"));
-            // }
-            // if (!selectChosenCell) {
-            //   addLastShotMark(enemySideEnemyFleet, e.target.querySelector(".cell"));
-            // }
-            // if (selectChosenCell) {
-            //   addLastShotMark(mySideMyFleet, addMarkToFleet(mySideMyFleet));
-            // }
-            // if (!selectChosenCell) {
-            //   addLastShotMark(fleet, e.target);
-            //   addLastShotMark(enemySideEnemyFleet, addMarkToFleet(enemySideEnemyFleet));
-            // }
             const addMissMark = function() {
                 if (e.target.textContent !== "") return;
                 // This and a piece of code below add a class and insert textContent in the fleet which was clicked
@@ -2557,16 +2529,6 @@ var _showEndResultsDefault = parcelHelpers.interopDefault(_showEndResults);
 var _gameStartControl = require("./gameStartControl");
 var _helpers = require("./helpers");
 var _config = require("./config");
-function addLastShotMark(fleet, e) {
-    // console.log("element", el, el?.nextElementSibling);
-    let improvedElement;
-    if (e.target.classList[0] === "dropzone") improvedElement = fleet.querySelector(`.${e.target.querySelector("div").classList[0]}`);
-    if (e.target.classList[0] !== "dropzone") improvedElement = fleet.querySelector(`.${e.target.classList[0]}`);
-    const markToRemove = fleet.querySelector(".last-shot")?.classList.remove("last-shot");
-    const markToAdd = /* e.target.querySelector(".cell") */ improvedElement?.classList.add("last-shot");
-    console.log("classes", fleet.querySelector(".last-shot"), improvedElement);
-    console.log("Added last shot mark");
-}
 function computerShotHandler() {
     // console.log("whoseTurn", whoseTurn, whoseTurn.turn === enemySideMyFleet);
     if (!(0, _gameStartControl.playingCheck).playing) {
