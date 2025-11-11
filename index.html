@@ -2,18 +2,46 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" href="src/img/boat.png" />
-    <link rel="stylesheet" href="src/css/style.css" />
-    <script type="module" defer src="src/js/controller.js"></script>
+    <link
+      rel="icon"
+      href="src/img/boat.png"
+    />
+    <link
+      rel="stylesheet"
+      href="src/css/style.css"
+    />
+    <script
+      type="module"
+      defer
+      src="src/js/controller.js"
+    ></script>
     <title>Sea Battle</title>
   </head>
   <body>
+    <audio
+      id="cannon"
+      preload="auto"
+    >
+      <!-- <source src="gun.mp3" type="audio/mpeg"> -->
+      <!-- fallback if you also saved a .wav version -->
+      <source
+        src="src/sounds/bomb.mp3"
+        type="audio/wav"
+      />
+      Your browser does not support audio.
+    </audio>
     <div class="container grid grid--3-cols">
       <div class="grid grid--2-cols">
         <div class="sea-container">
@@ -44,7 +72,10 @@
                 maxlength="12"
               />
               <button class="submit-username--fleet-1">Submit&nbsp;</button>
-              <button class="new-game-btn player-1" disabled>
+              <button
+                class="new-game-btn player-1"
+                disabled
+              >
                 New game&nbsp;<ion-icon name="repeat"></ion-icon>
               </button>
               <button class="change-username-btn-1">
@@ -117,7 +148,10 @@
               <button class="submit-username--fleet-2">
                 <span>Submit&nbsp;</span>
               </button>
-              <button class="new-game-btn player-2" disabled>
+              <button
+                class="new-game-btn player-2"
+                disabled
+              >
                 New game&nbsp;<ion-icon name="repeat"></ion-icon>
               </button>
               <button class="change-username-btn-2">

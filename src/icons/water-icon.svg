@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6DD5FA"/>
+      <stop offset="100%" stop-color="#2980B9"/>
+    </linearGradient>
+    <linearGradient id="foamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Deep water background -->
+  <rect width="64" height="64" fill="#1A5276"/>
+
+  <!-- Water surface -->
+  <path d="M0,32 Q16,24 32,32 T64,32 L64,64 L0,64 Z" fill="url(#waterGrad)"/>
+
+  <!-- Wave foam highlights -->
+  <path d="M8,34 Q16,28 24,32 T40,32 Q48,28 56,33" fill="none" stroke="url(#foamGrad)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M12,40 Q20,36 28,39 T44,38 Q50,35 56,39" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Small sparkle -->
+  <circle cx="48" cy="20" r="2" fill="#FFFFFF"/>
+  <circle cx="16" cy="24" r="1.5" fill="#FFFFFF"/>
+</svg>

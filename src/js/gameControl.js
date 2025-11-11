@@ -5,7 +5,7 @@ import {
   enemySideEnemyFleet,
 } from "./globalVarsPause";
 
-import { playingCheck } from "./gameStartControl";
+import { playingCheck, whoseTurn } from "./gameStartControl";
 
 import { startTimer } from "./helpers";
 
@@ -31,6 +31,8 @@ export default function () {
         playingCheck.playing && fleet === enemySideMyFleet
           ? mySideEnemyFleet
           : enemySideMyFleet;
+
+      whoseTurn.turn = turn;
 
       if (playingCheck.playing) {
         turn.style.pointerEvents = "auto";

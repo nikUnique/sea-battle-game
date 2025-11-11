@@ -135,7 +135,7 @@ export const startTimer = function (fleet, newGame = false) {
     labelContraryTimer.textContent = timerClock(time, labelTimer);
 
     if (time === 0) {
-      console.log(playingCheck.playing, "play");
+      console.log(playingCheck.playing, "play", time);
 
       const fleetSide =
         fleet === mySideEnemyFleet ? enemySideMyFleet : mySideEnemyFleet;

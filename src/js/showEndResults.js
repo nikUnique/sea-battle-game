@@ -43,6 +43,8 @@ export default function (fleet, noTime = false) {
 
   const runOutOfTime = noTime ? true : false;
 
+  console.log("runOUtOftime", runOutOfTime);
+
   if (!areAllShipsInjured && !runOutOfTime) {
     return;
   }

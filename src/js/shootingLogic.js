@@ -2,15 +2,45 @@ import {
   mySideMyFleet,
   enemySideEnemyFleet,
   enemySideMyFleet,
+  mySideEnemyFleet,
 } from "./globalVars";
+
+import { randomNumberFromRange } from "./shipMakeHelpers";
 
 import showEndResults from "./showEndResults";
 
-import { playingCheck } from "./gameStartControl";
+import { playingCheck, whoseTurn } from "./gameStartControl";
 
 import { buildShipBorder, startTimer, timerClock } from "./helpers";
 
 import { APPEAR_TIME, TIME_LENGTHS } from "./config";
+
+function addLastShotMark(fleet, e) {
+  // console.log("element", el, el?.nextElementSibling);
+
+  let improvedElement;
+
+  if (e.target.classList[0] === "dropzone") {
+    improvedElement = fleet.querySelector(
+      `.${e.target.querySelector("div").classList[0]}`
+    );
+  }
+
+  if (e.target.classList[0] !== "dropzone") {
+    improvedElement = fleet.querySelector(`.${e.target.classList[0]}`);
+  }
+
+  const markToRemove = fleet
+    .querySelector(".last-shot")
+    ?.classList.remove("last-shot");
+  const markToAdd =
+    /* e.target.querySelector(".cell") */ improvedElement?.classList.add(
+      "last-shot"
+    );
+  console.log("classes", fleet.querySelector(".last-shot"), improvedElement);
+
+  console.log("Added last shot mark");
+}
 
 export default function (fleet, ships) {
   const shootingLogic = function (e) {
@@ -23,6 +53,24 @@ export default function (fleet, ships) {
 
     console.log(e.target, "target");
 
+    const addMarkToFleet = function (fleet) {
+      // If the first condition is true this means that the shot missed and reached dropzone containing empty cell
+      if (e.target.classList[0] === "dropzone")
+        return fleet.querySelector(
+          `.${e.target.querySelector("div").classList[0]}`
+        );
+
+      // If this is true then this means that the shot damaged a ship
+      if (e.target.classList[0] !== "dropzone") {
+        console.log(
+          "fleet.querySelector(`.${e.target.classList[0]}`",
+          fleet.querySelector(`.${e.target.classList[0]}`)
+        );
+
+        return fleet.querySelector(`.${e.target.classList[0]}`);
+      }
+    };
+
     const containsShip =
       !playingCheck.playing ||
       e.target.querySelector(".ship")?.classList.contains("ship");
@@ -33,19 +81,84 @@ export default function (fleet, ships) {
       return;
     }
 
-    const miss = "&bull;";
+    const miss = "&#x1F30A;";
 
-    const addMarkToFleet = function (fleet) {
-      // If the first condition is true this means that the shot missed and reached dropzone containing empty cell
-      if (e.target.classList[0] === "dropzone")
-        return fleet.querySelector(
-          `.${e.target.querySelector("div").classList[0]}`
-        );
+    const whoseFleet =
+      fleet === mySideEnemyFleet ? enemySideEnemyFleet : mySideMyFleet;
+    if (fleet === mySideEnemyFleet) {
+      mySideEnemyFleet
+        .querySelector(".last-shot")
+        ?.classList.remove("last-shot");
+      enemySideEnemyFleet
+        .querySelector(".last-shot")
+        ?.classList.remove("last-shot");
+    }
+    if (fleet === enemySideMyFleet) {
+      mySideMyFleet.querySelector(".last-shot")?.classList.remove("last-shot");
+      enemySideMyFleet
+        .querySelector(".last-shot")
+        ?.classList.remove("last-shot");
+    }
 
-      // If this is true then this means that the shot damaged a ship
-      if (e.target.classList[0] !== "dropzone")
-        return fleet.querySelector(`.${e.target.classList[0]}`);
-    };
+    if (e.target.classList.contains("dropzone")) {
+      e.target.querySelector(".cell").classList.add("last-shot");
+      whoseFleet
+        .querySelector(`.${e.target.querySelector("div").classList[0]}`)
+        .classList.add("last-shot");
+    }
+
+    if (e.target.classList[0] !== "dropzone") {
+      console.log("Our ship target:", e.target);
+      e.target.classList.add("last-shot");
+      console.log(
+        "Opposite",
+        whoseFleet.querySelector(`.${e.target.classList[0]}`).nextElementSibling
+      );
+
+      whoseFleet
+        .querySelector(`.${e.target.classList[0]}`)
+        .nextElementSibling.classList.add("last-shot");
+    }
+
+    // addLastShotMark(mySideMyFleet, addMarkToFleet(mySideMyFleet));
+    // addLastShotMark(enemySideEnemyFleet, addMarkToFleet(enemySideEnemyFleet));
+
+    // addLastShotMark(fleet, e);
+    // addLastShotMark(mySideEnemyFleet ? enemySideEnemyFleet : mySideMyFleet, e);
+
+    // addLastShotMark(fleet, e);
+
+    // if (fleet === mySideEnemyFleet && e.target.classList[0] !== "dropzone") {
+    //   console.log("Sandwish");
+
+    //   addLastShotMark(
+    //     enemySideMyFleet,
+    //     enemySideMyFleet.querySelector(`.${e.target.querySelector(".ship")}`)
+    //   );
+    // }
+
+    // if (fleet === mySideEnemyFleet) {
+    //   addLastShotMark(
+    //     enemySideEnemyFleet,
+    //     enemySideEnemyFleet.querySelector(`.${e.target.querySelector(".ship")}`)
+    //   );
+    // }
+
+    // if (selectChosenCell) {
+    //   addLastShotMark(mySideMyFleet, e.target.querySelector(".cell"));
+    // }
+    // if (!selectChosenCell) {
+    //   addLastShotMark(enemySideEnemyFleet, e.target.querySelector(".cell"));
+    // }
+
+    // if (selectChosenCell) {
+    //   addLastShotMark(mySideMyFleet, addMarkToFleet(mySideMyFleet));
+    // }
+
+    // if (!selectChosenCell) {
+    //   addLastShotMark(fleet, e.target);
+    //   addLastShotMark(enemySideEnemyFleet, addMarkToFleet(enemySideEnemyFleet));
+    // }
 
     const addMissMark = function () {
       if (e.target.textContent !== "") {
@@ -92,6 +205,9 @@ export default function (fleet, ships) {
     console.log(ships);
 
     e.target.classList.add("injure");
+    const audio = document.getElementById("cannon");
+    audio.currentTime = 0;
+    audio.play();
     const injure = "&cross;";
 
     // e.target.insertAdjacentHTML("afterbegin", injure);
@@ -213,18 +329,22 @@ export default function (fleet, ships) {
         console.log(cellAround, "cellAround");
 
         // There is also can be an imaginary 11th cell when it comes to bottom ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
-        cellAround && (cellAround.style.fontSize = "3.2rem");
+        // cellAround && (cellAround.style.fontSize = "3.2rem");
 
         const surroundDestroyedShip = function (fleet, cellAround) {
+          const surroundSign = "&#x1F4A7";
           cellAround?.textContent === "" &&
             fleet
               .querySelector(`.${cell}`)
-              ?.insertAdjacentHTML("afterbegin", miss);
+              ?.insertAdjacentHTML("afterbegin", surroundSign);
+          /*   fleet
+              .querySelector(`.${cell}`)
+              ?.insertAdjacentHTML("afterbegin", miss); */
 
           !cellAround?.classList.contains("miss") &&
             cellAround?.classList.add("cell-around");
 
-          cellAround && (cellAround.style.fontSize = "3.2rem");
+          // cellAround && (cellAround.style.fontSize = "3.2rem");
 
           cellAround.style.visibility = "hidden";
 
@@ -258,5 +378,56 @@ export default function (fleet, ships) {
 
   fleet.addEventListener("click", function (e) {
     shootingLogic(e);
+
+    computerShotHandler();
   });
+}
+
+export function computerShotHandler() {
+  // console.log("whoseTurn", whoseTurn, whoseTurn.turn === enemySideMyFleet);
+
+  if (!playingCheck.playing) {
+    console.log("The game is over 💯");
+    return;
+  }
+  if (
+    whoseTurn.turn === enemySideMyFleet
+    /* (fleet === mySideEnemyFleet &&
+      !e.target.classList.contains("ship") &&
+      !e.target.classList.contains("miss") &&
+      !e.target.classList.contains("cell-around") */
+    // (fleet === mySideEnemyFleet && e.target.classList.contains("ship"))
+    /*   (fleet === enemySideMyFleet && e.target.classList.contains("ship")) */
+  ) {
+    const allMyShips = [...enemySideMyFleet.querySelectorAll("td")]
+      .filter((el) => !el.querySelector(".miss"))
+      .filter((el) => !el.querySelector(".injure"))
+      .filter((el) => !el.querySelector(".cell-around"));
+
+    const timeout = randomNumberFromRange(1, 5);
+    console.log("timeout", timeout);
+
+    if (allMyShips.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * allMyShips.length);
+    const randomElement = allMyShips[randomIndex];
+    if (
+      !randomElement.querySelector(".ship") &&
+      !randomElement.querySelector(".miss") &&
+      !randomElement.querySelector(".cell-around")
+    ) {
+      setTimeout(function () {
+        randomElement.click();
+      }, timeout * 1000);
+    }
+    if (
+      !randomElement.querySelector(".injure") &&
+      !randomElement.querySelector(".miss") &&
+      !randomElement.querySelector(".cell-around")
+    ) {
+      setTimeout(function () {
+        randomElement.querySelector(".ship")?.click();
+      }, timeout * 1000);
+    }
+    // console.log("Clicked:", randomElement.children[0]);
+  }
 }

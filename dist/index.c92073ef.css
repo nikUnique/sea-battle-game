@@ -141,7 +141,7 @@ td {
 }
 
 td:hover {
-  background-color: #c3fae8;
+  background-color: #c5f6fa;
 }
 
 .dropzone {
@@ -220,7 +220,7 @@ button:disabled {
 }
 
 .my-side--enemy-fleet .ship:hover, .enemy-side--my-fleet .ship:hover {
-  background-color: #c3fae8;
+  background-color: #c5f6fa;
 }
 
 .binoculars-reward-label, .timer-label {
@@ -254,12 +254,18 @@ button:disabled {
 .miss {
   color: #22b8cf;
   background-color: #e6fcf5;
-  font-size: 3.2rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.4rem;
+  display: flex;
 }
 
 .cell-around {
   color: #99e9f2;
   background-color: #e6fcf5;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.4rem;
   display: flex;
 }
 
@@ -268,13 +274,21 @@ button:disabled {
   display: flex;
 }
 
+.last-shot {
+  background-color: #c5f6fa;
+}
+
 .dropzone .ship.injure {
   background-color: #e6fcf5;
   font-size: 3.2rem !important;
 }
 
-.dragover {
-  background-color: #c3fae8;
+.dropzone .ship.injure.last-shot {
+  background-color: #c5f6fa !important;
+}
+
+.dropzone .ship.injure .dragover {
+  background-color: #c5f6fa;
 }
 
 .notification-window {

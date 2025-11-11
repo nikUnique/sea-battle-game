@@ -1886,7 +1886,7 @@ const startTimer = function(fleet, newGame = false) {
     const tick = function() {
         labelContraryTimer.textContent = timerClock(time, labelTimer);
         if (time === 0) {
-            console.log((0, _gameStartControl.playingCheck).playing, "play");
+            console.log((0, _gameStartControl.playingCheck).playing, "play", time);
             const fleetSide = fleet === (0, _globalVarsPause.mySideEnemyFleet) ? (0, _globalVarsPause.enemySideMyFleet) : (0, _globalVarsPause.mySideEnemyFleet);
             clearInterval(timer);
             timeLeftLabel.style.opacity = "0";
@@ -1984,13 +1984,18 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "playingCheck", ()=>playingCheck);
 parcelHelpers.export(exports, "bothFleetsReady", ()=>bothFleetsReady);
 parcelHelpers.export(exports, "newGameAgreement", ()=>newGameAgreement);
+parcelHelpers.export(exports, "whoseTurn", ()=>whoseTurn);
 parcelHelpers.export(exports, "gameStartControl", ()=>gameStartControl);
 var _config = require("./config");
 var _globalVars = require("./globalVars");
 var _helpers = require("./helpers");
+var _shootingLogic = require("./shootingLogic");
 // Shows the current state of the game
 const playingCheck = {
     playing: false
+};
+const whoseTurn = {
+    turn: ""
 };
 // Helps to define whether both sides built their fleets and ready to start or not
 let bothFleetsReady = [];
@@ -2302,17 +2307,18 @@ const gameStartControl = function(fleet, fleetParts) {
             (0, _helpers.allowForbidClick)((0, _globalVars.mySideMyFleet), "none");
             (0, _helpers.allowForbidClick)((0, _globalVars.enemySideEnemyFleet), "none");
         }
-        console.log(firstTurn);
         if (!playingCheck.playing) return;
         (0, _helpers.getSeaOpacityBack)();
         const defineFirstTurn = function(fleet, contraryFleet) {
+            whoseTurn.turn = fleet;
             (0, _helpers.allowForbidClick)(fleet, "auto");
             (0, _helpers.startTimer)(fleet);
+            if (whoseTurn.turn === (0, _globalVars.enemySideMyFleet) && fleet === (0, _globalVars.enemySideMyFleet)) (0, _shootingLogic.computerShotHandler)();
             contraryFleet.closest(".sea").style.opacity = "0.7";
         };
         if (fleet === (0, _globalVars.mySideEnemyFleet) || fleet === (0, _globalVars.enemySideMyFleet)) {
             firstTurn < 0.5 && defineFirstTurn((0, _globalVars.mySideEnemyFleet), (0, _globalVars.enemySideMyFleet));
-            firstTurn >= 0.5 && defineFirstTurn((0, _globalVars.enemySideMyFleet), (0, _globalVars.mySideEnemyFleet));
+            if (firstTurn >= 0.5) defineFirstTurn((0, _globalVars.enemySideMyFleet), (0, _globalVars.mySideEnemyFleet));
         }
         [
             (0, _globalVars.newGameBtn1),
@@ -2322,9 +2328,271 @@ const gameStartControl = function(fleet, fleetParts) {
         });
     };
     fleet !== (0, _globalVars.mySideMyFleet) && fleet !== (0, _globalVars.enemySideEnemyFleet) && (fleetIsEnemySideMyFleet ? (0, _globalVars.startGameBtn1) : (0, _globalVars.startGameBtn2)).addEventListener("click", startPlaying);
+    function sleep(ms) {
+        return new Promise((resolve)=>setTimeout(resolve, ms));
+    }
+    // Computer is ready to play in 5 seconds
+    setTimeout(async function() {
+        (0, _globalVars.startGameBtn2).click();
+    }, 5000);
 };
 
-},{"./config":"k5Hzs","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars":"gb5d6"}],"2csmh":[function(require,module,exports) {
+},{"./config":"k5Hzs","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars":"gb5d6","./shootingLogic":"6WpIw"}],"6WpIw":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
+        const shootingLogic = function(e) {
+            e.preventDefault();
+            // Here are possible 2 options: first is that this variable will be a truthy value because it will successfully select desired element, but second options is that this value will be undefined. So, both of this values make it enough to select the right cell. For example if my opponent shot in a cell of enemySideMyFleet which is his side then that spot will be selected because it happened on his side, but if I shot a cell of mySideEnemyFleet then it will be undefined because closest method will not find enemySideMyFleet in mySideEnemyFleet, so, which means that this is the second option and a cell of mySideEnemyFleet will be chosen when this variable will be used
+            const selectChosenCell = e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`);
+            console.log(e.target, "target");
+            const addMarkToFleet = function(fleet) {
+                // If the first condition is true this means that the shot missed and reached dropzone containing empty cell
+                if (e.target.classList[0] === "dropzone") return fleet.querySelector(`.${e.target.querySelector("div").classList[0]}`);
+                // If this is true then this means that the shot damaged a ship
+                if (e.target.classList[0] !== "dropzone") {
+                    console.log("fleet.querySelector(`.${e.target.classList[0]}`", fleet.querySelector(`.${e.target.classList[0]}`));
+                    return fleet.querySelector(`.${e.target.classList[0]}`);
+                }
+            };
+            const containsShip = !(0, _gameStartControl.playingCheck).playing || e.target.querySelector(".ship")?.classList.contains("ship");
+            // If I made a shot in dropzone containing ship instead of ship itself then this will not count and you can shoot again. This is done this way to make it simplier to select empty cell inside of dropzone which doesn't contain a ship
+            if (containsShip) {
+                console.log("dropzone");
+                return;
+            }
+            const miss = "&#x1F30A;";
+            const whoseFleet = fleet === (0, _globalVars.mySideEnemyFleet) ? (0, _globalVars.enemySideEnemyFleet) : (0, _globalVars.mySideMyFleet);
+            if (fleet === (0, _globalVars.mySideEnemyFleet)) {
+                (0, _globalVars.mySideEnemyFleet).querySelector(".last-shot")?.classList.remove("last-shot");
+                (0, _globalVars.enemySideEnemyFleet).querySelector(".last-shot")?.classList.remove("last-shot");
+            }
+            if (fleet === (0, _globalVars.enemySideMyFleet)) {
+                (0, _globalVars.mySideMyFleet).querySelector(".last-shot")?.classList.remove("last-shot");
+                (0, _globalVars.enemySideMyFleet).querySelector(".last-shot")?.classList.remove("last-shot");
+            }
+            if (e.target.classList.contains("dropzone")) {
+                e.target.querySelector(".cell").classList.add("last-shot");
+                whoseFleet.querySelector(`.${e.target.querySelector("div").classList[0]}`).classList.add("last-shot");
+            }
+            if (e.target.classList[0] !== "dropzone") {
+                console.log("Our ship target:", e.target);
+                e.target.classList.add("last-shot");
+                console.log("Opposite", whoseFleet.querySelector(`.${e.target.classList[0]}`).nextElementSibling);
+                whoseFleet.querySelector(`.${e.target.classList[0]}`).nextElementSibling.classList.add("last-shot");
+            }
+            // addLastShotMark(mySideMyFleet, addMarkToFleet(mySideMyFleet));
+            // addLastShotMark(enemySideEnemyFleet, addMarkToFleet(enemySideEnemyFleet));
+            // addLastShotMark(fleet, e);
+            // addLastShotMark(mySideEnemyFleet ? enemySideEnemyFleet : mySideMyFleet, e);
+            // addLastShotMark(fleet, e);
+            // if (fleet === mySideEnemyFleet && e.target.classList[0] !== "dropzone") {
+            //   console.log("Sandwish");
+            //   addLastShotMark(
+            //     enemySideMyFleet,
+            //     enemySideMyFleet.querySelector(`.${e.target.querySelector(".ship")}`)
+            //   );
+            // }
+            // if (fleet === mySideEnemyFleet) {
+            //   addLastShotMark(
+            //     enemySideEnemyFleet,
+            //     enemySideEnemyFleet.querySelector(`.${e.target.querySelector(".ship")}`)
+            //   );
+            // }
+            // if (selectChosenCell) {
+            //   addLastShotMark(mySideMyFleet, e.target.querySelector(".cell"));
+            // }
+            // if (!selectChosenCell) {
+            //   addLastShotMark(enemySideEnemyFleet, e.target.querySelector(".cell"));
+            // }
+            // if (selectChosenCell) {
+            //   addLastShotMark(mySideMyFleet, addMarkToFleet(mySideMyFleet));
+            // }
+            // if (!selectChosenCell) {
+            //   addLastShotMark(fleet, e.target);
+            //   addLastShotMark(enemySideEnemyFleet, addMarkToFleet(enemySideEnemyFleet));
+            // }
+            const addMissMark = function() {
+                if (e.target.textContent !== "") return;
+                // This and a piece of code below add a class and insert textContent in the fleet which was clicked
+                e.target.querySelector("div").classList.add("miss");
+                e.target.querySelector("div").insertAdjacentHTML("afterbegin", miss);
+                // These 2 if-statements basically do the same thing as above but duplicating this to the second sea part
+                if (selectChosenCell) {
+                    addMarkToFleet((0, _globalVars.mySideMyFleet)).classList.add("miss");
+                    addMarkToFleet((0, _globalVars.mySideMyFleet)).insertAdjacentHTML("afterbegin", miss);
+                }
+                if (!selectChosenCell) {
+                    addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).classList.add("miss");
+                    addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).insertAdjacentHTML("afterbegin", miss);
+                }
+            };
+            // Calls the function when player misses ship
+            !e.target.closest(".ship") && addMissMark();
+            // If cell in which you shot is already marked then code execution will stop here because the code below marks damaged ships which is already done at this point if target is a marked ship part and if not then the cell was already marked as missed which means that textContent of the target is already not empty in these cases
+            if (e.target.textContent !== "") {
+                console.log(e.target);
+                console.log("You already shot that cell or you missed");
+                return;
+            }
+            const injuredShipPartPos = ships.findIndex((ship)=>{
+                // Find ship index in the ships arr which was damaged
+                return ship?.coords?.includes(e.target.classList[0]);
+            });
+            console.log(ships);
+            e.target.classList.add("injure");
+            const audio = document.getElementById("cannon");
+            audio.currentTime = 0;
+            audio.play();
+            const injure = "&cross;";
+            // e.target.insertAdjacentHTML("afterbegin", injure);
+            // A nice neat trick when you don't need empty string but you also don't need it to be filled with something visible, so you just add empty space
+            e.target.textContent = " ";
+            // Checks whether ship is only damaged or destroyed completely
+            const destroyedShipCoords = ships[injuredShipPartPos].coords.map((_, i)=>{
+                return fleet.querySelector(`.${ships[injuredShipPartPos]?.coords[i]}`).nextElementSibling.classList.contains("injure");
+            });
+            // Duplicate damage mark on the second sea part
+            if (selectChosenCell) {
+                /* addMarkToFleet(mySideMyFleet).nextElementSibling.insertAdjacentHTML(
+        "afterbegin",
+        injure
+      ), && */ addMarkToFleet((0, _globalVars.mySideMyFleet)).nextElementSibling.classList.add("injure");
+                // When a ship is damaged or destroyed then timer refreshes
+                (0, _helpers.startTimer)(fleet);
+            }
+            if (!selectChosenCell) {
+                /* addMarkToFleet(
+        enemySideEnemyFleet
+      ).nextElementSibling.insertAdjacentHTML("afterbegin", injure), && */ addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).nextElementSibling.classList.add("injure");
+                (0, _helpers.startTimer)(fleet);
+            }
+            // If ships is destroyed completely it's time to add border to it, but if not then execution stops here
+            if (destroyedShipCoords.includes(false)) return;
+            const addBorder = function(borderSide, coord, color = "#FA5252") {
+                const selectTd = function(fleetSide) {
+                    fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = `2px solid ${color} `;
+                };
+                selectTd(fleet);
+                // Select tds for adding border to ships of the second sea part
+                selectTd(fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet));
+            };
+            ships[injuredShipPartPos].coords.map((coord, i, arr)=>{
+                (0, _helpers.buildShipBorder)([
+                    ships[injuredShipPartPos],
+                    coord,
+                    i,
+                    arr,
+                    addBorder
+                ]);
+                // Code below if-statement will be executed only for 1-cell ships
+                if (ships[injuredShipPartPos].coords.length !== 1) return;
+                // Check whether 1-cell ship contains reward class or not
+                const rewardShip = fleet.querySelector(`.${coord}`).nextElementSibling.classList.contains("reward");
+                if (!rewardShip) return;
+                // Adds special class which is necessary for reward feature
+                fleet.classList.add("binoculars");
+                const labelBinocularsReward = fleet.closest(".sea-container").querySelector(".binoculars-reward-label");
+                const labelTimer = fleet.closest(".sea-container").querySelector(".timer");
+                labelBinocularsReward.style.opacity = "100";
+                const tick = function() {
+                    (0, _helpers.timerClock)(time, labelTimer);
+                    if (time === 0) {
+                        clearInterval(timer);
+                        labelBinocularsReward.style.opacity = "0";
+                        fleet.classList.remove("binoculars");
+                        console.log("Magic video camera removed");
+                    }
+                    time--;
+                };
+                let time = (0, _config.TIME_LENGTHS).bonusTime;
+                tick();
+                // This will make timer
+                const timer = setInterval(tick, 1000);
+            });
+            const filledAreaAroundShip = ships[injuredShipPartPos].unavailabeCells.filter((cell)=>{
+                // Filtering out coords on which the ship inself is placed, because unavailableCells also included them
+                return !ships[injuredShipPartPos].coords.includes(cell);
+            }).filter((cell)=>{
+                return fleet.querySelector(`.${cell}`)?.textContent === "";
+            }).map((cell, i)=>{
+                const cellAround = fleet.querySelector(`.${cell}`);
+                console.log(cellAround, "cellAround");
+                // There is also can be an imaginary 11th cell when it comes to bottom ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
+                // cellAround && (cellAround.style.fontSize = "3.2rem");
+                const surroundDestroyedShip = function(fleet, cellAround) {
+                    const surroundSign = "&#x1F4A7";
+                    cellAround?.textContent === "" && fleet.querySelector(`.${cell}`)?.insertAdjacentHTML("afterbegin", surroundSign);
+                    /*   fleet
+              .querySelector(`.${cell}`)
+              ?.insertAdjacentHTML("afterbegin", miss); */ !cellAround?.classList.contains("miss") && cellAround?.classList.add("cell-around");
+                    // cellAround && (cellAround.style.fontSize = "3.2rem");
+                    cellAround.style.visibility = "hidden";
+                    // This is done for nice animation effect
+                    setTimeout(function() {
+                        cellAround.style.visibility = "visible";
+                    }, i * (0, _config.APPEAR_TIME));
+                };
+                const markContraryFleet = function(fleet) {
+                    const cellAroundContrarySide = fleet.querySelector(`.${cell}`);
+                    surroundDestroyedShip(fleet, cellAroundContrarySide);
+                };
+                e.target.closest(".ship").closest(".enemy-side--my-fleet") && markContraryFleet((0, _globalVars.mySideMyFleet));
+                e.target.closest(".ship").closest(".my-side--enemy-fleet") && markContraryFleet((0, _globalVars.enemySideEnemyFleet));
+                // If the cell is empty then a new mark will be inserted, but if there is something inside then nothing will happen
+                surroundDestroyedShip(fleet, cellAround);
+            });
+            /**************************/ /* CONTROLLING THE END OF THE GAME */ /**************************/ (0, _showEndResultsDefault.default)(fleet);
+        };
+        fleet.addEventListener("click", function(e) {
+            shootingLogic(e);
+            computerShotHandler();
+        });
+    });
+parcelHelpers.export(exports, "computerShotHandler", ()=>computerShotHandler);
+var _globalVars = require("./globalVars");
+var _shipMakeHelpers = require("./shipMakeHelpers");
+var _showEndResults = require("./showEndResults");
+var _showEndResultsDefault = parcelHelpers.interopDefault(_showEndResults);
+var _gameStartControl = require("./gameStartControl");
+var _helpers = require("./helpers");
+var _config = require("./config");
+function addLastShotMark(fleet, e) {
+    // console.log("element", el, el?.nextElementSibling);
+    let improvedElement;
+    if (e.target.classList[0] === "dropzone") improvedElement = fleet.querySelector(`.${e.target.querySelector("div").classList[0]}`);
+    if (e.target.classList[0] !== "dropzone") improvedElement = fleet.querySelector(`.${e.target.classList[0]}`);
+    const markToRemove = fleet.querySelector(".last-shot")?.classList.remove("last-shot");
+    const markToAdd = /* e.target.querySelector(".cell") */ improvedElement?.classList.add("last-shot");
+    console.log("classes", fleet.querySelector(".last-shot"), improvedElement);
+    console.log("Added last shot mark");
+}
+function computerShotHandler() {
+    // console.log("whoseTurn", whoseTurn, whoseTurn.turn === enemySideMyFleet);
+    if (!(0, _gameStartControl.playingCheck).playing) {
+        console.log("The game is over \uD83D\uDCAF");
+        return;
+    }
+    if ((0, _gameStartControl.whoseTurn).turn === (0, _globalVars.enemySideMyFleet)) {
+        const allMyShips = [
+            ...(0, _globalVars.enemySideMyFleet).querySelectorAll("td")
+        ].filter((el)=>!el.querySelector(".miss")).filter((el)=>!el.querySelector(".injure")).filter((el)=>!el.querySelector(".cell-around"));
+        const timeout = (0, _shipMakeHelpers.randomNumberFromRange)(1, 5);
+        console.log("timeout", timeout);
+        if (allMyShips.length === 0) return;
+        const randomIndex = Math.floor(Math.random() * allMyShips.length);
+        const randomElement = allMyShips[randomIndex];
+        if (!randomElement.querySelector(".ship") && !randomElement.querySelector(".miss") && !randomElement.querySelector(".cell-around")) setTimeout(function() {
+            randomElement.click();
+        }, timeout * 1000);
+        if (!randomElement.querySelector(".injure") && !randomElement.querySelector(".miss") && !randomElement.querySelector(".cell-around")) setTimeout(function() {
+            randomElement.querySelector(".ship")?.click();
+        }, timeout * 1000);
+    // console.log("Clicked:", randomElement.children[0]);
+    }
+}
+
+},{"./globalVars":"gb5d6","./showEndResults":"2csmh","./gameStartControl":"fXv0K","./helpers":"hGI1E","./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./shipMakeHelpers":"2URfe"}],"2csmh":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
@@ -2343,6 +2611,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
         console.log(fleet);
         const areAllShipsInjured = injuredShips.length === allShips.length;
         const runOutOfTime = noTime ? true : false;
+        console.log("runOUtOftime", runOutOfTime);
         if (!areAllShipsInjured && !runOutOfTime) return;
         // If code execution is at this point - this means the game is finished
         clearInterval((0, _helpers.timer));
@@ -2759,6 +3028,7 @@ parcelHelpers.export(exports, "default", ()=>function() {
                 if (// Check complition of conditions which define whether the turn should or should not be changed
                 e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
                 const turn = (0, _gameStartControl.playingCheck).playing && fleet === (0, _globalVarsPause.enemySideMyFleet) ? (0, _globalVarsPause.mySideEnemyFleet) : (0, _globalVarsPause.enemySideMyFleet);
+                (0, _gameStartControl.whoseTurn).turn = turn;
                 if ((0, _gameStartControl.playingCheck).playing) {
                     turn.style.pointerEvents = "auto";
                     fleet.closest(".sea").style.opacity = "0.7";
@@ -2778,166 +3048,7 @@ var _globalVarsPause = require("./globalVarsPause");
 var _gameStartControl = require("./gameStartControl");
 var _helpers = require("./helpers");
 
-},{"./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause":"bAcK9"}],"6WpIw":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
-        const shootingLogic = function(e) {
-            e.preventDefault();
-            // Here are possible 2 options: first is that this variable will be a truthy value because it will successfully select desired element, but second options is that this value will be undefined. So, both of this values make it enough to select the right cell. For example if my opponent shot in a cell of enemySideMyFleet which is his side then that spot will be selected because it happened on his side, but if I shot a cell of mySideEnemyFleet then it will be undefined because closest method will not find enemySideMyFleet in mySideEnemyFleet, so, which means that this is the second option and a cell of mySideEnemyFleet will be chosen when this variable will be used
-            const selectChosenCell = e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`);
-            console.log(e.target, "target");
-            const containsShip = !(0, _gameStartControl.playingCheck).playing || e.target.querySelector(".ship")?.classList.contains("ship");
-            // If I made a shot in dropzone containing ship instead of ship itself then this will not count and you can shoot again. This is done this way to make it simplier to select empty cell inside of dropzone which doesn't contain a ship
-            if (containsShip) {
-                console.log("dropzone");
-                return;
-            }
-            const miss = "&bull;";
-            const addMarkToFleet = function(fleet) {
-                // If the first condition is true this means that the shot missed and reached dropzone containing empty cell
-                if (e.target.classList[0] === "dropzone") return fleet.querySelector(`.${e.target.querySelector("div").classList[0]}`);
-                // If this is true then this means that the shot damaged a ship
-                if (e.target.classList[0] !== "dropzone") return fleet.querySelector(`.${e.target.classList[0]}`);
-            };
-            const addMissMark = function() {
-                if (e.target.textContent !== "") return;
-                // This and a piece of code below add a class and insert textContent in the fleet which was clicked
-                e.target.querySelector("div").classList.add("miss");
-                e.target.querySelector("div").insertAdjacentHTML("afterbegin", miss);
-                // These 2 if-statements basically do the same thing as above but duplicating this to the second sea part
-                if (selectChosenCell) {
-                    addMarkToFleet((0, _globalVars.mySideMyFleet)).classList.add("miss");
-                    addMarkToFleet((0, _globalVars.mySideMyFleet)).insertAdjacentHTML("afterbegin", miss);
-                }
-                if (!selectChosenCell) {
-                    addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).classList.add("miss");
-                    addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).insertAdjacentHTML("afterbegin", miss);
-                }
-            };
-            // Calls the function when player misses ship
-            !e.target.closest(".ship") && addMissMark();
-            // If cell in which you shot is already marked then code execution will stop here because the code below marks damaged ships which is already done at this point if target is a marked ship part and if not then the cell was already marked as missed which means that textContent of the target is already not empty in these cases
-            if (e.target.textContent !== "") {
-                console.log(e.target);
-                console.log("You already shot that cell or you missed");
-                return;
-            }
-            const injuredShipPartPos = ships.findIndex((ship)=>{
-                // Find ship index in the ships arr which was damaged
-                return ship?.coords?.includes(e.target.classList[0]);
-            });
-            console.log(ships);
-            e.target.classList.add("injure");
-            const injure = "&cross;";
-            // e.target.insertAdjacentHTML("afterbegin", injure);
-            // A nice neat trick when you don't need empty string but you also don't need it to be filled with something visible, so you just add empty space
-            e.target.textContent = " ";
-            // Checks whether ship is only damaged or destroyed completely
-            const destroyedShipCoords = ships[injuredShipPartPos].coords.map((_, i)=>{
-                return fleet.querySelector(`.${ships[injuredShipPartPos]?.coords[i]}`).nextElementSibling.classList.contains("injure");
-            });
-            // Duplicate damage mark on the second sea part
-            if (selectChosenCell) {
-                /* addMarkToFleet(mySideMyFleet).nextElementSibling.insertAdjacentHTML(
-        "afterbegin",
-        injure
-      ), && */ addMarkToFleet((0, _globalVars.mySideMyFleet)).nextElementSibling.classList.add("injure");
-                // When a ship is damaged or destroyed then timer refreshes
-                (0, _helpers.startTimer)(fleet);
-            }
-            if (!selectChosenCell) {
-                /* addMarkToFleet(
-        enemySideEnemyFleet
-      ).nextElementSibling.insertAdjacentHTML("afterbegin", injure), && */ addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).nextElementSibling.classList.add("injure");
-                (0, _helpers.startTimer)(fleet);
-            }
-            // If ships is destroyed completely it's time to add border to it, but if not then execution stops here
-            if (destroyedShipCoords.includes(false)) return;
-            const addBorder = function(borderSide, coord, color = "#FA5252") {
-                const selectTd = function(fleetSide) {
-                    fleetSide.querySelector(`.${coord}`).closest(".dropzone").style[borderSide] = `2px solid ${color} `;
-                };
-                selectTd(fleet);
-                // Select tds for adding border to ships of the second sea part
-                selectTd(fleet === (0, _globalVars.enemySideMyFleet) ? (0, _globalVars.mySideMyFleet) : (0, _globalVars.enemySideEnemyFleet));
-            };
-            ships[injuredShipPartPos].coords.map((coord, i, arr)=>{
-                (0, _helpers.buildShipBorder)([
-                    ships[injuredShipPartPos],
-                    coord,
-                    i,
-                    arr,
-                    addBorder
-                ]);
-                // Code below if-statement will be executed only for 1-cell ships
-                if (ships[injuredShipPartPos].coords.length !== 1) return;
-                // Check whether 1-cell ship contains reward class or not
-                const rewardShip = fleet.querySelector(`.${coord}`).nextElementSibling.classList.contains("reward");
-                if (!rewardShip) return;
-                // Adds special class which is necessary for reward feature
-                fleet.classList.add("binoculars");
-                const labelBinocularsReward = fleet.closest(".sea-container").querySelector(".binoculars-reward-label");
-                const labelTimer = fleet.closest(".sea-container").querySelector(".timer");
-                labelBinocularsReward.style.opacity = "100";
-                const tick = function() {
-                    (0, _helpers.timerClock)(time, labelTimer);
-                    if (time === 0) {
-                        clearInterval(timer);
-                        labelBinocularsReward.style.opacity = "0";
-                        fleet.classList.remove("binoculars");
-                        console.log("Magic video camera removed");
-                    }
-                    time--;
-                };
-                let time = (0, _config.TIME_LENGTHS).bonusTime;
-                tick();
-                // This will make timer
-                const timer = setInterval(tick, 1000);
-            });
-            const filledAreaAroundShip = ships[injuredShipPartPos].unavailabeCells.filter((cell)=>{
-                // Filtering out coords on which the ship inself is placed, because unavailableCells also included them
-                return !ships[injuredShipPartPos].coords.includes(cell);
-            }).filter((cell)=>{
-                return fleet.querySelector(`.${cell}`)?.textContent === "";
-            }).map((cell, i)=>{
-                const cellAround = fleet.querySelector(`.${cell}`);
-                console.log(cellAround, "cellAround");
-                // There is also can be an imaginary 11th cell when it comes to bottom ships(because unavailableCells contains them, but only for conveniency reason), so there is a check whether that cell exists or not, because there is no 11th cell exists in the sea(Means that this could be misunderstood as if 11th cell exists but transparent)
-                cellAround && (cellAround.style.fontSize = "3.2rem");
-                const surroundDestroyedShip = function(fleet, cellAround) {
-                    cellAround?.textContent === "" && fleet.querySelector(`.${cell}`)?.insertAdjacentHTML("afterbegin", miss);
-                    !cellAround?.classList.contains("miss") && cellAround?.classList.add("cell-around");
-                    cellAround && (cellAround.style.fontSize = "3.2rem");
-                    cellAround.style.visibility = "hidden";
-                    // This is done for nice animation effect
-                    setTimeout(function() {
-                        cellAround.style.visibility = "visible";
-                    }, i * (0, _config.APPEAR_TIME));
-                };
-                const markContraryFleet = function(fleet) {
-                    const cellAroundContrarySide = fleet.querySelector(`.${cell}`);
-                    surroundDestroyedShip(fleet, cellAroundContrarySide);
-                };
-                e.target.closest(".ship").closest(".enemy-side--my-fleet") && markContraryFleet((0, _globalVars.mySideMyFleet));
-                e.target.closest(".ship").closest(".my-side--enemy-fleet") && markContraryFleet((0, _globalVars.enemySideEnemyFleet));
-                // If the cell is empty then a new mark will be inserted, but if there is something inside then nothing will happen
-                surroundDestroyedShip(fleet, cellAround);
-            });
-            /**************************/ /* CONTROLLING THE END OF THE GAME */ /**************************/ (0, _showEndResultsDefault.default)(fleet);
-        };
-        fleet.addEventListener("click", function(e) {
-            shootingLogic(e);
-        });
-    });
-var _globalVars = require("./globalVars");
-var _showEndResults = require("./showEndResults");
-var _showEndResultsDefault = parcelHelpers.interopDefault(_showEndResults);
-var _gameStartControl = require("./gameStartControl");
-var _helpers = require("./helpers");
-var _config = require("./config");
-
-},{"./globalVars":"gb5d6","./showEndResults":"2csmh","./gameStartControl":"fXv0K","./helpers":"hGI1E","./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGRP7":[function(require,module,exports) {
+},{"./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause":"bAcK9"}],"hGRP7":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "startNewGame", ()=>startNewGame);

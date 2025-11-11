@@ -33,9 +33,12 @@ import {
   selectCellsAround,
   startTimer,
 } from "./helpers";
+import { computerShotHandler } from "./shootingLogic";
 
 // Shows the current state of the game
 const playingCheck = { playing: false };
+
+const whoseTurn = { turn: "" };
 
 // Helps to define whether both sides built their fleets and ready to start or not
 let bothFleetsReady = [];
@@ -49,7 +52,7 @@ let firstTurn;
 // Helps to define whether all ships are placed in the right way or not
 let checkCells;
 
-export { playingCheck, bothFleetsReady, newGameAgreement };
+export { playingCheck, bothFleetsReady, newGameAgreement, whoseTurn };
 
 export const gameStartControl = function (fleet, fleetParts) {
   const fleetIsEnemySideMyFleet = fleet === enemySideMyFleet;
@@ -438,14 +441,17 @@ export const gameStartControl = function (fleet, fleetParts) {
       allowForbidClick(enemySideEnemyFleet, "none");
     }
 
-    console.log(firstTurn);
-
     if (!playingCheck.playing) return;
     getSeaOpacityBack();
 
     const defineFirstTurn = function (fleet, contraryFleet) {
+      whoseTurn.turn = fleet;
       allowForbidClick(fleet, "auto");
       startTimer(fleet);
+
+      if (whoseTurn.turn === enemySideMyFleet && fleet === enemySideMyFleet) {
+        computerShotHandler();
+      }
 
       contraryFleet.closest(".sea").style.opacity = "0.7";
     };
@@ -453,7 +459,9 @@ export const gameStartControl = function (fleet, fleetParts) {
     if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet) {
       firstTurn < 0.5 && defineFirstTurn(mySideEnemyFleet, enemySideMyFleet);
 
-      firstTurn >= 0.5 && defineFirstTurn(enemySideMyFleet, mySideEnemyFleet);
+      if (firstTurn >= 0.5) {
+        defineFirstTurn(enemySideMyFleet, mySideEnemyFleet);
+      }
     }
 
     [newGameBtn1, newGameBtn2].forEach((btn) => {
@@ -467,4 +475,13 @@ export const gameStartControl = function (fleet, fleetParts) {
       "click",
       startPlaying
     );
+
+  function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  // Computer is ready to play in 5 seconds
+  setTimeout(async function () {
+    startGameBtn2.click();
+  }, 5000);
 };
