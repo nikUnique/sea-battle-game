@@ -6,7 +6,7 @@ const IN_BETWEEN_SHIP_PART_LENGTH = 4;
 const SECONDS_IN_MINUTE = 60;
 const APPEAR_TIME = 100;
 const TIME_LENGTHS = {
-  shotTime: 90,
+  shotTime: 15,
   bonusTime: 5,
 };
 
