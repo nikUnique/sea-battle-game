@@ -293,6 +293,9 @@ button:disabled {
   background-color: #fab005;
 }
 
+.hide {
+  display: none;
+}
 .my-side--enemy-fleet,
 .enemy-side--my-fleet {
   cursor: url(../icons/gun-target.png), auto;
@@ -613,7 +616,7 @@ button:disabled {
 
 .game-description-container-2 {
   grid-column: 3/-1;
-  display: grid;
+  display: none;
   width: 80%;
   justify-self: center;
 }

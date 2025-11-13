@@ -637,6 +637,11 @@ const [fourCellShip] = createShip?.({
   randomLetterRangeProp: ["d", "g"],
   size: 4,
 });
+const [fourCellShipTwo] = createShip?.({
+  randomRange: [4, 7],
+  randomLetterRangeProp: ["d", "g"],
+  size: 4,
+});
 
 const [threeCellShipOne] = createShip?.({
   randomRange: [3, 8],
@@ -712,6 +717,7 @@ let createEnemyShips = [
   [threeCellShipTwo, threeCellShipTwo.length],
 
   [fourCellShip, fourCellShip.length],
+  // [fourCellShipTwo, fourCellShip.length],
 
   // [["a1"], ["d10"].length],
   // [["c1"], ["d10"].length],
@@ -813,5 +819,6 @@ export {
   resultsMessage2,
   player1,
   player2,
+  lowerLetters,
   // overlay,
 };

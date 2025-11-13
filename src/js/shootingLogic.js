@@ -1,11 +1,16 @@
+/* eslint-disable no-unused-vars */
 import {
   mySideMyFleet,
   enemySideEnemyFleet,
   enemySideMyFleet,
   mySideEnemyFleet,
+  lowerLetters,
 } from "./globalVars";
 
-import { randomNumberFromRange } from "./shipMakeHelpers";
+import {
+  generateSurroundingFields,
+  randomNumberFromRange,
+} from "./shipMakeHelpers";
 
 import showEndResults from "./showEndResults";
 
@@ -14,6 +19,10 @@ import { playingCheck, whoseTurn } from "./gameStartControl";
 import { buildShipBorder, startTimer, timerClock } from "./helpers";
 
 import { APPEAR_TIME, TIME_LENGTHS } from "./config";
+
+let lastShotField;
+let surroundingCoords;
+let lastInjuredShip = [];
 
 export default function (fleet, ships) {
   const shootingLogic = function (e) {
@@ -60,7 +69,7 @@ export default function (fleet, ships) {
       fleet === mySideEnemyFleet ? enemySideEnemyFleet : mySideMyFleet;
 
     // Removing visual indicators to last missed field in all 4 sea containers
-    if (fleet === mySideEnemyFleet) {
+    if (fleet === mySideEnemyFleet && e.target.textContent === "") {
       mySideEnemyFleet
         .querySelector(".last-shot")
         ?.classList.remove("last-shot");
@@ -68,7 +77,7 @@ export default function (fleet, ships) {
         .querySelector(".last-shot")
         ?.classList.remove("last-shot");
     }
-    if (fleet === enemySideMyFleet) {
+    if (fleet === enemySideMyFleet && e.target.textContent === "") {
       mySideMyFleet.querySelector(".last-shot")?.classList.remove("last-shot");
       enemySideMyFleet
         .querySelector(".last-shot")
@@ -78,7 +87,10 @@ export default function (fleet, ships) {
     // Adding visual indicators to last missed field in all 4 sea containers
 
     // For missed fields
-    if (e.target.classList.contains("dropzone")) {
+    if (
+      e.target.classList.contains("dropzone") &&
+      e.target.textContent === ""
+    ) {
       e.target.querySelector(".cell").classList.add("last-shot");
       whoseFleet
         .querySelector(`.${e.target.querySelector("div").classList[0]}`)
@@ -86,7 +98,7 @@ export default function (fleet, ships) {
     }
 
     // For shipped fields
-    if (e.target.classList[0] !== "dropzone") {
+    if (e.target.classList[0] !== "dropzone" && e.target.textContent === "") {
       // console.log("Our ship target:", e.target);
       e.target.classList.add("last-shot");
 
@@ -159,10 +171,6 @@ export default function (fleet, ships) {
 
     // Duplicate damage mark on the second sea part
     if (selectChosenCell) {
-      /* addMarkToFleet(mySideMyFleet).nextElementSibling.insertAdjacentHTML(
-        "afterbegin",
-        injure
-      ), && */
       addMarkToFleet(mySideMyFleet).nextElementSibling.classList.add("injure");
 
       // When a ship is damaged or destroyed then timer refreshes
@@ -170,9 +178,6 @@ export default function (fleet, ships) {
     }
 
     if (!selectChosenCell) {
-      /* addMarkToFleet(
-        enemySideEnemyFleet
-      ).nextElementSibling.insertAdjacentHTML("afterbegin", injure), && */
       addMarkToFleet(enemySideEnemyFleet).nextElementSibling.classList.add(
         "injure"
       );
@@ -319,50 +324,271 @@ export default function (fleet, ships) {
 }
 
 export function computerShotHandler() {
-  // console.log("whoseTurn", whoseTurn, whoseTurn.turn === enemySideMyFleet);
-
-  if (!playingCheck.playing) {
-    console.log("The game is over 💯");
-    return;
-  }
-  if (
-    whoseTurn.turn === enemySideMyFleet
-    /* (fleet === mySideEnemyFleet &&
-      !e.target.classList.contains("ship") &&
-      !e.target.classList.contains("miss") &&
-      !e.target.classList.contains("cell-around") */
-    // (fleet === mySideEnemyFleet && e.target.classList.contains("ship"))
-    /*   (fleet === enemySideMyFleet && e.target.classList.contains("ship")) */
-  ) {
-    const allMyShips = [...enemySideMyFleet.querySelectorAll("td")]
-      .filter((el) => !el.querySelector(".miss"))
-      .filter((el) => !el.querySelector(".injure"))
-      .filter((el) => !el.querySelector(".cell-around"));
-
-    const timeout = randomNumberFromRange(1, 5);
-    console.log("timeout", timeout);
-
-    if (allMyShips.length === 0) return;
-    const randomIndex = Math.floor(Math.random() * allMyShips.length);
-    const randomElement = allMyShips[randomIndex];
-    if (
-      !randomElement.querySelector(".ship") &&
-      !randomElement.querySelector(".miss") &&
-      !randomElement.querySelector(".cell-around")
-    ) {
-      setTimeout(function () {
-        randomElement.click();
-      }, timeout * 1000);
+  try {
+    if (!playingCheck.playing) {
+      console.log("The game is over 💯");
+      return;
     }
-    if (
-      !randomElement.querySelector(".injure") &&
-      !randomElement.querySelector(".miss") &&
-      !randomElement.querySelector(".cell-around")
-    ) {
-      setTimeout(function () {
-        randomElement.querySelector(".ship")?.click();
-      }, timeout * 1000);
+
+    console.log("lastShotField", lastShotField);
+
+    if (whoseTurn.turn === enemySideMyFleet) {
+      let allMyShips = [...enemySideMyFleet.querySelectorAll("td")]
+        .filter((el) => !el.querySelector(".miss"))
+        .filter((el) => !el.querySelector(".injure"))
+        .filter((el) => !el.querySelector(".cell-around"));
+
+      let oldShips = allMyShips;
+      if (lastShotField) {
+        console.log("allMyShipsBefore", allMyShips, surroundingCoords);
+        let injuredShipParts = lastInjuredShip.map(
+          (coord) => coord.classList[0]
+        );
+
+        console.log("injuredShipParts", injuredShipParts);
+
+        // const betterShipParts = injuredShipParts.find(
+        //   (coord, i, arr) => coord.slice(0, 1) === arr[i + 1].slice(0, 1)
+        // );
+        const IsThisVertical =
+          injuredShipParts.length > 1 &&
+          injuredShipParts[0]?.slice(0, 1) === injuredShipParts[1]?.slice(0, 1);
+
+        // console.log("IsThisVertical", IsThisVertical);
+
+        console.log("lastInjuredShips", lastInjuredShip);
+
+        allMyShips = surroundingCoords
+          .filter((el) => !el.querySelector(".miss"))
+          .filter((el) => !el.querySelector(".injure"))
+          .filter((el) => !el.querySelector(".cell-around"));
+
+        if (injuredShipParts.length > 1) {
+          if (IsThisVertical) {
+            allMyShips = surroundingCoords.filter((coord, i, arr) => {
+              return (
+                injuredShipParts[0].slice(0, 1) ===
+                coord.querySelector(".cell").classList[0].slice(0, 1)
+              );
+            });
+            console.log("isVertical", allMyShips);
+          }
+
+          if (!IsThisVertical) {
+            console.log("surroundingCoordsBefore", surroundingCoords);
+
+            allMyShips = surroundingCoords
+              .filter((coord, i, arr) => {
+                console.log(
+                  "horizontal measure",
+                  injuredShipParts[0].slice(1),
+                  coord.querySelector(".cell").classList[0].slice(1)
+                );
+
+                return (
+                  injuredShipParts[0].slice(1) ===
+                  coord.querySelector(".cell").classList[0].slice(1)
+                );
+              })
+              .filter((el) => !el.querySelector(".miss"))
+              .filter((el) => !el.querySelector(".injure"))
+              .filter((el) => !el.querySelector(".cell-around"));
+
+            const areAllCellsTaken =
+              allMyShips
+                .filter((el) => !el.querySelector(".miss"))
+                .filter((el) => !el.querySelector(".injure"))
+                .filter((el) => !el.querySelector(".cell-around")).length === 0;
+
+            console.log("areAllCellsTAken", areAllCellsTaken);
+
+            if (areAllCellsTaken) {
+              const option1 = enemySideMyFleet.querySelector(
+                `.${lastInjuredShip[0].classList[0]}`
+              );
+              console.log("opton1", option1);
+
+              const lastShotCoords = generateSurroundingFields({
+                lowerLetters,
+                coord: lastShotField.classList[0].toLowerCase(),
+                left: "left",
+                right: "right",
+              });
+
+              console.log("side coords", lastShotCoords);
+
+              allMyShips = lastShotCoords
+                .filter((coord) => typeof coord === "string")
+                .map((coord) =>
+                  enemySideMyFleet
+                    .querySelector(`.${coord.toUpperCase()}`)
+                    .closest(".dropzone")
+                )
+                .filter((el) => !el.querySelector(".miss"))
+                .filter((el) => !el.querySelector(".injure"))
+                .filter((el) => !el.querySelector(".cell-around"));
+
+              if (allMyShips.length === 0) {
+                const otherCoord = lastInjuredShip.find((el) => {
+                  return generateSurroundingFields({
+                    lowerLetters,
+                    coord: el.classList[0].toLowerCase(),
+                    left: "left",
+                    right: "right",
+                  })
+                    .filter((coord) => typeof coord === "string")
+                    .map((coord) =>
+                      enemySideMyFleet
+                        .querySelector(`.${coord.toUpperCase()}`)
+                        .closest(".dropzone")
+                    )
+                    .filter((el) => !el.querySelector(".miss"))
+                    .filter((el) => !el.querySelector(".injure"))
+                    .filter((el) => !el.querySelector(".cell-around")).length;
+                });
+
+                console.log("otherCoords", otherCoord);
+
+                if (otherCoord) {
+                  allMyShips = generateSurroundingFields({
+                    lowerLetters,
+                    coord: otherCoord.classList[0].toLowerCase(),
+                    left: "left",
+                    right: "right",
+                  })
+                    .filter((coord) => typeof coord === "string")
+                    .map((coord) =>
+                      enemySideMyFleet
+                        .querySelector(`.${coord.toUpperCase()}`)
+                        .closest(".dropzone")
+                    )
+                    .filter((el) => !el.querySelector(".miss"))
+                    .filter((el) => !el.querySelector(".injure"))
+                    .filter((el) => !el.querySelector(".cell-around"));
+
+                  console.log("The most final coord is here", allMyShips);
+                }
+              }
+            }
+
+            console.log("isHorizontal", allMyShips);
+          }
+        }
+
+        console.log("lastINjuredBeforebuch", lastInjuredShip);
+
+        const allSurroundingsFromFullShip = [
+          ...lastInjuredShip.map((coord) => {
+            const dubl = generateSurroundingFields({
+              lowerLetters,
+              coord: coord?.classList[0].toLowerCase(),
+              top: "top",
+              bottom: "bottom",
+              right: "right",
+              left: "left",
+            });
+            return dubl;
+          }),
+        ]
+          .flatMap((el) => el)
+          .filter((coord) => typeof coord === "string");
+        /*  .map((coord) =>
+              enemySideMyFleet
+                .querySelector(`.${coord.toUpperCase()}`)
+                .closest(".dropzone")
+            )) */
+        console.log("allSurroundingsFromFullShip", allSurroundingsFromFullShip);
+
+        // Gotta change the array for lastInjuredShips
+        if (
+          allSurroundingsFromFullShip.length &&
+          allSurroundingsFromFullShip.filter(
+            (coord) =>
+              enemySideMyFleet
+                .querySelector(`.${coord.toUpperCase()}`)
+                .classList.contains("miss") ||
+              enemySideMyFleet
+                .querySelector(`.${coord.toUpperCase()}`)
+                .classList.contains("cell-around") ||
+              enemySideMyFleet
+                .querySelector(`.${coord.toUpperCase()}`)
+                .nextElementSibling?.classList.contains("injure")
+          ).length === allSurroundingsFromFullShip.length
+          // .filter((coord) => !coord.classList.contains("cell-around"))
+          // .filter((coord) => !coord.classList.contains("injure")).length === 0
+        ) {
+          console.log("We reset for the new hant 👜");
+
+          allMyShips = oldShips;
+          lastInjuredShip = [];
+          lastShotField = "";
+        }
+
+        console.log("allMyShips", allMyShips);
+      }
+
+      const timeout = randomNumberFromRange(1, 5);
+      console.log("timeout", timeout);
+
+      if (allMyShips.length === 0) return;
+      const randomIndex = Math.floor(Math.random() * allMyShips.length);
+      const randomElement = allMyShips[randomIndex];
+      console.log("randomElement", randomElement);
+
+      if (
+        !randomElement.querySelector(".ship") &&
+        !randomElement.querySelector(".miss") &&
+        !randomElement.querySelector(".cell-around")
+      ) {
+        setTimeout(function () {
+          console.log("LastShotFields is empty string now");
+
+          randomElement.click();
+        }, /* timeout - */ 1 * 1000);
+      }
+      if (
+        !randomElement.querySelector(".injure") &&
+        !randomElement.querySelector(".miss") &&
+        !randomElement.querySelector(".cell-around") &&
+        randomElement.querySelector(".ship")
+      ) {
+        lastShotField = randomElement.querySelector(".ship");
+        lastInjuredShip = [
+          ...lastInjuredShip,
+          randomElement.querySelector(".ship"),
+        ];
+        console.log("surroundingCoords", surroundingCoords);
+
+        console.log("lastShotField is real now", lastShotField);
+
+        if (lastInjuredShip.length === 1) {
+          surroundingCoords = generateSurroundingFields({
+            lowerLetters,
+            coord: randomElement
+              .querySelector(".cell")
+              ?.classList[0].toLowerCase(),
+            top: "top",
+            bottom: "bottom",
+            right: "right",
+            left: "left",
+          })
+            .filter((coord) => typeof coord === "string")
+            .map((coord) =>
+              enemySideMyFleet
+                .querySelector(`.${coord.toUpperCase()}`)
+                .closest(".dropzone")
+            );
+        }
+
+        setTimeout(function () {
+          randomElement.querySelector(".ship")?.click();
+
+          // Define all surrounding fields
+        }, /* timeout - */ 1 * 1000);
+      }
+      // console.log("Clicked:", randomElement.children[0]);
     }
-    // console.log("Clicked:", randomElement.children[0]);
+  } catch (error) {
+    console.error(error, "Error happend ⁉️");
   }
 }

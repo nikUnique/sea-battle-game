@@ -58,15 +58,26 @@ export function generateSurroundingFields({
 }) {
   let shipSurroundings = [];
 
+  function isCoordNumberLegit(coordNumber) {
+    if (coordNumber < 1 || coordNumber > 10) {
+      return false;
+    }
+    return true;
+  }
+
   if (top) {
-    shipSurroundings = [coord.slice(0, 1) + (Number(coord.slice(1)) - 1)];
+    if (isCoordNumberLegit(Number(coord.slice(1)) - 1)) {
+      shipSurroundings = [coord.slice(0, 1) + (Number(coord.slice(1)) - 1)];
+    }
   }
 
   if (bottom) {
-    shipSurroundings = [
-      ...shipSurroundings,
-      coord.slice(0, 1) + (Number(coord.slice(1)) + 1),
-    ];
+    if (isCoordNumberLegit(Number(coord.slice(1)) + 1)) {
+      shipSurroundings = [
+        ...shipSurroundings,
+        coord.slice(0, 1) + (Number(coord.slice(1)) + 1),
+      ];
+    }
   }
 
   if (left) {
@@ -74,7 +85,6 @@ export function generateSurroundingFields({
       ...shipSurroundings,
       lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
         Number(coord.slice(1)),
-      ,
     ];
   }
 
@@ -87,35 +97,43 @@ export function generateSurroundingFields({
   }
 
   if (topLeft) {
-    shipSurroundings = [
-      ...shipSurroundings,
-      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
-        (Number(coord.slice(1)) - 1),
-    ];
+    if (isCoordNumberLegit(Number(coord.slice(1)) - 1)) {
+      shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+          (Number(coord.slice(1)) - 1),
+      ];
+    }
   }
 
   if (topRight) {
-    shipSurroundings = [
-      ...shipSurroundings,
-      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
-        (Number(coord.slice(1)) - 1),
-    ];
+    if (isCoordNumberLegit(Number(coord.slice(1)) - 1)) {
+      shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+          (Number(coord.slice(1)) - 1),
+      ];
+    }
   }
 
   if (bottomLeft) {
-    shipSurroundings = [
-      ...shipSurroundings,
-      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
-        (Number(coord.slice(1)) + 1),
-    ];
+    if (isCoordNumberLegit(Number(coord.slice(1)) + 1)) {
+      shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) - 1] +
+          (Number(coord.slice(1)) + 1),
+      ];
+    }
   }
 
   if (bottomRight) {
-    shipSurroundings = [
-      ...shipSurroundings,
-      lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
-        (Number(coord.slice(1)) + 1),
-    ];
+    if (isCoordNumberLegit(Number(coord.slice(1)) + 1)) {
+      shipSurroundings = [
+        ...shipSurroundings,
+        lowerLetters[lowerLetters.indexOf(coord.slice(0, 1)) + 1] +
+          (Number(coord.slice(1)) + 1),
+      ];
+    }
   }
 
   // shipSurroundings = [

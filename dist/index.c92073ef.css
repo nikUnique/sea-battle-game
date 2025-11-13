@@ -207,6 +207,10 @@ button:disabled {
   background-color: #fab005;
 }
 
+.hide {
+  display: none;
+}
+
 .my-side--enemy-fleet, .enemy-side--my-fleet {
   cursor: url("gun-target.4be8e5b3.png"), auto;
 }
@@ -443,7 +447,7 @@ button:disabled {
   grid-column: 3 / -1;
   justify-self: center;
   width: 80%;
-  display: grid;
+  display: none;
 }
 
 .ship-description {
