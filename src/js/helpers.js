@@ -223,3 +223,11 @@ export const openUsernameForm = function (fleet, display) {
 export const closeUsernameForm = function (fleet, display) {
   toggleUsernameForm(fleet, display);
 };
+
+export function sleep(timeInMilliseconds) {
+  return new Promise(function (resolve) {
+    setTimeout(function () {
+      resolve();
+    }, timeInMilliseconds);
+  });
+}

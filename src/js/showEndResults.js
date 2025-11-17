@@ -53,6 +53,7 @@ export default function (fleet, noTime = false) {
   clearInterval(timer);
   console.log(areAllShipsInjured, "areAll");
   console.log(runOutOfTime, "areAll");
+  playingCheck.playing = false;
 
   // Composing the result message
   const composeMessage = function (messageEl, fleetSide) {

@@ -5,6 +5,7 @@ import {
   enemySideMyFleet,
   mySideEnemyFleet,
   lowerLetters,
+  duration,
 } from "./globalVars";
 
 import {
@@ -16,7 +17,7 @@ import showEndResults from "./showEndResults";
 
 import { playingCheck, whoseTurn } from "./gameStartControl";
 
-import { buildShipBorder, startTimer, timerClock } from "./helpers";
+import { buildShipBorder, sleep, startTimer, timerClock } from "./helpers";
 
 import { APPEAR_TIME, TIME_LENGTHS } from "./config";
 
@@ -26,6 +27,10 @@ let lastDamagingShot;
 let surroundingCoords;
 // All damaged ships parts of one ship
 let lastInjuredShip = [];
+// const LAUNCH_X = 90;
+let LAUNCH_Y = window.innerHeight * 0.78;
+
+// Bomb flight duration time
 
 function filterOutNonEmptyCells(array) {
   return array
@@ -101,6 +106,80 @@ function finishOffDamagedShip(ships, direction) {
   return allMyShips;
 }
 
+function launchBombTo(targetX, targetY, fleet, target) {
+  const LAUNCH_X = fleet === mySideEnemyFleet ? 90 : window.innerWidth - 90;
+  // 1. Create bomb
+  const bomb = document.createElement("div");
+  bomb.className = "bomb";
+  bomb.style.left = LAUNCH_X + "px";
+  bomb.style.top = LAUNCH_Y + "px";
+  document.body.appendChild(bomb);
+
+  // 2. Physics: parabolic trajectory
+  const dx = targetX - LAUNCH_X - 10;
+  const dy = targetY - LAUNCH_Y - 10;
+  const distance = Math.hypot(dx, dy);
+  const gravity = 400; // arc strength
+  duration.duration = distance / 1200 + 0.5; // flight time (seconds)
+  console.log("duration", duration);
+
+  let startTime = null;
+
+  function animateBomb(time) {
+    if (!startTime) startTime = time;
+    const progress = Math.min(
+      (time - startTime) / (duration.duration * 1000),
+      1
+    );
+
+    // Easing: smooth acceleration
+    const eased = 1 - Math.pow(1 - progress, 3);
+
+    // Parabolic path: x = linear, y = quadratic
+    const x = LAUNCH_X + dx * progress;
+    const y =
+      LAUNCH_Y +
+      window.scrollY +
+      dy * progress -
+      Math.sin(progress * Math.PI) * (distance * 0.3);
+
+    bomb.style.left = x + "px";
+    bomb.style.top = y + "px";
+
+    if (progress < 1) {
+      requestAnimationFrame(animateBomb);
+    } else {
+      // 3. Explode
+      !target.classList.contains("dropzone") && createExplosion(x, y);
+      bomb.remove();
+    }
+  }
+  requestAnimationFrame(animateBomb);
+}
+
+// Explosion function
+function createExplosion(x, y) {
+  console.log("x, y", x, y);
+
+  const boom = document.createElement("div");
+  boom.className = "explosion";
+  boom.style.left = x + "px";
+  boom.style.top = y + "px";
+  document.body.appendChild(boom);
+
+  setTimeout(function () {
+    boom.classList.add("smoke");
+  }, 350);
+  setTimeout(() => {
+    boom.remove();
+  }, 2000);
+
+  // Resize handler
+  window.addEventListener("resize", function () {
+    LAUNCH_Y = window.innerHeight;
+  });
+}
+
 export default function (fleet, ships) {
   const shootingLogic = function (e) {
     e.preventDefault();
@@ -110,14 +189,50 @@ export default function (fleet, ships) {
       .closest(".enemy-side--my-fleet")
       ?.querySelector(`.${e.target.classList[0]}`);
 
+    // e.target.addEventListener("click", () => {
+
+    // });
+    let rect = e.target.getBoundingClientRect();
+
+    if (fleet === enemySideMyFleet) {
+      if (e.target.classList[0] === "dropzone") {
+        rect = mySideMyFleet
+          .querySelector(`.${e.target.querySelector(".cell")?.classList[0]}`)
+          .getBoundingClientRect();
+      }
+
+      if (e.target.classList.contains("ship")) {
+        console.log("e.target", e.target);
+
+        rect = mySideMyFleet
+          .querySelector(`.${e.target?.classList[0]}`)
+          .closest(".dropzone")
+          .getBoundingClientRect();
+      }
+    }
+
+    console.log("rect", rect);
+
+    // launchBombTo(e.clientX, e.clientY);
+    launchBombTo(
+      rect.left + rect.width / 2,
+      rect.top + rect.height / 2,
+      fleet,
+      e.target
+    );
+
     // console.log(e.target, "target");
 
     const addMarkToFleet = function (fleet) {
       // If the first condition is true this means that the shot missed and reached dropzone containing empty cell
-      if (e.target.classList[0] === "dropzone")
+      if (e.target.classList[0] === "dropzone") {
+        const audio = document.getElementById("water-splash");
+        audio.currentTime = 0;
+        audio.play();
         return fleet.querySelector(
           `.${e.target.querySelector("div").classList[0]}`
         );
+      }
 
       // If this is true then this means that the shot damaged a ship
       if (e.target.classList[0] !== "dropzone") {
@@ -228,9 +343,7 @@ export default function (fleet, ships) {
     console.log(ships);
 
     e.target.classList.add("injure");
-    const audio = document.getElementById("cannon");
-    audio.currentTime = 0;
-    audio.play();
+
     const injure = "&cross;";
 
     // e.target.insertAdjacentHTML("afterbegin", injure);
@@ -261,6 +374,18 @@ export default function (fleet, ships) {
       startTimer(fleet);
     }
 
+    const audio = document.getElementById("cannon");
+    if (destroyedShipCoords.includes(false)) {
+      audio.currentTime = 0;
+      audio.play();
+    } else {
+      const explosion = document.getElementById("explosion");
+      explosion.currentTime = 0;
+      explosion.play();
+
+      audio.currentTime = 0;
+      audio.play();
+    }
     // If ships is destroyed completely it's time to add border to it, but if not then execution stops here
     if (destroyedShipCoords.includes(false)) return;
 
@@ -393,6 +518,7 @@ export default function (fleet, ships) {
   };
 
   fleet.addEventListener("click", function (e) {
+    setTimeout(function () {}, duration.duration * 1000);
     shootingLogic(e);
 
     computerShotHandler();

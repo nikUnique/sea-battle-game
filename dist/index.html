@@ -12,13 +12,34 @@
   </head>
   <body>
     <audio id="cannon" preload="auto">
-      <!-- <source src="gun.mp3" type="audio/mpeg"> -->
-      <!-- fallback if you also saved a .wav version -->
-      <source src="/bomb.36375c68.mp3" type="audio/wav">
+      <source src="/bomb.36375c68.mp3" type="audio/mp3">
       Your browser does not support audio.
     </audio>
-    <!-- <div class="container grid"> -->
-    <div class="container grid grid--3-cols">
+
+    <audio id="water-splash" preload="auto">
+      <source src="/water-splash.2b6eaec5.wav" type="audio/wav">
+      Your browser does not support audio.
+    </audio>
+
+    <audio id="explosion" preload="auto">
+      <source src="/explosion.d03ecb9c.wav" type="audio/wav">
+      Your browser does not support audio.
+    </audio>
+
+    <!-- <div
+      style="
+        position: absolute;
+        left: 50px;
+        top: 80%;
+        width: 80px;
+        height: 40px;
+        background: #444;
+        border-radius: 10px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+      "
+    ></div> -->
+    <div class="container grid">
+      <!-- <div class="container grid grid--3-cols"> -->
       <div class="grid grid--2-cols">
         <!-- <div class="grid grid--2-cols"> -->
         <div class="sea-container">
@@ -78,7 +99,7 @@
       </div>
 
       <div class="grid-helper"></div>
-      <div class="grid grid--2-cols">
+      <div class="grid grid--2-cols hide">
         <div class="sea-container">
           <table class="sea player-2">
             <thead>

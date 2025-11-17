@@ -735,6 +735,7 @@ parcelHelpers.export(exports, "resultsMessage2", ()=>resultsMessage2);
 parcelHelpers.export(exports, "player1", ()=>player1);
 parcelHelpers.export(exports, "player2", ()=>player2);
 parcelHelpers.export(exports, "lowerLetters", ()=>lowerLetters);
+parcelHelpers.export(exports, "duration", ()=>duration);
 var _shipMakeHelpers = require("./shipMakeHelpers");
 // FLEET ENVIRONMENT
 const mySideMyFleet = document.querySelector(".my-side--my-fleet");
@@ -1563,6 +1564,9 @@ const inputUsernameLabel2 = document.querySelector(".your-name-2");
 const inputUsernameLabel1 = document.querySelector(".your-name-1");
 const submitUsername1 = document.querySelector(".submit-username--fleet-1");
 const submitUsername2 = document.querySelector(".submit-username--fleet-2");
+const duration = {
+    duration: 0
+};
 
 },{"./shipMakeHelpers":"2URfe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2URfe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -1847,6 +1851,7 @@ parcelHelpers.export(exports, "startTimer", ()=>startTimer);
 parcelHelpers.export(exports, "selectCellsAround", ()=>selectCellsAround);
 parcelHelpers.export(exports, "openUsernameForm", ()=>openUsernameForm);
 parcelHelpers.export(exports, "closeUsernameForm", ()=>closeUsernameForm);
+parcelHelpers.export(exports, "sleep", ()=>sleep);
 var _config = require("./config");
 var _gameStartControl = require("./gameStartControl");
 var _globalVarsPause = require("./globalVarsPause");
@@ -1981,8 +1986,15 @@ const openUsernameForm = function(fleet, display) {
 const closeUsernameForm = function(fleet, display) {
     toggleUsernameForm(fleet, display);
 };
+function sleep(timeInMilliseconds) {
+    return new Promise(function(resolve) {
+        setTimeout(function() {
+            resolve();
+        }, timeInMilliseconds);
+    });
+}
 
-},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause":"bAcK9"}],"k5Hzs":[function(require,module,exports) {
+},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./globalVarsPause":"bAcK9","./showEndResults":"2csmh","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k5Hzs":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AMOUNT_OF_DESTROYERS", ()=>AMOUNT_OF_DESTROYERS);
@@ -2364,7 +2376,7 @@ const gameStartControl = function(fleet, fleetParts) {
     }, 5000);
 };
 
-},{"./config":"k5Hzs","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars":"gb5d6","./shootingLogic":"6WpIw"}],"6WpIw":[function(require,module,exports) {
+},{"./config":"k5Hzs","./globalVars":"gb5d6","./helpers":"hGI1E","./shootingLogic":"6WpIw","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6WpIw":[function(require,module,exports) {
 /* eslint-disable no-unused-vars */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
@@ -2372,10 +2384,28 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             e.preventDefault();
             // Here are possible 2 options: first is that this variable will be a truthy value because it will successfully select desired element, but second options is that this value will be undefined. So, both of this values make it enough to select the right cell. For example if my opponent shot in a cell of enemySideMyFleet which is his side then that spot will be selected because it happened on his side, but if I shot a cell of mySideEnemyFleet then it will be undefined because closest method will not find enemySideMyFleet in mySideEnemyFleet, so, which means that this is the second option and a cell of mySideEnemyFleet will be chosen when this variable will be used
             const selectChosenCell = e.target.closest(".enemy-side--my-fleet")?.querySelector(`.${e.target.classList[0]}`);
+            // e.target.addEventListener("click", () => {
+            // });
+            let rect = e.target.getBoundingClientRect();
+            if (fleet === (0, _globalVars.enemySideMyFleet)) {
+                if (e.target.classList[0] === "dropzone") rect = (0, _globalVars.mySideMyFleet).querySelector(`.${e.target.querySelector(".cell")?.classList[0]}`).getBoundingClientRect();
+                if (e.target.classList.contains("ship")) {
+                    console.log("e.target", e.target);
+                    rect = (0, _globalVars.mySideMyFleet).querySelector(`.${e.target?.classList[0]}`).closest(".dropzone").getBoundingClientRect();
+                }
+            }
+            console.log("rect", rect);
+            // launchBombTo(e.clientX, e.clientY);
+            launchBombTo(rect.left + rect.width / 2, rect.top + rect.height / 2, fleet, e.target);
             // console.log(e.target, "target");
             const addMarkToFleet = function(fleet) {
                 // If the first condition is true this means that the shot missed and reached dropzone containing empty cell
-                if (e.target.classList[0] === "dropzone") return fleet.querySelector(`.${e.target.querySelector("div").classList[0]}`);
+                if (e.target.classList[0] === "dropzone") {
+                    const audio = document.getElementById("water-splash");
+                    audio.currentTime = 0;
+                    audio.play();
+                    return fleet.querySelector(`.${e.target.querySelector("div").classList[0]}`);
+                }
                 // If this is true then this means that the shot damaged a ship
                 if (e.target.classList[0] !== "dropzone") {
                     console.log("fleet.querySelector(`.${e.target.classList[0]}`", fleet.querySelector(`.${e.target.classList[0]}`));
@@ -2439,9 +2469,6 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             });
             console.log(ships);
             e.target.classList.add("injure");
-            const audio = document.getElementById("cannon");
-            audio.currentTime = 0;
-            audio.play();
             const injure = "&cross;";
             // e.target.insertAdjacentHTML("afterbegin", injure);
             // A nice neat trick when you don't need empty string but you also don't need it to be filled with something visible, so you just add empty space
@@ -2459,6 +2486,17 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             if (!selectChosenCell) {
                 addMarkToFleet((0, _globalVars.enemySideEnemyFleet)).nextElementSibling.classList.add("injure");
                 (0, _helpers.startTimer)(fleet);
+            }
+            const audio = document.getElementById("cannon");
+            if (destroyedShipCoords.includes(false)) {
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                const explosion = document.getElementById("explosion");
+                explosion.currentTime = 0;
+                explosion.play();
+                audio.currentTime = 0;
+                audio.play();
             }
             // If ships is destroyed completely it's time to add border to it, but if not then execution stops here
             if (destroyedShipCoords.includes(false)) return;
@@ -2546,6 +2584,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             /**************************/ /* CONTROLLING THE END OF THE GAME */ /**************************/ (0, _showEndResultsDefault.default)(fleet);
         };
         fleet.addEventListener("click", function(e) {
+            setTimeout(function() {}, (0, _globalVars.duration).duration * 1000);
             shootingLogic(e);
             computerShotHandler();
         });
@@ -2564,6 +2603,9 @@ let lastDamagingShot;
 let surroundingCoords;
 // All damaged ships parts of one ship
 let lastInjuredShip = [];
+// const LAUNCH_X = 90;
+let LAUNCH_Y = window.innerHeight * 0.78;
+// Bomb flight duration time
 function filterOutNonEmptyCells(array) {
     return array.filter((el)=>!el.querySelector(".miss")).filter((el)=>!el.querySelector(".injure")).filter((el)=>!el.querySelector(".cell-around"));
 }
@@ -2631,6 +2673,60 @@ function finishOffDamagedShip(ships, direction) {
         }
     }
     return allMyShips;
+}
+function launchBombTo(targetX, targetY, fleet, target) {
+    const LAUNCH_X = fleet === (0, _globalVars.mySideEnemyFleet) ? 90 : window.innerWidth - 90;
+    // 1. Create bomb
+    const bomb = document.createElement("div");
+    bomb.className = "bomb";
+    bomb.style.left = LAUNCH_X + "px";
+    bomb.style.top = LAUNCH_Y + "px";
+    document.body.appendChild(bomb);
+    // 2. Physics: parabolic trajectory
+    const dx = targetX - LAUNCH_X - 10;
+    const dy = targetY - LAUNCH_Y - 10;
+    const distance = Math.hypot(dx, dy);
+    const gravity = 400; // arc strength
+    (0, _globalVars.duration).duration = distance / 1200 + 0.5; // flight time (seconds)
+    console.log("duration", (0, _globalVars.duration));
+    let startTime = null;
+    function animateBomb(time) {
+        if (!startTime) startTime = time;
+        const progress = Math.min((time - startTime) / ((0, _globalVars.duration).duration * 1000), 1);
+        // Easing: smooth acceleration
+        const eased = 1 - Math.pow(1 - progress, 3);
+        // Parabolic path: x = linear, y = quadratic
+        const x = LAUNCH_X + dx * progress;
+        const y = LAUNCH_Y + window.scrollY + dy * progress - Math.sin(progress * Math.PI) * (distance * 0.3);
+        bomb.style.left = x + "px";
+        bomb.style.top = y + "px";
+        if (progress < 1) requestAnimationFrame(animateBomb);
+        else {
+            // 3. Explode
+            !target.classList.contains("dropzone") && createExplosion(x, y);
+            bomb.remove();
+        }
+    }
+    requestAnimationFrame(animateBomb);
+}
+// Explosion function
+function createExplosion(x, y) {
+    console.log("x, y", x, y);
+    const boom = document.createElement("div");
+    boom.className = "explosion";
+    boom.style.left = x + "px";
+    boom.style.top = y + "px";
+    document.body.appendChild(boom);
+    setTimeout(function() {
+        boom.classList.add("smoke");
+    }, 350);
+    setTimeout(()=>{
+        boom.remove();
+    }, 2000);
+    // Resize handler
+    window.addEventListener("resize", function() {
+        LAUNCH_Y = window.innerHeight;
+    });
 }
 function computerShotHandler() {
     try {
@@ -2745,6 +2841,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
         clearInterval((0, _helpers.timer));
         console.log(areAllShipsInjured, "areAll");
         console.log(runOutOfTime, "areAll");
+        (0, _gameStartControl.playingCheck).playing = false;
         // Composing the result message
         const composeMessage = function(messageEl, fleetSide) {
             messageEl.textContent !== "" && (messageEl.textContent = "");
@@ -2789,7 +2886,7 @@ var _globalVarsPause = require("./globalVarsPause");
 var _gameStartControl = require("./gameStartControl");
 var _helpers = require("./helpers");
 
-},{"./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause":"bAcK9"}],"bAcK9":[function(require,module,exports) {
+},{"./globalVarsPause":"bAcK9","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bAcK9":[function(require,module,exports) {
 // FLEET ENVIRONMENT
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -3153,30 +3250,33 @@ parcelHelpers.export(exports, "default", ()=>function() {
             console.log((0, _gameStartControl.playingCheck).playing);
             // Adding an event listener to fleets on which we try to find ships
             fleet.addEventListener("click", function(e) {
-                if (// Check complition of conditions which define whether the turn should or should not be changed
-                e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
-                const turn = (0, _gameStartControl.playingCheck).playing && fleet === (0, _globalVarsPause.enemySideMyFleet) ? (0, _globalVarsPause.mySideEnemyFleet) : (0, _globalVarsPause.enemySideMyFleet);
-                (0, _gameStartControl.whoseTurn).turn = turn;
-                if ((0, _gameStartControl.playingCheck).playing) {
-                    turn.style.pointerEvents = "auto";
-                    fleet.closest(".sea").style.opacity = "0.7";
-                    (0, _helpers.startTimer)(turn);
-                    /*   fleet.closest(".sea-container").querySelector(".timer-label") && */ fleet.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
-                    // Selecting part of the fleet which is on your opponent's side
-                    const fleetSide = fleet === (0, _globalVarsPause.enemySideMyFleet) ? (0, _globalVarsPause.mySideMyFleet) : (0, _globalVarsPause.enemySideEnemyFleet);
-                    fleetSide.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
-                }
-                // The turn changed and because of this the side which turn it was before will be unavailable for clicks
-                (0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none");
-                turn.closest(".sea").style.opacity = "1";
+                gameControlHandler(e, fleet);
             });
         });
     });
 var _globalVarsPause = require("./globalVarsPause");
 var _gameStartControl = require("./gameStartControl");
 var _helpers = require("./helpers");
+function gameControlHandler(e, fleet) {
+    if (// Check complition of conditions which define whether the turn should or should not be changed
+    e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
+    const turn = (0, _gameStartControl.playingCheck).playing && fleet === (0, _globalVarsPause.enemySideMyFleet) ? (0, _globalVarsPause.mySideEnemyFleet) : (0, _globalVarsPause.enemySideMyFleet);
+    (0, _gameStartControl.whoseTurn).turn = turn;
+    if ((0, _gameStartControl.playingCheck).playing) {
+        turn.style.pointerEvents = "auto";
+        fleet.closest(".sea").style.opacity = "0.7";
+        (0, _helpers.startTimer)(turn);
+        /*   fleet.closest(".sea-container").querySelector(".timer-label") && */ fleet.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
+        // Selecting part of the fleet which is on your opponent's side
+        const fleetSide = fleet === (0, _globalVarsPause.enemySideMyFleet) ? (0, _globalVarsPause.mySideMyFleet) : (0, _globalVarsPause.enemySideEnemyFleet);
+        fleetSide.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
+    }
+    // The turn changed and because of this the side which turn it was before will be unavailable for clicks
+    (0, _gameStartControl.playingCheck).playing && (fleet.style.pointerEvents = "none");
+    turn.closest(".sea").style.opacity = "1";
+}
 
-},{"./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause":"bAcK9"}],"hGRP7":[function(require,module,exports) {
+},{"./globalVarsPause":"bAcK9","./gameStartControl":"fXv0K","./helpers":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hGRP7":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "startNewGame", ()=>startNewGame);
@@ -3314,6 +3414,6 @@ const startNewGame = function(fleet) {
     });
 };
 
-},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./globalVars":"gb5d6","./helpers":"hGI1E","./placeShipsManually":"3iktl","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./makeShips":"8mnMH"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
+},{"./config":"k5Hzs","./gameStartControl":"fXv0K","./globalVars":"gb5d6","./helpers":"hGI1E","./placeShipsManually":"3iktl","./makeShips":"8mnMH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
 //# sourceMappingURL=index.e37f48ea.js.map

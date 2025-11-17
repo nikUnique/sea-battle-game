@@ -774,6 +774,10 @@ const inputUsernameLabel1 = document.querySelector(".your-name-1");
 const submitUsername1 = document.querySelector(".submit-username--fleet-1");
 const submitUsername2 = document.querySelector(".submit-username--fleet-2");
 
+const duration = {
+  duration: 0,
+};
+
 export {
   bothSideShips,
   mySideMyFleet,
@@ -820,5 +824,6 @@ export {
   player1,
   player2,
   lowerLetters,
+  duration,
   // overlay,
 };
