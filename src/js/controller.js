@@ -52,7 +52,9 @@ const createFleet = function (fleetParts) {
   /**************************/
   /* GAME CONTROL */
   /**************************/
-  gameControl(fleet);
+  // fleet !== mySideMyFleet &&
+  //   fleet !== enemySideEnemyFleet &&
+  //   gameControl(fleet);
 
   /**************************/
   /* START NEW GAME */

@@ -1,3 +1,4 @@
+import { DotLottie } from "@lottiefiles/dotlottie-web";
 import {
   AMOUNT_OF_DESTROYERS,
   BOTH_FLEETS_READY_COMPLETE_LENGTH,
@@ -23,6 +24,7 @@ import {
   changeUsernameBtn2,
   errorMessage1,
   errorMessage2,
+  lottieSplash,
 } from "./globalVars";
 
 import {
@@ -416,7 +418,20 @@ export const gameStartControl = function (fleet, fleetParts) {
       playingCheck.playing = true;
       console.log("Game started 🥰");
 
+      const audio = document.getElementById("halloween");
+      audio.loop = true;
+      audio.volume = 0.4;
+      audio.currentTime = 0;
+      audio.play();
+
       console.log(playingCheck.playing, "playing");
+
+      // lottieSplash.waterSplash = new DotLottie({
+      //   container: document.getElementById("dotlottie-canvas"),
+      //   src: "https://lottie.host/b2c16b47-ffa0-49df-ad07-bd4e918a6254/jzIHDnTf5u.lottie",
+      //   loop: false,
+      //   autoplay: true,
+      // });
 
       // Disable right-click
       document.addEventListener("contextmenu", (e) => e.preventDefault());

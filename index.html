@@ -27,6 +27,7 @@
       defer
       src="src/js/controller.js"
     ></script>
+
     <title>Sea Battle</title>
   </head>
   <body>
@@ -63,6 +64,27 @@
       Your browser does not support audio.
     </audio>
 
+    <audio
+      id="fun-explosion"
+      preload="auto"
+    >
+      <source
+        src="src/sounds/explosion-large.flac"
+        type="audio/flac"
+      />
+      Your browser does not support audio.
+    </audio>
+    <audio
+      id="halloween"
+      preload="auto"
+    >
+      <source
+        src="src/sounds/halloween.mp3"
+        type="audio/mp3"
+      />
+      Your browser does not support audio.
+    </audio>
+
     <!-- <div
       style="
         position: absolute;
@@ -75,10 +97,22 @@
         box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
       "
     ></div> -->
+
     <div class="container grid">
-      <!-- <div class="container grid grid--3-cols"> -->
       <div class="grid grid--2-cols">
         <!-- <div class="grid grid--2-cols"> -->
+        <img
+          src="./animations/water-splash.gif"
+          alt="super"
+          id="water-splash-gif"
+          style="position: absolute"
+        />
+        <!-- <video
+          src="./animations/water-splash.webm"
+          id="water-splash-gif"
+          style="position: absolute"
+        ></video> -->
+
         <div class="sea-container">
           <table class="sea player-1">
             <thead>
@@ -295,12 +329,12 @@
           player to sink their opponent's ships or the first player whose enemy
           loses all his time wins the game.
         </p>
-        <p>
+        <!-- <p>
           Magic video camera 📹 feature: When you destroyed a ship for which
           destruction there should be an award in a kind of magic video camera,
           then for 10 seconds hovering effect on ships will be different from
           hovering effect on empty cells.
-        </p>
+        </p> -->
       </div>
       <div class="game-description-container-2">
         <h2 class="rules-caption">Sea battle rules</h2>
@@ -370,12 +404,12 @@
           player to sink their opponent's ships or the first player whose enemy
           loses all his time wins the game.
         </p>
-        <p>
+        <!-- <p>
           Magic video camera 📹 feature: When you destroyed a ship for which
           destruction there should be an award in a kind of magic video camera,
           then for 10 seconds hovering effect on ships will be different from
           hovering effect on empty cells.
-        </p>
+        </p> -->
       </div>
     </div>
 

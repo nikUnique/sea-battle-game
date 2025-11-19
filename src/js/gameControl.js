@@ -7,9 +7,12 @@ import {
 
 import { playingCheck, whoseTurn } from "./gameStartControl";
 
-import { startTimer } from "./helpers";
+import { sleep, startTimer } from "./helpers";
+import { duration } from "./globalVars";
 
-function gameControlHandler(e, fleet) {
+export function gameControlHandler(e, fleet) {
+  console.log("fleet in the gameControlHandler", fleet, e);
+
   if (
     // Check complition of conditions which define whether the turn should or should not be changed
     e.target.classList.contains("ship") ||
@@ -25,6 +28,8 @@ function gameControlHandler(e, fleet) {
       : enemySideMyFleet;
 
   whoseTurn.turn = turn;
+
+  console.log("turn", turn);
 
   if (playingCheck.playing) {
     turn.style.pointerEvents = "auto";
@@ -52,16 +57,21 @@ function gameControlHandler(e, fleet) {
   turn.closest(".sea").style.opacity = "1";
 }
 
-export default function () {
-  // playingCheck.playing === true &&
-  //   (enemySideMyFleet.style.pointerEvents = "none");
+// export default function () {
+//   // playingCheck.playing === true &&
+//   //   (enemySideMyFleet.style.pointerEvents = "none");
 
-  [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
-    console.log(playingCheck.playing);
+//   [mySideEnemyFleet, enemySideMyFleet].forEach((fleet) => {
+//     console.log(playingCheck.playing);
 
-    // Adding an event listener to fleets on which we try to find ships
-    fleet.addEventListener("click", function (e) {
-      gameControlHandler(e, fleet);
-    });
-  });
-}
+//     // Adding an event listener to fleets on which we try to find ships
+//     fleet.addEventListener("click", async function (e) {
+//       console.log("this in gameControl", this, fleet);
+//       // deferExecution(e, this);
+
+//       await sleep((duration.duration - 0.2) * 1000);
+//       console.log("this AFter sleep", this, fleet);
+//       gameControlHandler(e, this);
+//     });
+//   });
+// }

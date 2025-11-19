@@ -50,6 +50,10 @@ export default function (fleet, noTime = false) {
   }
 
   // If code execution is at this point - this means the game is finished
+  const audio = document.getElementById("halloween");
+  audio.currentTime = 0;
+  audio.pause();
+
   clearInterval(timer);
   console.log(areAllShipsInjured, "areAll");
   console.log(runOutOfTime, "areAll");

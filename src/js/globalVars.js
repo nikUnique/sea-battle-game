@@ -778,6 +778,10 @@ const duration = {
   duration: 0,
 };
 
+const lottieSplash = {
+  waterSplash: "",
+};
+
 export {
   bothSideShips,
   mySideMyFleet,
@@ -825,5 +829,6 @@ export {
   player2,
   lowerLetters,
   duration,
+  lottieSplash,
   // overlay,
 };

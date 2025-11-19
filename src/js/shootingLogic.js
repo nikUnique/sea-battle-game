@@ -6,6 +6,7 @@ import {
   mySideEnemyFleet,
   lowerLetters,
   duration,
+  lottieSplash,
 } from "./globalVars";
 
 import {
@@ -20,6 +21,9 @@ import { playingCheck, whoseTurn } from "./gameStartControl";
 import { buildShipBorder, sleep, startTimer, timerClock } from "./helpers";
 
 import { APPEAR_TIME, TIME_LENGTHS } from "./config";
+import { gameControlHandler } from "./gameControl";
+import { DotLottie } from "@lottiefiles/dotlottie-web";
+import Lottie from "lottie-web";
 
 // The last damaged ship cell
 let lastDamagingShot;
@@ -29,6 +33,12 @@ let surroundingCoords;
 let lastInjuredShip = [];
 // const LAUNCH_X = 90;
 let LAUNCH_Y = window.innerHeight * 0.78;
+
+let waterSplashLottie;
+
+let splash;
+
+let loadedImage;
 
 // Bomb flight duration time
 
@@ -116,11 +126,11 @@ function launchBombTo(targetX, targetY, fleet, target) {
   document.body.appendChild(bomb);
 
   // 2. Physics: parabolic trajectory
-  const dx = targetX - LAUNCH_X - 10;
-  const dy = targetY - LAUNCH_Y - 10;
+  const dx = targetX - LAUNCH_X;
+  const dy = targetY - LAUNCH_Y;
   const distance = Math.hypot(dx, dy);
   const gravity = 400; // arc strength
-  duration.duration = distance / 1200 + 0.5; // flight time (seconds)
+  duration.duration = distance / 1500 + 0.5; // flight time (seconds)
   console.log("duration", duration);
 
   let startTime = null;
@@ -152,6 +162,17 @@ function launchBombTo(targetX, targetY, fleet, target) {
       // 3. Explode
       !target.classList.contains("dropzone") && createExplosion(x, y);
       bomb.remove();
+
+      if (
+        target.classList.contains("dropzone") &&
+        !target.classList.contains("miss") &&
+        !target.classList.contains("cell-around")
+      ) {
+        // createWaterSplash(x, y);
+        createWaterSplashGif(x, y);
+        // createVSplash(x, y);
+        // createPlungeSplash(x, y, fleet, target);
+      }
     }
   }
   requestAnimationFrame(animateBomb);
@@ -180,6 +201,152 @@ function createExplosion(x, y) {
   });
 }
 
+function createPlungeSplash(x, y) {
+  const splash = document.createElement("div");
+  const fallTime = 720;
+  splash.className = "plunge";
+  splash.style.left = x + "px";
+  splash.style.top = y + "px";
+  document.body.appendChild(splash);
+
+  // Jet + Crown
+  splash.innerHTML = `<div class="jet"></div><div class="crown"</div>`;
+
+  // Chunky water chunks
+
+  for (let i = 0; i < 22; i++) {
+    setTimeout(function () {
+      const c = document.createElement("div");
+      c.className = "chunk";
+      const size = Math.random() * 12 + 8;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = Math.random() * 40 + 20;
+      c.style.width = c.style.height = size + "px";
+      c.style.left = Math.cos(angle) * dist + "px";
+      c.style.top = "-80px";
+      c.style.animationDelay = Math.random() * 0.2 + "s";
+      splash.appendChild(c);
+    }, i * 45);
+  }
+
+  // Three shockwaves
+  [0, 200, 400].forEach((delay, i) => {
+    setTimeout(() => {
+      const s = document.createElement("div");
+      s.className = "shockwave";
+      s.style.borderWidth = 6 - i * 1.5 + "px";
+      splash.appendChild(s);
+    }, delay);
+  });
+
+  setTimeout(function () {
+    splash.remove();
+  }, fallTime);
+}
+
+function createVSplash(x, y) {
+  const splash = document.createElement("div");
+  const fallTime = 720;
+  splash.classList = "vsplash";
+  splash.style.left = x + "px";
+  splash.style.top = y + "px";
+  document.body.appendChild(splash);
+
+  setTimeout(function () {
+    splash.remove();
+  }, fallTime);
+}
+
+function createWaterSplash(x, y) {
+  const fallTime = 1200;
+  const localSplash = splash;
+  // splash = document.createElement("canvas");
+  // splash.id = "dotlottie-canvas";
+  // splash.className = "lottie-water-splash";
+  splash.style.left = x + "px";
+  splash.style.top = y + "px";
+  // document.body.appendChild(splash);
+
+  if (lottieSplash.waterSplash) {
+    console.log("The animation should play 😠", +new Date());
+
+    lottieSplash.waterSplash.play();
+  }
+
+  setTimeout(function () {
+    console.log("splash", splash);
+    console.log("removed", +new Date());
+    localSplash.remove();
+  }, fallTime);
+}
+
+function playWaterSplashLottie(x, y) {
+  const waterSplashLottie = document.querySelector("#dotlottie-canvas");
+
+  if (waterSplashLottie) {
+    waterSplashLottie.style.left = x + "px";
+    waterSplashLottie.style.top = y + "px";
+
+    waterSplashLottie?.play();
+  }
+}
+
+async function loadImage(src) {
+  try {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
+      img.src = src;
+    });
+  } catch (error) {
+    console.error("error in loadImage", error);
+  }
+}
+
+async function createWaterSplashGif(x, y) {
+  try {
+    const fallTime = 1200;
+
+    // const splash = document.querySelector("#water-splash-gif");
+    const splash = await loadImage("../../animations/water-splash.gif");
+
+    // splash.src = "../img/sea-icon-sm.jpg";
+    // splash.alt = "Water splash animation";
+    // splash.className = "lottie-water-splash";
+    // console.log("Image starts loading");
+
+    // console.log("Image finished loading");
+    // splash.src = "../../animations/water-splash.gif";
+
+    // await loadImage("../img/sea-icon.png");
+
+    console.log("splash", splash);
+
+    splash.alt = "Water splash animation";
+
+    splash.className = "lottie-water-splash";
+    splash.style.left = x + "px";
+    splash.style.top = y + "px";
+    splash.style.display = "";
+    const clonedSplash = splash.cloneNode(true);
+    splash.parentNode.replaceChild(clonedSplash, splash);
+    clonedSplash.src = "";
+    clonedSplash.src = splash.src;
+    // const splashSrc = splash.src;
+    // splash.src = "";
+    // splash.src = splashSrc;
+
+    // document.body.appendChild(splash);
+    setTimeout(function () {
+      clonedSplash.style.display = "none";
+      // splash.remove();
+    }, fallTime);
+  } catch (error) {
+    console.error("error happend", error);
+  }
+}
+
 export default function (fleet, ships) {
   const shootingLogic = function (e) {
     e.preventDefault();
@@ -192,34 +359,6 @@ export default function (fleet, ships) {
     // e.target.addEventListener("click", () => {
 
     // });
-    let rect = e.target.getBoundingClientRect();
-
-    if (fleet === enemySideMyFleet) {
-      if (e.target.classList[0] === "dropzone") {
-        rect = mySideMyFleet
-          .querySelector(`.${e.target.querySelector(".cell")?.classList[0]}`)
-          .getBoundingClientRect();
-      }
-
-      if (e.target.classList.contains("ship")) {
-        console.log("e.target", e.target);
-
-        rect = mySideMyFleet
-          .querySelector(`.${e.target?.classList[0]}`)
-          .closest(".dropzone")
-          .getBoundingClientRect();
-      }
-    }
-
-    console.log("rect", rect);
-
-    // launchBombTo(e.clientX, e.clientY);
-    launchBombTo(
-      rect.left + rect.width / 2,
-      rect.top + rect.height / 2,
-      fleet,
-      e.target
-    );
 
     // console.log(e.target, "target");
 
@@ -236,6 +375,9 @@ export default function (fleet, ships) {
 
       // If this is true then this means that the shot damaged a ship
       if (e.target.classList[0] !== "dropzone") {
+        const audio = document.getElementById("fun-explosion");
+        audio.currentTime = 0;
+        audio.play();
         console.log(
           "fleet.querySelector(`.${e.target.classList[0]}`",
           fleet.querySelector(`.${e.target.classList[0]}`)
@@ -374,17 +516,15 @@ export default function (fleet, ships) {
       startTimer(fleet);
     }
 
-    const audio = document.getElementById("cannon");
     if (destroyedShipCoords.includes(false)) {
-      audio.currentTime = 0;
-      audio.play();
+      console.log("");
     } else {
       const explosion = document.getElementById("explosion");
       explosion.currentTime = 0;
       explosion.play();
 
-      audio.currentTime = 0;
-      audio.play();
+      // audio.currentTime = 0;
+      // audio.play();
     }
     // If ships is destroyed completely it's time to add border to it, but if not then execution stops here
     if (destroyedShipCoords.includes(false)) return;
@@ -518,10 +658,76 @@ export default function (fleet, ships) {
   };
 
   fleet.addEventListener("click", function (e) {
-    setTimeout(function () {}, duration.duration * 1000);
-    shootingLogic(e);
+    if (
+      e.target.textContent === "" &&
+      !e.target.classList.contains("miss") &&
+      !e.target.classList.contains("cell-around")
+    ) {
+      const audio = document.getElementById("cannon");
+      audio.currentTime = 0;
+      audio.play();
+    }
 
-    computerShotHandler();
+    let rect = e.target.getBoundingClientRect();
+
+    // loadImage("../img/sea-icon-heavy.jpg");
+
+    // if (e.target.classList.contains("dropzone")) {
+    //   console.log("New animation is being loaded", new Date().getSeconds());
+
+    //   splash = document.createElement("canvas");
+    //   splash.id = "dotlottie-canvas";
+    //   splash.className = "lottie-water-splash";
+    //   document.body.appendChild(splash);
+    //   lottieSplash.waterSplash = new DotLottie({
+    //     canvas: document.querySelector("#dotlottie-canvas"),
+    //     src: "https://lottie.host/b2c16b47-ffa0-49df-ad07-bd4e918a6254/jzIHDnTf5u.lottie",
+    //     loop: false,
+    //     autoplay: false,
+    //   });
+    // }
+
+    if (fleet === enemySideMyFleet) {
+      if (e.target.classList[0] === "dropzone") {
+        rect = mySideMyFleet
+          .querySelector(`.${e.target.querySelector(".cell")?.classList[0]}`)
+          .getBoundingClientRect();
+      }
+
+      if (e.target.classList.contains("ship")) {
+        console.log("e.target", e.target);
+
+        rect = mySideMyFleet
+          .querySelector(`.${e.target?.classList[0]}`)
+          .closest(".dropzone")
+          .getBoundingClientRect();
+      }
+    }
+
+    console.log("rect", rect);
+
+    // launchBombTo(e.clientX, e.clientY);
+    if (
+      e.target.textContent === "" &&
+      !e.target.classList.contains("miss") &&
+      !e.target.classList.contains("cell-around")
+    ) {
+      launchBombTo(
+        rect.left + rect.width / 2,
+        rect.top + rect.height / 2,
+        fleet,
+        e.target
+      );
+    }
+
+    setTimeout(function () {
+      // if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet)
+      gameControlHandler(e, fleet);
+
+      shootingLogic(e);
+
+      computerShotHandler();
+    }, duration.duration * 1000);
   });
 }
 
@@ -668,7 +874,7 @@ export function computerShotHandler() {
           randomElement.querySelector(".ship")?.click();
         }, 1 * 1000);
       }
-      // console.log("Clicked:", randomElement.children[0]);
+      console.log("Clicked:", randomElement.children[0]);
     }
   } catch (error) {
     console.error(error, "Error happend ⁉️");

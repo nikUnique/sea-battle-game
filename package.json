@@ -19,6 +19,8 @@
     "parcel": "^2.11.0"
   },
   "dependencies": {
-    "disable-devtool": "^0.3.7"
+    "@lottiefiles/dotlottie-web": "^0.56.0",
+    "disable-devtool": "^0.3.7",
+    "lottie-web": "^5.13.0"
   }
 }
