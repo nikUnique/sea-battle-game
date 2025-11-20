@@ -1,10 +1,13 @@
-import { MIN_INPUT_LENGTH, NEW_GAME_AGREEMENT_COMPLETE_LENGTH } from "./config";
+import {
+  MIN_INPUT_LENGTH,
+  NEW_GAME_AGREEMENT_COMPLETE_LENGTH,
+} from "./config.js";
 
 import {
   bothFleetsReady,
   newGameAgreement,
   playingCheck,
-} from "./gameStartControl";
+} from "./gameStartControl.js";
 
 import {
   allTimers,
@@ -23,7 +26,7 @@ import {
   newGameBtn2,
   startGameBtn1,
   startGameBtn2,
-} from "./globalVars";
+} from "./globalVars.js";
 
 import {
   allowForbidClick,
@@ -33,10 +36,10 @@ import {
   closeUsernameForm,
   openUsernameForm,
   startTimer,
-} from "./helpers";
+} from "./helpers.js";
 
-import placeShipsManually from "./placeShipsManually";
-import createShip from "./makeShips";
+import placeShipsManually from "./placeShipsManually.js";
+import createShip from "./makeShips.js";
 
 export const startNewGame = function (fleet) {
   const fleetIsMySideMyFleet = fleet === mySideMyFleet;

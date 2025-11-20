@@ -3,12 +3,11 @@ import {
   mySideEnemyFleet,
   enemySideMyFleet,
   enemySideEnemyFleet,
-} from "./globalVarsPause";
+} from "./globalVarsPause.js";
 
-import { playingCheck, whoseTurn } from "./gameStartControl";
+import { playingCheck, whoseTurn } from "./gameStartControl.js";
 
-import { sleep, startTimer } from "./helpers";
-import { duration } from "./globalVars";
+import { sleep, startTimer } from "./helpers.js";
 
 export function gameControlHandler(e, fleet) {
   console.log("fleet in the gameControlHandler", fleet, e);

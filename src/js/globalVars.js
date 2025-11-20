@@ -4,7 +4,7 @@ import {
   checkShipSafety,
   remakeShip,
   generateSurroundingFields,
-} from "./shipMakeHelpers";
+} from "./shipMakeHelpers.js";
 // FLEET ENVIRONMENT
 const mySideMyFleet = document.querySelector(".my-side--my-fleet");
 const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");

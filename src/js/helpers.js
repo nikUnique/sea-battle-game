@@ -1,6 +1,6 @@
-import { SECONDS_IN_MINUTE, TIME_LENGTHS } from "./config";
+import { SECONDS_IN_MINUTE, TIME_LENGTHS } from "./config.js";
 
-import { playingCheck } from "./gameStartControl";
+import { playingCheck } from "./gameStartControl.js";
 
 import {
   changeUsernameBtn1,
@@ -22,9 +22,9 @@ import {
   submitUsername2,
   username1Input,
   username2Input,
-} from "./globalVarsPause";
+} from "./globalVarsPause.js";
 
-import showEndResults from "./showEndResults";
+import showEndResults from "./showEndResults.js";
 
 let timer;
 export { timer };

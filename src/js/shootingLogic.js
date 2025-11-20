@@ -7,23 +7,21 @@ import {
   lowerLetters,
   duration,
   lottieSplash,
-} from "./globalVars";
+} from "./globalVars.js";
 
 import {
   generateSurroundingFields,
   randomNumberFromRange,
-} from "./shipMakeHelpers";
+} from "./shipMakeHelpers.js";
 
-import showEndResults from "./showEndResults";
+import showEndResults from "./showEndResults.js";
 
-import { playingCheck, whoseTurn } from "./gameStartControl";
+import { playingCheck, whoseTurn } from "./gameStartControl.js";
 
-import { buildShipBorder, sleep, startTimer, timerClock } from "./helpers";
+import { buildShipBorder, sleep, startTimer, timerClock } from "./helpers.js";
 
-import { APPEAR_TIME, TIME_LENGTHS } from "./config";
-import { gameControlHandler } from "./gameControl";
-import { DotLottie } from "@lottiefiles/dotlottie-web";
-import Lottie from "lottie-web";
+import { APPEAR_TIME, TIME_LENGTHS } from "./config.js";
+import { gameControlHandler } from "./gameControl.js";
 
 // The last damaged ship cell
 let lastDamagingShot;

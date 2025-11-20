@@ -1,13 +1,12 @@
 import {
   seaFleet,
   letters,
-  seaFleet,
   mySideMyFleet,
   mySideEnemyFleet,
   enemySideEnemyFleet,
   enemySideMyFleet,
   seas,
-} from "./globalVars";
+} from "./globalVars.js";
 
 /* <th>${item}</th> */
 

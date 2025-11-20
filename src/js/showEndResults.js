@@ -11,16 +11,16 @@ import {
   player1,
   player2,
   // overlay,
-} from "./globalVarsPause";
+} from "./globalVarsPause.js";
 
-import { playingCheck } from "./gameStartControl";
+import { playingCheck } from "./gameStartControl.js";
 
 import {
   closeNotificationWindow1,
   closeNotificationWindow2,
   getSeaOpacityBack,
   timer,
-} from "./helpers";
+} from "./helpers.js";
 
 export default function (fleet, noTime = false) {
   const allShips = [...fleet.querySelectorAll(".ship")];
