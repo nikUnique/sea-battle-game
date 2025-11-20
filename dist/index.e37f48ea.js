@@ -2884,17 +2884,17 @@ async function createWaterSplashGif(x, y) {
         splash.style.left = x + "px";
         splash.style.top = y + "px";
         splash.style.display = "";
-        const clonedSplash = splash.cloneNode(true);
-        splash.parentNode.replaceChild(clonedSplash, splash);
-        clonedSplash.src = "";
-        clonedSplash.src = splash.src;
+        // const clonedSplash = splash.cloneNode(true);
+        // splash.parentNode.replaceChild(clonedSplash, splash);
+        // clonedSplash.src = "";
+        // clonedSplash.src = splash.src;
         // const splashSrc = splash.src;
         // splash.src = "";
         // splash.src = splashSrc;
         // document.body.appendChild(splash);
         setTimeout(function() {
-            clonedSplash.style.display = "none";
-        // splash.remove();
+            // clonedSplash.style.display = "none";
+            splash.remove();
         }, fallTime);
     } catch (error) {
         console.error("error happend", error);
