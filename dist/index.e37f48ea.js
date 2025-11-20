@@ -2749,8 +2749,7 @@ function launchBombTo(targetX, targetY, fleet, target) {
             // 3. Explode
             !target.classList.contains("dropzone") && createExplosion(x, y);
             bomb.remove();
-            if (target.classList.contains("dropzone") && !target.classList.contains("miss") && !target.classList.contains("cell-around")) // createWaterSplash(x, y);
-            createWaterSplashGif(x, y);
+            if (target.classList.contains("dropzone") && !target.classList.contains("miss") && !target.classList.contains("cell-around")) createWaterSplashWebm(x, y);
         }
     }
     requestAnimationFrame(animateBomb);
@@ -2824,74 +2823,21 @@ function createVSplash(x, y) {
         splash.remove();
     }, fallTime);
 }
-function createWaterSplash(x, y) {
-    const fallTime = 1200;
-    const localSplash = splash;
-    // splash = document.createElement("canvas");
-    // splash.id = "dotlottie-canvas";
-    // splash.className = "lottie-water-splash";
-    splash.style.left = x + "px";
-    splash.style.top = y + "px";
-    // document.body.appendChild(splash);
-    if ((0, _globalVarsJs.lottieSplash).waterSplash) {
-        console.log("The animation should play \uD83D\uDE20", +new Date());
-        (0, _globalVarsJs.lottieSplash).waterSplash.play();
-    }
-    setTimeout(function() {
-        console.log("splash", splash);
-        console.log("removed", +new Date());
-        localSplash.remove();
-    }, fallTime);
-}
-function playWaterSplashLottie(x, y) {
-    const waterSplashLottie = document.querySelector("#dotlottie-canvas");
-    if (waterSplashLottie) {
-        waterSplashLottie.style.left = x + "px";
-        waterSplashLottie.style.top = y + "px";
-        waterSplashLottie?.play();
-    }
-}
-async function loadImage(src) {
-    try {
-        return new Promise((resolve, reject)=>{
-            const img = new Image();
-            img.onload = ()=>resolve(img);
-            img.onerror = ()=>reject(new Error(`Failed to load image: ${src}`));
-            img.src = src;
-        });
-    } catch (error) {
-        console.error("error in loadImage", error);
-    }
-}
-async function createWaterSplashGif(x, y) {
+async function createWaterSplashWebm(x, y) {
     try {
         const fallTime = 1200;
-        // const splash = document.querySelector("#water-splash-gif");
-        const splash = await loadImage("../../animations/water-splash.gif");
-        // splash.src = "../img/sea-icon-sm.jpg";
-        // splash.alt = "Water splash animation";
-        // splash.className = "lottie-water-splash";
-        // console.log("Image starts loading");
-        // console.log("Image finished loading");
-        // splash.src = "../../animations/water-splash.gif";
-        // await loadImage("../img/sea-icon.png");
+        const splash = document.querySelector("#water-splash-webm");
         console.log("splash", splash);
         splash.alt = "Water splash animation";
         splash.className = "lottie-water-splash";
         splash.style.left = x + "px";
         splash.style.top = y + "px";
         splash.style.display = "";
-        // const clonedSplash = splash.cloneNode(true);
-        // splash.parentNode.replaceChild(clonedSplash, splash);
-        // clonedSplash.src = "";
-        // clonedSplash.src = splash.src;
-        // const splashSrc = splash.src;
-        // splash.src = "";
-        // splash.src = splashSrc;
-        // document.body.appendChild(splash);
+        splash.currentTime = 0;
+        splash.play();
         setTimeout(function() {
-            // clonedSplash.style.display = "none";
-            splash.remove();
+            splash.style.display = "none";
+        // splash.remove();
         }, fallTime);
     } catch (error) {
         console.error("error happend", error);
