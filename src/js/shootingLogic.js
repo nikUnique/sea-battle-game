@@ -41,6 +41,7 @@ let splash;
 let loadedImage;
 
 // Bomb flight duration time
+console.log("Just to push");
 
 function filterOutNonEmptyCells(array) {
   return array
