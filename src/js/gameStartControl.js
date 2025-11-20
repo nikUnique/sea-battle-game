@@ -1,9 +1,8 @@
-import { DotLottie } from "@lottiefiles/dotlottie-web";
 import {
   AMOUNT_OF_DESTROYERS,
   BOTH_FLEETS_READY_COMPLETE_LENGTH,
   IN_BETWEEN_SHIP_PART_LENGTH,
-} from "./config";
+} from "./config.js";
 
 import {
   mySideMyFleet,
@@ -24,8 +23,7 @@ import {
   changeUsernameBtn2,
   errorMessage1,
   errorMessage2,
-  lottieSplash,
-} from "./globalVars";
+} from "./globalVars.js";
 
 import {
   allowForbidClick,
@@ -34,8 +32,10 @@ import {
   getSeaOpacityBack,
   selectCellsAround,
   startTimer,
-} from "./helpers";
-import { computerShotHandler } from "./shootingLogic";
+} from "./helpers.js";
+import { computerShotHandler } from "./shootingLogic.js";
+
+import createShip from "./makeShips.js";
 
 // Shows the current state of the game
 const playingCheck = { playing: false };
