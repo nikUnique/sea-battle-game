@@ -9,18 +9,17 @@ import {
   mySideEnemyShips,
   enemySideEnemyShips,
   enemySideMyShips,
-} from "./globalVars";
+} from "./globalVars.js";
 
-import createShip from "./makeShips";
-import "./fleetEnvironment";
+import createShip from "./makeShips.js";
+import "./fleetEnvironment.js";
 
-import placeShipsManually from "./placeShipsManually";
+import placeShipsManually from "./placeShipsManually.js";
 
-import { gameStartControl } from "./gameStartControl";
+import { gameStartControl } from "./gameStartControl.js";
 
-import gameControl from "./gameControl";
-import shootingLogic from "./shootingLogic";
-import { startNewGame } from "./startNewGame";
+import shootingLogic from "./shootingLogic.js";
+import { startNewGame } from "./startNewGame.js";
 
 /**************************/
 /* CREATE FLEET */
