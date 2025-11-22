@@ -43,6 +43,7 @@ body {
   grid-template-columns: repeat(2, 1fr);
   place-self: center;
   margin-top: 12.8rem;
+  position: relative;
 }
 
 .grid--3-cols {
@@ -539,9 +540,6 @@ button:disabled {
 }
 
 .lottie-water-splash {
-  z-index: 1000;
-  width: 100px;
-  height: 100px;
   position: absolute;
   transform: translate(-50%, -50%);
 }

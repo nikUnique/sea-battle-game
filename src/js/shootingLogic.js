@@ -129,7 +129,7 @@ function launchBombTo(targetX, targetY, fleet, target) {
   const dy = targetY - LAUNCH_Y;
   const distance = Math.hypot(dx, dy);
   const gravity = 400; // arc strength
-  duration.duration = distance / 1500 + 0.5; // flight time (seconds)
+  duration.duration = distance / 2000 + 0.5; // flight time (seconds)
   console.log("duration", duration);
 
   let startTime = null;
@@ -168,10 +168,8 @@ function launchBombTo(targetX, targetY, fleet, target) {
         !target.classList.contains("cell-around")
       ) {
         createWaterSplashWebm(x, y);
-        // createWaterSplash(x, y);
-        // createWaterSplashGif(x, y);<!DOCTYPE html>
-        // createVSplash(x, y);
-        // createPlungeSplash(x, y, fleet, target);
+
+        createFountainSplash(x, y);
       }
     }
   }
@@ -180,8 +178,6 @@ function launchBombTo(targetX, targetY, fleet, target) {
 
 // Explosion function
 function createExplosion(x, y) {
-  console.log("x, y", x, y);
-
   const boom = document.createElement("div");
   boom.className = "explosion";
   boom.style.left = x + "px";
@@ -201,72 +197,13 @@ function createExplosion(x, y) {
   });
 }
 
-function createPlungeSplash(x, y) {
-  const splash = document.createElement("div");
-  const fallTime = 720;
-  splash.className = "plunge";
-  splash.style.left = x + "px";
-  splash.style.top = y + "px";
-  document.body.appendChild(splash);
-
-  // Jet + Crown
-  splash.innerHTML = `<div class="jet"></div><div class="crown"</div>`;
-
-  // Chunky water chunks
-
-  for (let i = 0; i < 22; i++) {
-    setTimeout(function () {
-      const c = document.createElement("div");
-      c.className = "chunk";
-      const size = Math.random() * 12 + 8;
-      const angle = Math.random() * Math.PI * 2;
-      const dist = Math.random() * 40 + 20;
-      c.style.width = c.style.height = size + "px";
-      c.style.left = Math.cos(angle) * dist + "px";
-      c.style.top = "-80px";
-      c.style.animationDelay = Math.random() * 0.2 + "s";
-      splash.appendChild(c);
-    }, i * 45);
-  }
-
-  // Three shockwaves
-  [0, 200, 400].forEach((delay, i) => {
-    setTimeout(() => {
-      const s = document.createElement("div");
-      s.className = "shockwave";
-      s.style.borderWidth = 6 - i * 1.5 + "px";
-      splash.appendChild(s);
-    }, delay);
-  });
-
-  setTimeout(function () {
-    splash.remove();
-  }, fallTime);
-}
-
-function createVSplash(x, y) {
-  const splash = document.createElement("div");
-  const fallTime = 720;
-  splash.classList = "vsplash";
-  splash.style.left = x + "px";
-  splash.style.top = y + "px";
-  document.body.appendChild(splash);
-
-  setTimeout(function () {
-    splash.remove();
-  }, fallTime);
-}
-
 async function createWaterSplashWebm(x, y) {
   try {
     const fallTime = 1200;
 
     const splash = document.querySelector("#water-splash-webm");
 
-    console.log("splash", splash);
-
     splash.alt = "Water splash animation";
-
     splash.className = "lottie-water-splash";
     splash.style.left = x + "px";
     splash.style.top = y + "px";
@@ -276,10 +213,118 @@ async function createWaterSplashWebm(x, y) {
 
     setTimeout(function () {
       splash.style.display = "none";
-      // splash.remove();
     }, fallTime);
   } catch (error) {
     console.error("error happend", error);
+  }
+}
+
+function createFountainSplash(x, y) {
+  try {
+    const fallTime = 1500;
+    const canvas = document.createElement("canvas");
+    canvas.width = 160;
+    canvas.height = 800;
+    canvas.style.position = "absolute";
+    canvas.id = "c";
+    // canvas.className = "lottie-water-splash";
+    canvas.style.left = x - 70 + "px";
+    canvas.style.top = y - 300 + "px";
+    canvas.style.pointerEvents = "none";
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext("2d");
+    let droplets = [];
+
+    class Drop {
+      constructor(x, y, vx, vy) {
+        this.x = x;
+        this.y = y;
+        this.vx = vx;
+        this.vy = vy;
+        this.size = Math.random() * 1.8 + 2;
+        this.life = 1;
+      }
+      update() {
+        this.vy += 0.42;
+        this.vx *= 0.97;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life -= 0.018;
+      }
+      draw() {
+        if (this.life <= 0) return;
+
+        const currentSize = this.size * this.life;
+
+        ctx.globalAlpha = Math.max(0, this.life);
+        ctx.fillStyle = "#6cf";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalAlpha = Math.max(0, this.life * 0.7);
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(
+          this.x - currentSize * 0.4,
+          this.y - currentSize * 0.5,
+          currentSize * 0.38,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+    }
+
+    // Small upward fountain from bottom center
+    function splash() {
+      const cx = 80; // center of this canvas
+      const cy = 90; // this is exactly where you clicked
+      for (let i = 0; i < 24; i++) {
+        const angle = (Math.random() - 0.5) * 0.5;
+        const speed = Math.random() * 3.5 + 6;
+        droplets.push(
+          new Drop(
+            80 + (Math.random() - 0.5) * 14,
+            300,
+            Math.sin(angle) * speed * 0.8,
+            -speed
+          )
+        );
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // ctx.globalAlpha = 0.18;
+      // ctx.fillStyle = "transparent";
+      // ctx.fillRect(0, 0, 140, 180);
+      // ctx.globalAlpha = 1;
+
+      droplets = droplets.filter((d) => {
+        d.update();
+        d.draw();
+        return d.life > 0.02 && d.y < canvas.height + 100;
+      });
+
+      if (droplets.length > 0) {
+        requestAnimationFrame(animate);
+      } else {
+        canvas.remove(); // clean up when finished
+      }
+    }
+
+    splash();
+    // Click = small splash (or use setInterval for continious fountain)
+    // canvas.onclick = splash;
+
+    animate();
+
+    // setTimeout(function () {
+    // }, fallTime);
+  } catch (error) {
+    console.error(`An error happened in createFountainSplash`);
   }
 }
 
@@ -422,10 +467,6 @@ export default function (fleet, ships) {
 
     e.target.classList.add("injure");
 
-    const injure = "&cross;";
-
-    // e.target.insertAdjacentHTML("afterbegin", injure);
-
     // A nice neat trick when you don't need empty string but you also don't need it to be filled with something visible, so you just add empty space
     e.target.textContent = " ";
 
@@ -458,9 +499,6 @@ export default function (fleet, ships) {
       const explosion = document.getElementById("explosion");
       explosion.currentTime = 0;
       explosion.play();
-
-      // audio.currentTime = 0;
-      // audio.play();
     }
     // If ships is destroyed completely it's time to add border to it, but if not then execution stops here
     if (destroyedShipCoords.includes(false)) return;
@@ -487,49 +525,6 @@ export default function (fleet, ships) {
       if (ships[injuredShipPartPos].coords.length !== 1) {
         return;
       }
-
-      // Check whether 1-cell ship contains reward class or not
-      // const rewardShip = fleet
-      //   .querySelector(`.${coord}`)
-      //   .nextElementSibling.classList.contains("reward");
-
-      // if (!rewardShip) {
-      //   return;
-      // }
-      // Adds special class which is necessary for reward feature
-      // fleet.classList.add("binoculars");
-
-      // const labelBinocularsReward = fleet
-      //   .closest(".sea-container")
-      //   .querySelector(".binoculars-reward-label");
-
-      // const labelTimer = fleet
-      //   .closest(".sea-container")
-      //   .querySelector(".timer");
-
-      // labelBinocularsReward.style.opacity = "100";
-
-      // const tick = function () {
-      //   timerClock(time, labelTimer);
-
-      //   if (time === 0) {
-      //     clearInterval(timer);
-
-      //     labelBinocularsReward.style.opacity = "0";
-
-      //     fleet.classList.remove("binoculars");
-
-      //     console.log("Magic video camera removed");
-      //   }
-
-      //   time--;
-      // };
-
-      // let time = TIME_LENGTHS.bonusTime;
-      // tick();
-
-      // This will make timer
-      // const timer = setInterval(tick, 1000);
     });
 
     const filledAreaAroundShip = ships[injuredShipPartPos].unavailabeCells
@@ -606,23 +601,6 @@ export default function (fleet, ships) {
 
     let rect = e.target.getBoundingClientRect();
 
-    // loadImage("../img/sea-icon-heavy.jpg");
-
-    // if (e.target.classList.contains("dropzone")) {
-    //   console.log("New animation is being loaded", new Date().getSeconds());
-
-    //   splash = document.createElement("canvas");
-    //   splash.id = "dotlottie-canvas";
-    //   splash.className = "lottie-water-splash";
-    //   document.body.appendChild(splash);
-    //   lottieSplash.waterSplash = new DotLottie({
-    //     canvas: document.querySelector("#dotlottie-canvas"),
-    //     src: "https://lottie.host/b2c16b47-ffa0-49df-ad07-bd4e918a6254/jzIHDnTf5u.lottie",
-    //     loop: false,
-    //     autoplay: false,
-    //   });
-    // }
-
     if (fleet === enemySideMyFleet) {
       if (e.target.classList[0] === "dropzone") {
         rect = mySideMyFleet
@@ -640,9 +618,6 @@ export default function (fleet, ships) {
       }
     }
 
-    console.log("rect", rect);
-
-    // launchBombTo(e.clientX, e.clientY);
     if (
       e.target.textContent === "" &&
       !e.target.classList.contains("miss") &&
@@ -657,7 +632,6 @@ export default function (fleet, ships) {
     }
 
     setTimeout(function () {
-      // if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet)
       gameControlHandler(e, fleet);
 
       shootingLogic(e);

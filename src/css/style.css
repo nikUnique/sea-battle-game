@@ -111,6 +111,7 @@ body {
   align-self: center;
   justify-self: center;
   margin-top: 12.8rem;
+  position: relative;
 }
 
 .grid--3-cols {
@@ -686,12 +687,12 @@ button:disabled {
 /* Water splash from lottie */
 .lottie-water-splash {
   position: absolute;
-  /* left: -50%;
-  top: -50%; */
+
   transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
-  z-index: 1000;
+  /* width: 100px;
+  height: 100px; */
+
+  /* z-index: 1000; */
 }
 
 /**************************/

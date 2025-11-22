@@ -876,23 +876,42 @@ let createMyShips = [
 ];
 let readyEnemyShips = [];
 let createShipCount = 0;
+let randomCoordCount = 0;
+let multipleShipsSets = [];
+let multipleShipsObjectSets = [];
 function createShip({ randomRange, randomLetterRangeProp, size }) {
     createShipCount++;
     console.log("createShipCountrand", createShipCount);
     const checkFleetBusiness = readyEnemyShips?.flatMap((coord)=>coord?.toLowerCase());
-    const randomNumber = Math.floor(Math.random() * 10) + 1;
-    const randomNumberForLetter = Math.floor(Math.random() * 10);
-    const randomLetter = lowerLetters[randomNumberForLetter];
-    const randomFromRange = (0, _shipMakeHelpersJs.randomNumberFromRange)(randomRange[0], randomRange[1]);
-    const randomLetterRange = (0, _shipMakeHelpersJs.randomLetterFun)(randomLetterRangeProp[0], randomLetterRangeProp[1]);
-    // Is horizontal or not
-    const isHorizontal = Math.random() < 0.5;
-    const isTop = Math.random() < 0.5;
-    const isRight = Math.random() < 0.5;
-    const randomCoordByNumber = randomLetter + randomFromRange;
-    const randomCoordByLetter = randomLetterRange + randomNumber;
-    if (isHorizontal) console.log("randomCoordbyLetter", randomCoordByLetter);
-    if (!isHorizontal) console.log("randomCoordByNumber", randomCoordByNumber);
+    let randomNumber, randomNumberForLetter, randomLetter, randomFromRange, randomLetterRange, randomCoord, isHorizontal, isTop, isRight, randomCoordByNumber, randomCoordByLetter;
+    function regenerateRandomCoord() {
+        console.log("RandomCoordCount", randomCoordCount);
+        randomCoordCount++;
+        randomNumber = Math.floor(Math.random() * 10) + 1;
+        randomNumberForLetter = Math.floor(Math.random() * 10);
+        randomLetter = lowerLetters[randomNumberForLetter];
+        randomFromRange = (0, _shipMakeHelpersJs.randomNumberFromRange)(randomRange[0], randomRange[1]);
+        randomLetterRange = (0, _shipMakeHelpersJs.randomLetterFun)(randomLetterRangeProp[0], randomLetterRangeProp[1]);
+        // Is horizontal or not
+        isHorizontal = Math.random() < 0.5;
+        isTop = Math.random() < 0.5;
+        isRight = Math.random() < 0.5;
+        randomCoordByNumber = randomLetter + randomFromRange;
+        randomCoordByLetter = randomLetterRange + randomNumber;
+        if (isHorizontal) {
+            console.log("randomCoordbyLetter", randomCoordByLetter);
+            randomCoord = randomCoordByLetter;
+        }
+        if (!isHorizontal) {
+            console.log("randomCoordByNumber", randomCoordByNumber);
+            randomCoord = randomCoordByNumber;
+        }
+    }
+    regenerateRandomCoord();
+    const isShipNotSafe = (0, _shipMakeHelpersJs.checkShipSafety)([
+        randomCoord
+    ], checkFleetBusiness);
+    if (!isShipNotSafe) regenerateRandomCoord();
     let firstCoord, secondCoord, thirdCoord, fourthCoord;
     if (!isHorizontal && isTop) {
         firstCoord = randomCoordByNumber;
@@ -1395,133 +1414,255 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
         ];
     }
 }
-const [fourCellShip] = createShip?.({
-    randomRange: [
-        4,
-        7
-    ],
-    randomLetterRangeProp: [
-        "d",
-        "g"
-    ],
-    size: 4
-});
-const [fourCellShipTwo] = createShip?.({
-    randomRange: [
-        4,
-        7
-    ],
-    randomLetterRangeProp: [
-        "d",
-        "g"
-    ],
-    size: 4
-});
-const [threeCellShipOne] = createShip?.({
-    randomRange: [
-        3,
-        8
-    ],
-    randomLetterRangeProp: [
-        "c",
-        "h"
-    ],
-    size: 3
-});
-const [threeCellShipTwo] = createShip?.({
-    randomRange: [
-        3,
-        8
-    ],
-    randomLetterRangeProp: [
-        "c",
-        "h"
-    ],
-    size: 3
-});
-const [twoCellShipOne] = createShip?.({
-    randomRange: [
-        2,
-        9
-    ],
-    randomLetterRangeProp: [
-        "b",
-        "i"
-    ],
-    size: 2
-});
-const [twoCellShipTwo] = createShip?.({
-    randomRange: [
-        2,
-        9
-    ],
-    randomLetterRangeProp: [
-        "b",
-        "i"
-    ],
-    size: 2
-});
-const [twoCellShipThree] = createShip?.({
-    randomRange: [
-        2,
-        9
-    ],
-    randomLetterRangeProp: [
-        "b",
-        "i"
-    ],
-    size: 2
-});
-const [oneCellShipOne] = createShip?.({
-    randomRange: [
-        1,
-        10
-    ],
-    randomLetterRangeProp: [
-        "a",
-        "j"
-    ],
-    size: 1
-});
-const [oneCellShipTwo] = createShip?.({
-    randomRange: [
-        1,
-        10
-    ],
-    randomLetterRangeProp: [
-        "a",
-        "j"
-    ],
-    size: 1
-});
-const [oneCellShipThree] = createShip?.({
-    randomRange: [
-        1,
-        10
-    ],
-    randomLetterRangeProp: [
-        "a",
-        "j"
-    ],
-    size: 1
-});
-const [oneCellShipFour] = createShip?.({
-    randomRange: [
-        1,
-        10
-    ],
-    randomLetterRangeProp: [
-        "a",
-        "j"
-    ],
-    size: 1
-});
+// const [fourCellShip] = createShip?.({
+//   randomRange: [4, 7],
+//   randomLetterRangeProp: ["d", "g"],
+//   size: 4,
+// });
+// const [threeCellShipOne] = createShip?.({
+//   randomRange: [3, 8],
+//   randomLetterRangeProp: ["c", "h"],
+//   size: 3,
+// });
+// const [twoCellShipOne] = createShip?.({
+//   randomRange: [2, 9],
+//   randomLetterRangeProp: ["b", "i"],
+//   size: 2,
+// });
+// const [twoCellShipTwo] = createShip?.({
+//   randomRange: [2, 9],
+//   randomLetterRangeProp: ["b", "i"],
+//   size: 2,
+// });
 // const [twoCellShipThree] = createShip?.({
 //   randomRange: [2, 9],
 //   randomLetterRangeProp: ["b", "i"],
 //   size: 2,
 // });
+// const [threeCellShipTwo] = createShip?.({
+//   randomRange: [3, 8],
+//   randomLetterRangeProp: ["c", "h"],
+//   size: 3,
+// });
+// const [oneCellShipOne] = createShip?.({
+//   randomRange: [1, 10],
+//   randomLetterRangeProp: ["a", "j"],
+//   size: 1,
+// });
+// const [oneCellShipTwo] = createShip?.({
+//   randomRange: [1, 10],
+//   randomLetterRangeProp: ["a", "j"],
+//   size: 1,
+// });
+// const [oneCellShipThree] = createShip?.({
+//   randomRange: [1, 10],
+//   randomLetterRangeProp: ["a", "j"],
+//   size: 1,
+// });
+// const [oneCellShipFour] = createShip?.({
+//   randomRange: [1, 10],
+//   randomLetterRangeProp: ["a", "j"],
+//   size: 1,
+// });
+// console.log("Enemy fleet finished creating");
+// multipleShipsSets = [...multipleShipsSets, readyEnemyShips];
+function createMultipleShipsSets() {
+    let fourCellShip, threeCellShipOne, twoCellShipOne, twoCellShipTwo, twoCellShipThree, threeCellShipTwo, oneCellShipOne, oneCellShipTwo, oneCellShipThree, oneCellShipFour;
+    [oneCellShipOne] = createShip?.({
+        randomRange: [
+            1,
+            10
+        ],
+        randomLetterRangeProp: [
+            "a",
+            "j"
+        ],
+        size: 1
+    });
+    [oneCellShipTwo] = createShip?.({
+        randomRange: [
+            1,
+            10
+        ],
+        randomLetterRangeProp: [
+            "a",
+            "j"
+        ],
+        size: 1
+    });
+    [oneCellShipThree] = createShip?.({
+        randomRange: [
+            1,
+            10
+        ],
+        randomLetterRangeProp: [
+            "a",
+            "j"
+        ],
+        size: 1
+    });
+    [oneCellShipFour] = createShip?.({
+        randomRange: [
+            1,
+            10
+        ],
+        randomLetterRangeProp: [
+            "a",
+            "j"
+        ],
+        size: 1
+    });
+    [twoCellShipOne] = createShip?.({
+        randomRange: [
+            2,
+            9
+        ],
+        randomLetterRangeProp: [
+            "b",
+            "i"
+        ],
+        size: 2
+    });
+    [fourCellShip] = createShip?.({
+        randomRange: [
+            4,
+            7
+        ],
+        randomLetterRangeProp: [
+            "d",
+            "g"
+        ],
+        size: 4
+    });
+    [threeCellShipOne] = createShip?.({
+        randomRange: [
+            3,
+            8
+        ],
+        randomLetterRangeProp: [
+            "c",
+            "h"
+        ],
+        size: 3
+    });
+    [threeCellShipTwo] = createShip?.({
+        randomRange: [
+            3,
+            8
+        ],
+        randomLetterRangeProp: [
+            "c",
+            "h"
+        ],
+        size: 3
+    });
+    [twoCellShipTwo] = createShip?.({
+        randomRange: [
+            2,
+            9
+        ],
+        randomLetterRangeProp: [
+            "b",
+            "i"
+        ],
+        size: 2
+    });
+    [twoCellShipThree] = createShip?.({
+        randomRange: [
+            2,
+            9
+        ],
+        randomLetterRangeProp: [
+            "b",
+            "i"
+        ],
+        size: 2
+    });
+    multipleShipsSets = [
+        ...multipleShipsSets,
+        readyEnemyShips
+    ];
+    readyEnemyShips = [];
+    multipleShipsObjectSets = [
+        ...multipleShipsObjectSets,
+        [
+            fourCellShip,
+            threeCellShipOne,
+            twoCellShipOne,
+            twoCellShipTwo,
+            twoCellShipThree,
+            threeCellShipTwo,
+            oneCellShipOne,
+            oneCellShipTwo,
+            oneCellShipThree,
+            oneCellShipFour
+        ]
+    ];
+    if (multipleShipsSets.length < 30) {
+        console.log("multipelShipSetsOur", multipleShipsSets);
+        console.log("multipleShipsSets in a loopour", multipleShipsSets.length);
+        createMultipleShipsSets();
+    }
+    return {
+        fourCellShip,
+        threeCellShipOne,
+        twoCellShipOne,
+        twoCellShipTwo,
+        twoCellShipThree,
+        threeCellShipTwo,
+        oneCellShipOne,
+        oneCellShipTwo,
+        oneCellShipThree,
+        oneCellShipFour
+    };
+}
+createMultipleShipsSets();
+// const sizeOfTheBestSet = multipleShipsSets.reduce((acc, shipArray, i) => {
+//   const filteredArr = shipArray.filter((coord) => {
+//     return (
+//       "a,j".indexOf(coord.slice(0, 1)) >= 0 ||
+//       "1,10".indexOf(coord.slice(1)) >= 0
+//     );
+//   });
+//   console.log("filteredArrour", filteredArr, shipArray, i, acc);
+//   if (filteredArr.length > acc.length) {
+//     console.log("iour", i);
+//     return shipArray;
+//   }
+//   if (filteredArr.length <= acc.length) {
+//     console.log("iour", i);
+//     return acc;
+//   }
+//   // return acc;
+// }, []);
+console.log("multipleInstancesour", multipleShipsSets);
+const sizeOfTheBestSet = multipleShipsSets.map((shipArr)=>{
+    return shipArr.filter((coord)=>{
+        return "a,j".indexOf(coord.slice(0, 1)) >= 0 || "1,10".indexOf(coord.slice(1)) >= 0;
+    });
+});
+// console.log("sizeOfTheBEstour", sizeOfTheBestSet);
+const bestArr = sizeOfTheBestSet.reduce((acc, shipArr, i)=>{
+    console.log("acc", shipArr, acc);
+    if (shipArr.length > acc?.size) return {
+        size: shipArr.length,
+        index: i
+    };
+    if (shipArr.length <= acc?.size) return {
+        size: acc.size,
+        index: acc.index
+    };
+}, {
+    size: 0,
+    index: 0
+});
+console.log("bestArr", bestArr);
+const [fourCellShip, threeCellShipOne, twoCellShipOne, twoCellShipTwo, twoCellShipThree, threeCellShipTwo, oneCellShipOne, oneCellShipTwo, oneCellShipThree, oneCellShipFour] = multipleShipsObjectSets[bestArr.index];
+// Get the index of the array with the most elements
+// console.log("shipAnalysisour", bestOfTheBestSet);
+console.log("We should wait");
 createShipCount = 0;
+randomCoordCount = 0;
 // }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
 let createEnemyShips = [
@@ -1602,7 +1743,7 @@ const lottieSplash = {
     waterSplash: ""
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./shipMakeHelpers.js":"2URfe"}],"2URfe":[function(require,module,exports) {
+},{"./shipMakeHelpers.js":"2URfe","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2URfe":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "randomNumberFromRange", ()=>randomNumberFromRange);
@@ -2478,8 +2619,6 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             });
             console.log(ships);
             e.target.classList.add("injure");
-            const injure = "&cross;";
-            // e.target.insertAdjacentHTML("afterbegin", injure);
             // A nice neat trick when you don't need empty string but you also don't need it to be filled with something visible, so you just add empty space
             e.target.textContent = " ";
             // Checks whether ship is only damaged or destroyed completely
@@ -2501,8 +2640,6 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 const explosion = document.getElementById("explosion");
                 explosion.currentTime = 0;
                 explosion.play();
-            // audio.currentTime = 0;
-            // audio.play();
             }
             // If ships is destroyed completely it's time to add border to it, but if not then execution stops here
             if (destroyedShipCoords.includes(false)) return;
@@ -2524,36 +2661,6 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 ]);
                 // Code below if-statement will be executed only for 1-cell ships
                 if (ships[injuredShipPartPos].coords.length !== 1) return;
-            // Check whether 1-cell ship contains reward class or not
-            // const rewardShip = fleet
-            //   .querySelector(`.${coord}`)
-            //   .nextElementSibling.classList.contains("reward");
-            // if (!rewardShip) {
-            //   return;
-            // }
-            // Adds special class which is necessary for reward feature
-            // fleet.classList.add("binoculars");
-            // const labelBinocularsReward = fleet
-            //   .closest(".sea-container")
-            //   .querySelector(".binoculars-reward-label");
-            // const labelTimer = fleet
-            //   .closest(".sea-container")
-            //   .querySelector(".timer");
-            // labelBinocularsReward.style.opacity = "100";
-            // const tick = function () {
-            //   timerClock(time, labelTimer);
-            //   if (time === 0) {
-            //     clearInterval(timer);
-            //     labelBinocularsReward.style.opacity = "0";
-            //     fleet.classList.remove("binoculars");
-            //     console.log("Magic video camera removed");
-            //   }
-            //   time--;
-            // };
-            // let time = TIME_LENGTHS.bonusTime;
-            // tick();
-            // This will make timer
-            // const timer = setInterval(tick, 1000);
             });
             const filledAreaAroundShip = ships[injuredShipPartPos].unavailabeCells.filter((cell)=>{
                 // Filtering out coords on which the ship inself is placed, because unavailableCells also included them
@@ -2596,20 +2703,6 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                 audio.play();
             }
             let rect = e.target.getBoundingClientRect();
-            // loadImage("../img/sea-icon-heavy.jpg");
-            // if (e.target.classList.contains("dropzone")) {
-            //   console.log("New animation is being loaded", new Date().getSeconds());
-            //   splash = document.createElement("canvas");
-            //   splash.id = "dotlottie-canvas";
-            //   splash.className = "lottie-water-splash";
-            //   document.body.appendChild(splash);
-            //   lottieSplash.waterSplash = new DotLottie({
-            //     canvas: document.querySelector("#dotlottie-canvas"),
-            //     src: "https://lottie.host/b2c16b47-ffa0-49df-ad07-bd4e918a6254/jzIHDnTf5u.lottie",
-            //     loop: false,
-            //     autoplay: false,
-            //   });
-            // }
             if (fleet === (0, _globalVarsJs.enemySideMyFleet)) {
                 if (e.target.classList[0] === "dropzone") rect = (0, _globalVarsJs.mySideMyFleet).querySelector(`.${e.target.querySelector(".cell")?.classList[0]}`).getBoundingClientRect();
                 if (e.target.classList.contains("ship")) {
@@ -2617,11 +2710,8 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
                     rect = (0, _globalVarsJs.mySideMyFleet).querySelector(`.${e.target?.classList[0]}`).closest(".dropzone").getBoundingClientRect();
                 }
             }
-            console.log("rect", rect);
-            // launchBombTo(e.clientX, e.clientY);
             if (e.target.textContent === "" && !e.target.classList.contains("miss") && !e.target.classList.contains("cell-around")) launchBombTo(rect.left + rect.width / 2, rect.top + rect.height / 2, fleet, e.target);
             setTimeout(function() {
-                // if (fleet === mySideEnemyFleet || fleet === enemySideMyFleet)
                 (0, _gameControlJs.gameControlHandler)(e, fleet);
                 shootingLogic(e);
                 computerShotHandler();
@@ -2731,7 +2821,7 @@ function launchBombTo(targetX, targetY, fleet, target) {
     const dy = targetY - LAUNCH_Y;
     const distance = Math.hypot(dx, dy);
     const gravity = 400; // arc strength
-    (0, _globalVarsJs.duration).duration = distance / 1500 + 0.5; // flight time (seconds)
+    (0, _globalVarsJs.duration).duration = distance / 2000 + 0.5; // flight time (seconds)
     console.log("duration", (0, _globalVarsJs.duration));
     let startTime = null;
     function animateBomb(time) {
@@ -2749,14 +2839,16 @@ function launchBombTo(targetX, targetY, fleet, target) {
             // 3. Explode
             !target.classList.contains("dropzone") && createExplosion(x, y);
             bomb.remove();
-            if (target.classList.contains("dropzone") && !target.classList.contains("miss") && !target.classList.contains("cell-around")) createWaterSplashWebm(x, y);
+            if (target.classList.contains("dropzone") && !target.classList.contains("miss") && !target.classList.contains("cell-around")) {
+                createWaterSplashWebm(x, y);
+                createFountainSplash(x, y);
+            }
         }
     }
     requestAnimationFrame(animateBomb);
 }
 // Explosion function
 function createExplosion(x, y) {
-    console.log("x, y", x, y);
     const boom = document.createElement("div");
     boom.className = "explosion";
     boom.style.left = x + "px";
@@ -2773,61 +2865,10 @@ function createExplosion(x, y) {
         LAUNCH_Y = window.innerHeight;
     });
 }
-function createPlungeSplash(x, y) {
-    const splash = document.createElement("div");
-    const fallTime = 720;
-    splash.className = "plunge";
-    splash.style.left = x + "px";
-    splash.style.top = y + "px";
-    document.body.appendChild(splash);
-    // Jet + Crown
-    splash.innerHTML = `<div class="jet"></div><div class="crown"</div>`;
-    // Chunky water chunks
-    for(let i = 0; i < 22; i++)setTimeout(function() {
-        const c = document.createElement("div");
-        c.className = "chunk";
-        const size = Math.random() * 12 + 8;
-        const angle = Math.random() * Math.PI * 2;
-        const dist = Math.random() * 40 + 20;
-        c.style.width = c.style.height = size + "px";
-        c.style.left = Math.cos(angle) * dist + "px";
-        c.style.top = "-80px";
-        c.style.animationDelay = Math.random() * 0.2 + "s";
-        splash.appendChild(c);
-    }, i * 45);
-    // Three shockwaves
-    [
-        0,
-        200,
-        400
-    ].forEach((delay, i)=>{
-        setTimeout(()=>{
-            const s = document.createElement("div");
-            s.className = "shockwave";
-            s.style.borderWidth = 6 - i * 1.5 + "px";
-            splash.appendChild(s);
-        }, delay);
-    });
-    setTimeout(function() {
-        splash.remove();
-    }, fallTime);
-}
-function createVSplash(x, y) {
-    const splash = document.createElement("div");
-    const fallTime = 720;
-    splash.classList = "vsplash";
-    splash.style.left = x + "px";
-    splash.style.top = y + "px";
-    document.body.appendChild(splash);
-    setTimeout(function() {
-        splash.remove();
-    }, fallTime);
-}
 async function createWaterSplashWebm(x, y) {
     try {
         const fallTime = 1200;
         const splash = document.querySelector("#water-splash-webm");
-        console.log("splash", splash);
         splash.alt = "Water splash animation";
         splash.className = "lottie-water-splash";
         splash.style.left = x + "px";
@@ -2837,10 +2878,89 @@ async function createWaterSplashWebm(x, y) {
         splash.play();
         setTimeout(function() {
             splash.style.display = "none";
-        // splash.remove();
         }, fallTime);
     } catch (error) {
         console.error("error happend", error);
+    }
+}
+function createFountainSplash(x, y) {
+    try {
+        const fallTime = 1500;
+        const canvas = document.createElement("canvas");
+        canvas.width = 160;
+        canvas.height = 800;
+        canvas.style.position = "absolute";
+        canvas.id = "c";
+        // canvas.className = "lottie-water-splash";
+        canvas.style.left = x - 70 + "px";
+        canvas.style.top = y - 300 + "px";
+        canvas.style.pointerEvents = "none";
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext("2d");
+        let droplets = [];
+        class Drop {
+            constructor(x, y, vx, vy){
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.size = Math.random() * 1.8 + 2;
+                this.life = 1;
+            }
+            update() {
+                this.vy += 0.42;
+                this.vx *= 0.97;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= 0.018;
+            }
+            draw() {
+                if (this.life <= 0) return;
+                const currentSize = this.size * this.life;
+                ctx.globalAlpha = Math.max(0, this.life);
+                ctx.fillStyle = "#6cf";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = Math.max(0, this.life * 0.7);
+                ctx.fillStyle = "#fff";
+                ctx.beginPath();
+                ctx.arc(this.x - currentSize * 0.4, this.y - currentSize * 0.5, currentSize * 0.38, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        // Small upward fountain from bottom center
+        function splash() {
+            const cx = 80; // center of this canvas
+            const cy = 90; // this is exactly where you clicked
+            for(let i = 0; i < 24; i++){
+                const angle = (Math.random() - 0.5) * 0.5;
+                const speed = Math.random() * 3.5 + 6;
+                droplets.push(new Drop(80 + (Math.random() - 0.5) * 14, 300, Math.sin(angle) * speed * 0.8, -speed));
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // ctx.globalAlpha = 0.18;
+            // ctx.fillStyle = "transparent";
+            // ctx.fillRect(0, 0, 140, 180);
+            // ctx.globalAlpha = 1;
+            droplets = droplets.filter((d)=>{
+                d.update();
+                d.draw();
+                return d.life > 0.02 && d.y < canvas.height + 100;
+            });
+            if (droplets.length > 0) requestAnimationFrame(animate);
+            else canvas.remove(); // clean up when finished
+        }
+        splash();
+        // Click = small splash (or use setInterval for continious fountain)
+        // canvas.onclick = splash;
+        animate();
+    // setTimeout(function () {
+    // }, fallTime);
+    } catch (error) {
+        console.error(`An error happened in createFountainSplash`);
     }
 }
 function computerShotHandler() {

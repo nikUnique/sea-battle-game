@@ -42,6 +42,9 @@ let createMyShips = [
 
 let readyEnemyShips = [];
 let createShipCount = 0;
+let randomCoordCount = 0;
+let multipleShipsSets = [];
+let multipleShipsObjectSets = [];
 
 function createShip({ randomRange, randomLetterRangeProp, size }) {
   createShipCount++;
@@ -51,29 +54,56 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
     coord?.toLowerCase()
   );
 
-  const randomNumber = Math.floor(Math.random() * 10) + 1;
-  const randomNumberForLetter = Math.floor(Math.random() * 10);
+  let randomNumber,
+    randomNumberForLetter,
+    randomLetter,
+    randomFromRange,
+    randomLetterRange,
+    randomCoord,
+    isHorizontal,
+    isTop,
+    isRight,
+    randomCoordByNumber,
+    randomCoordByLetter;
 
-  const randomLetter = lowerLetters[randomNumberForLetter];
-  const randomFromRange = randomNumberFromRange(randomRange[0], randomRange[1]);
-  const randomLetterRange = randomLetterFun(
-    randomLetterRangeProp[0],
-    randomLetterRangeProp[1]
-  );
+  function regenerateRandomCoord() {
+    console.log("RandomCoordCount", randomCoordCount);
+    randomCoordCount++;
 
-  // Is horizontal or not
-  const isHorizontal = Math.random() < 0.5;
-  const isTop = Math.random() < 0.5;
-  const isRight = Math.random() < 0.5;
+    randomNumber = Math.floor(Math.random() * 10) + 1;
+    randomNumberForLetter = Math.floor(Math.random() * 10);
 
-  const randomCoordByNumber = randomLetter + randomFromRange;
-  const randomCoordByLetter = randomLetterRange + randomNumber;
+    randomLetter = lowerLetters[randomNumberForLetter];
+    randomFromRange = randomNumberFromRange(randomRange[0], randomRange[1]);
+    randomLetterRange = randomLetterFun(
+      randomLetterRangeProp[0],
+      randomLetterRangeProp[1]
+    );
 
-  if (isHorizontal) {
-    console.log("randomCoordbyLetter", randomCoordByLetter);
+    // Is horizontal or not
+    isHorizontal = Math.random() < 0.5;
+    isTop = Math.random() < 0.5;
+    isRight = Math.random() < 0.5;
+
+    randomCoordByNumber = randomLetter + randomFromRange;
+    randomCoordByLetter = randomLetterRange + randomNumber;
+
+    if (isHorizontal) {
+      console.log("randomCoordbyLetter", randomCoordByLetter);
+      randomCoord = randomCoordByLetter;
+    }
+    if (!isHorizontal) {
+      console.log("randomCoordByNumber", randomCoordByNumber);
+      randomCoord = randomCoordByNumber;
+    }
   }
-  if (!isHorizontal) {
-    console.log("randomCoordByNumber", randomCoordByNumber);
+
+  regenerateRandomCoord();
+
+  const isShipNotSafe = checkShipSafety([randomCoord], checkFleetBusiness);
+
+  if (!isShipNotSafe) {
+    regenerateRandomCoord();
   }
 
   let firstCoord, secondCoord, thirdCoord, fourthCoord;
@@ -632,67 +662,29 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
   }
 }
 
-const [fourCellShip] = createShip?.({
-  randomRange: [4, 7],
-  randomLetterRangeProp: ["d", "g"],
-  size: 4,
-});
-const [fourCellShipTwo] = createShip?.({
-  randomRange: [4, 7],
-  randomLetterRangeProp: ["d", "g"],
-  size: 4,
-});
+// const [fourCellShip] = createShip?.({
+//   randomRange: [4, 7],
+//   randomLetterRangeProp: ["d", "g"],
+//   size: 4,
+// });
 
-const [threeCellShipOne] = createShip?.({
-  randomRange: [3, 8],
-  randomLetterRangeProp: ["c", "h"],
-  size: 3,
-});
+// const [threeCellShipOne] = createShip?.({
+//   randomRange: [3, 8],
+//   randomLetterRangeProp: ["c", "h"],
+//   size: 3,
+// });
 
-const [threeCellShipTwo] = createShip?.({
-  randomRange: [3, 8],
-  randomLetterRangeProp: ["c", "h"],
-  size: 3,
-});
+// const [twoCellShipOne] = createShip?.({
+//   randomRange: [2, 9],
+//   randomLetterRangeProp: ["b", "i"],
+//   size: 2,
+// });
 
-const [twoCellShipOne] = createShip?.({
-  randomRange: [2, 9],
-  randomLetterRangeProp: ["b", "i"],
-  size: 2,
-});
-
-const [twoCellShipTwo] = createShip?.({
-  randomRange: [2, 9],
-  randomLetterRangeProp: ["b", "i"],
-  size: 2,
-});
-
-const [twoCellShipThree] = createShip?.({
-  randomRange: [2, 9],
-  randomLetterRangeProp: ["b", "i"],
-  size: 2,
-});
-
-const [oneCellShipOne] = createShip?.({
-  randomRange: [1, 10],
-  randomLetterRangeProp: ["a", "j"],
-  size: 1,
-});
-const [oneCellShipTwo] = createShip?.({
-  randomRange: [1, 10],
-  randomLetterRangeProp: ["a", "j"],
-  size: 1,
-});
-const [oneCellShipThree] = createShip?.({
-  randomRange: [1, 10],
-  randomLetterRangeProp: ["a", "j"],
-  size: 1,
-});
-const [oneCellShipFour] = createShip?.({
-  randomRange: [1, 10],
-  randomLetterRangeProp: ["a", "j"],
-  size: 1,
-});
+// const [twoCellShipTwo] = createShip?.({
+//   randomRange: [2, 9],
+//   randomLetterRangeProp: ["b", "i"],
+//   size: 2,
+// });
 
 // const [twoCellShipThree] = createShip?.({
 //   randomRange: [2, 9],
@@ -700,7 +692,230 @@ const [oneCellShipFour] = createShip?.({
 //   size: 2,
 // });
 
+// const [threeCellShipTwo] = createShip?.({
+//   randomRange: [3, 8],
+//   randomLetterRangeProp: ["c", "h"],
+//   size: 3,
+// });
+
+// const [oneCellShipOne] = createShip?.({
+//   randomRange: [1, 10],
+//   randomLetterRangeProp: ["a", "j"],
+//   size: 1,
+// });
+// const [oneCellShipTwo] = createShip?.({
+//   randomRange: [1, 10],
+//   randomLetterRangeProp: ["a", "j"],
+//   size: 1,
+// });
+// const [oneCellShipThree] = createShip?.({
+//   randomRange: [1, 10],
+//   randomLetterRangeProp: ["a", "j"],
+//   size: 1,
+// });
+// const [oneCellShipFour] = createShip?.({
+//   randomRange: [1, 10],
+//   randomLetterRangeProp: ["a", "j"],
+//   size: 1,
+// });
+
+// console.log("Enemy fleet finished creating");
+
+// multipleShipsSets = [...multipleShipsSets, readyEnemyShips];
+
+function createMultipleShipsSets() {
+  let fourCellShip,
+    threeCellShipOne,
+    twoCellShipOne,
+    twoCellShipTwo,
+    twoCellShipThree,
+    threeCellShipTwo,
+    oneCellShipOne,
+    oneCellShipTwo,
+    oneCellShipThree,
+    oneCellShipFour;
+
+  [oneCellShipOne] = createShip?.({
+    randomRange: [1, 10],
+    randomLetterRangeProp: ["a", "j"],
+    size: 1,
+  });
+  [oneCellShipTwo] = createShip?.({
+    randomRange: [1, 10],
+    randomLetterRangeProp: ["a", "j"],
+    size: 1,
+  });
+  [oneCellShipThree] = createShip?.({
+    randomRange: [1, 10],
+    randomLetterRangeProp: ["a", "j"],
+    size: 1,
+  });
+  [oneCellShipFour] = createShip?.({
+    randomRange: [1, 10],
+    randomLetterRangeProp: ["a", "j"],
+    size: 1,
+  });
+
+  [twoCellShipOne] = createShip?.({
+    randomRange: [2, 9],
+    randomLetterRangeProp: ["b", "i"],
+    size: 2,
+  });
+
+  [fourCellShip] = createShip?.({
+    randomRange: [4, 7],
+    randomLetterRangeProp: ["d", "g"],
+    size: 4,
+  });
+
+  [threeCellShipOne] = createShip?.({
+    randomRange: [3, 8],
+    randomLetterRangeProp: ["c", "h"],
+    size: 3,
+  });
+
+  [threeCellShipTwo] = createShip?.({
+    randomRange: [3, 8],
+    randomLetterRangeProp: ["c", "h"],
+    size: 3,
+  });
+
+  [twoCellShipTwo] = createShip?.({
+    randomRange: [2, 9],
+    randomLetterRangeProp: ["b", "i"],
+    size: 2,
+  });
+
+  [twoCellShipThree] = createShip?.({
+    randomRange: [2, 9],
+    randomLetterRangeProp: ["b", "i"],
+    size: 2,
+  });
+
+  multipleShipsSets = [...multipleShipsSets, readyEnemyShips];
+  readyEnemyShips = [];
+
+  multipleShipsObjectSets = [
+    ...multipleShipsObjectSets,
+    [
+      fourCellShip,
+      threeCellShipOne,
+      twoCellShipOne,
+      twoCellShipTwo,
+      twoCellShipThree,
+      threeCellShipTwo,
+      oneCellShipOne,
+      oneCellShipTwo,
+      oneCellShipThree,
+      oneCellShipFour,
+    ],
+  ];
+
+  if (multipleShipsSets.length < 30) {
+    console.log("multipelShipSetsOur", multipleShipsSets);
+    console.log("multipleShipsSets in a loopour", multipleShipsSets.length);
+    createMultipleShipsSets();
+  }
+
+  return {
+    fourCellShip,
+    threeCellShipOne,
+    twoCellShipOne,
+    twoCellShipTwo,
+    twoCellShipThree,
+    threeCellShipTwo,
+    oneCellShipOne,
+    oneCellShipTwo,
+    oneCellShipThree,
+    oneCellShipFour,
+  };
+}
+
+createMultipleShipsSets();
+
+// const sizeOfTheBestSet = multipleShipsSets.reduce((acc, shipArray, i) => {
+//   const filteredArr = shipArray.filter((coord) => {
+//     return (
+//       "a,j".indexOf(coord.slice(0, 1)) >= 0 ||
+//       "1,10".indexOf(coord.slice(1)) >= 0
+//     );
+//   });
+
+//   console.log("filteredArrour", filteredArr, shipArray, i, acc);
+
+//   if (filteredArr.length > acc.length) {
+//     console.log("iour", i);
+
+//     return shipArray;
+//   }
+
+//   if (filteredArr.length <= acc.length) {
+//     console.log("iour", i);
+//     return acc;
+//   }
+
+//   // return acc;
+// }, []);
+
+console.log("multipleInstancesour", multipleShipsSets);
+
+const sizeOfTheBestSet = multipleShipsSets.map((shipArr) => {
+  return shipArr.filter((coord) => {
+    return (
+      "a,j".indexOf(coord.slice(0, 1)) >= 0 ||
+      "1,10".indexOf(coord.slice(1)) >= 0
+    );
+  });
+});
+// console.log("sizeOfTheBEstour", sizeOfTheBestSet);
+
+const bestArr = sizeOfTheBestSet.reduce(
+  (acc, shipArr, i) => {
+    console.log("acc", shipArr, acc);
+
+    if (shipArr.length > acc?.size) {
+      return {
+        size: shipArr.length,
+        index: i,
+      };
+    }
+
+    if (shipArr.length <= acc?.size) {
+      return {
+        size: acc.size,
+        index: acc.index,
+      };
+    }
+  },
+  {
+    size: 0,
+    index: 0,
+  }
+);
+
+console.log("bestArr", bestArr);
+
+const [
+  fourCellShip,
+  threeCellShipOne,
+  twoCellShipOne,
+  twoCellShipTwo,
+  twoCellShipThree,
+  threeCellShipTwo,
+  oneCellShipOne,
+  oneCellShipTwo,
+  oneCellShipThree,
+  oneCellShipFour,
+] = multipleShipsObjectSets[bestArr.index];
+
+// Get the index of the array with the most elements
+
+// console.log("shipAnalysisour", bestOfTheBestSet);
+
+console.log("We should wait");
+
 createShipCount = 0;
+randomCoordCount = 0;
 
 // }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
