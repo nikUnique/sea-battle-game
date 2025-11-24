@@ -32,11 +32,21 @@ let lastInjuredShip = [];
 // const LAUNCH_X = 90;
 let LAUNCH_Y = window.innerHeight * 0.78;
 
-let waterSplashLottie;
-
-let splash;
-
-let loadedImage;
+// let seaBattleGrid = [
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   // Here will be 10 arrays with 10 elements each, and ater each shot it should updated on the particular position
+// ];
+let seaBattleCells = Array(100).fill(0);
+let destroyedShips = [];
 
 // Bomb flight duration time
 console.log("Just to push");
@@ -258,7 +268,7 @@ function createFountainSplash(x, y) {
         const currentSize = this.size * this.life;
 
         ctx.globalAlpha = Math.max(0, this.life);
-        ctx.fillStyle = "#6cf";
+        ctx.fillStyle = "#79DAFA";
         ctx.beginPath();
         ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
         ctx.fill();
@@ -342,6 +352,8 @@ export default function (fleet, ships) {
     // });
 
     // console.log(e.target, "target");
+
+    console.log("shipsNice", ships);
 
     const addMarkToFleet = function (fleet) {
       // If the first condition is true this means that the shot missed and reached dropzone containing empty cell
@@ -652,6 +664,37 @@ export function computerShotHandler() {
       let allMyShips = [...enemySideMyFleet.querySelectorAll("td")];
       allMyShips = filterOutNonEmptyCells(allMyShips);
 
+      if (!destroyedShips.includes(4)) {
+        allMyShips = allMyShips.filter((shipEl, i) => {
+          console.log("We hunt for quidruple + haunt 🐘", destroyedShips);
+
+          return (i + 1) % 4 === 0;
+        });
+      }
+
+      if (
+        destroyedShips.includes(4) &&
+        destroyedShips.filter((el) => el === 3).length < 2
+      ) {
+        allMyShips = allMyShips.filter((shipEl, i) => {
+          console.log("We hunt for tripples + haunt 🐘", destroyedShips);
+
+          return (i + 1) % 3 === 0;
+        });
+      }
+
+      if (
+        destroyedShips.includes(4) &&
+        destroyedShips.filter((el) => el === 3).length === 2 &&
+        destroyedShips.filter((el) => el === 2).length < 3
+      ) {
+        allMyShips = allMyShips.filter((shipEl, i) => {
+          console.log("We hunt for doubles + haunt 🐘", destroyedShips);
+
+          return (i + 1) % 2 === 0;
+        });
+      }
+
       // Backup to use
       let oldShips = allMyShips;
 
@@ -726,6 +769,7 @@ export function computerShotHandler() {
           ).length === allSurroundingsFromFullShip.length
         ) {
           allMyShips = oldShips;
+          destroyedShips = [...destroyedShips, lastInjuredShip.length];
           lastInjuredShip = [];
           lastDamagingShot = "";
         }
@@ -736,6 +780,10 @@ export function computerShotHandler() {
 
       if (allMyShips.length === 0) return;
       const randomIndex = Math.floor(Math.random() * allMyShips.length);
+      console.log("randomIndex", randomIndex);
+      seaBattleCells[randomIndex] = 1;
+      console.log("seaBattleBoard", seaBattleCells);
+
       const randomElement = allMyShips[randomIndex];
 
       if (
@@ -758,6 +806,8 @@ export function computerShotHandler() {
           ...lastInjuredShip,
           randomElement.querySelector(".ship"),
         ];
+
+        console.log("lastInjuredShip", lastInjuredShip);
 
         console.log("lastDamagingShot is real now", lastDamagingShot);
 

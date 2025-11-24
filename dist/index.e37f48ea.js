@@ -1414,58 +1414,6 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
         ];
     }
 }
-// const [fourCellShip] = createShip?.({
-//   randomRange: [4, 7],
-//   randomLetterRangeProp: ["d", "g"],
-//   size: 4,
-// });
-// const [threeCellShipOne] = createShip?.({
-//   randomRange: [3, 8],
-//   randomLetterRangeProp: ["c", "h"],
-//   size: 3,
-// });
-// const [twoCellShipOne] = createShip?.({
-//   randomRange: [2, 9],
-//   randomLetterRangeProp: ["b", "i"],
-//   size: 2,
-// });
-// const [twoCellShipTwo] = createShip?.({
-//   randomRange: [2, 9],
-//   randomLetterRangeProp: ["b", "i"],
-//   size: 2,
-// });
-// const [twoCellShipThree] = createShip?.({
-//   randomRange: [2, 9],
-//   randomLetterRangeProp: ["b", "i"],
-//   size: 2,
-// });
-// const [threeCellShipTwo] = createShip?.({
-//   randomRange: [3, 8],
-//   randomLetterRangeProp: ["c", "h"],
-//   size: 3,
-// });
-// const [oneCellShipOne] = createShip?.({
-//   randomRange: [1, 10],
-//   randomLetterRangeProp: ["a", "j"],
-//   size: 1,
-// });
-// const [oneCellShipTwo] = createShip?.({
-//   randomRange: [1, 10],
-//   randomLetterRangeProp: ["a", "j"],
-//   size: 1,
-// });
-// const [oneCellShipThree] = createShip?.({
-//   randomRange: [1, 10],
-//   randomLetterRangeProp: ["a", "j"],
-//   size: 1,
-// });
-// const [oneCellShipFour] = createShip?.({
-//   randomRange: [1, 10],
-//   randomLetterRangeProp: ["a", "j"],
-//   size: 1,
-// });
-// console.log("Enemy fleet finished creating");
-// multipleShipsSets = [...multipleShipsSets, readyEnemyShips];
 function createMultipleShipsSets() {
     let fourCellShip, threeCellShipOne, twoCellShipOne, twoCellShipTwo, twoCellShipThree, threeCellShipTwo, oneCellShipOne, oneCellShipTwo, oneCellShipThree, oneCellShipFour;
     [oneCellShipOne] = createShip?.({
@@ -1598,11 +1546,9 @@ function createMultipleShipsSets() {
             oneCellShipFour
         ]
     ];
-    if (multipleShipsSets.length < 30) {
-        console.log("multipelShipSetsOur", multipleShipsSets);
-        console.log("multipleShipsSets in a loopour", multipleShipsSets.length);
-        createMultipleShipsSets();
-    }
+    if (multipleShipsSets.length < 30) // console.log("multipelShipSetsOur", multipleShipsSets);
+    // console.log("multipleShipsSets in a loopour", multipleShipsSets.length);
+    createMultipleShipsSets();
     return {
         fourCellShip,
         threeCellShipOne,
@@ -1617,26 +1563,21 @@ function createMultipleShipsSets() {
     };
 }
 createMultipleShipsSets();
-// const sizeOfTheBestSet = multipleShipsSets.reduce((acc, shipArray, i) => {
-//   const filteredArr = shipArray.filter((coord) => {
-//     return (
-//       "a,j".indexOf(coord.slice(0, 1)) >= 0 ||
-//       "1,10".indexOf(coord.slice(1)) >= 0
-//     );
-//   });
-//   console.log("filteredArrour", filteredArr, shipArray, i, acc);
-//   if (filteredArr.length > acc.length) {
-//     console.log("iour", i);
-//     return shipArray;
-//   }
-//   if (filteredArr.length <= acc.length) {
-//     console.log("iour", i);
-//     return acc;
-//   }
-//   // return acc;
-// }, []);
-console.log("multipleInstancesour", multipleShipsSets);
-const sizeOfTheBestSet = multipleShipsSets.map((shipArr)=>{
+// console.log("multipleInstancesour", multipleShipsSets);
+// const muiltipleSetsWithoutSingleCoords = filteredWithoutSingleShips.filter((coordArray, i) => {
+// })
+const muiltipleSetsWithoutSingleCoords = multipleShipsObjectSets.map((shipObjArr, i)=>{
+    return shipObjArr.filter((coordsArr)=>{
+        return coordsArr.length > 2;
+    });
+}).map((shipObjArr, i)=>{
+    return shipObjArr.flat();
+});
+// console.log(
+//   "muiltipleSetsWithoutSingleCoords",
+//   muiltipleSetsWithoutSingleCoords
+// );
+const sizeOfTheBestSet = muiltipleSetsWithoutSingleCoords.map((shipArr, i)=>{
     return shipArr.filter((coord)=>{
         return "a,j".indexOf(coord.slice(0, 1)) >= 0 || "1,10".indexOf(coord.slice(1)) >= 0;
     });
@@ -1657,13 +1598,13 @@ const bestArr = sizeOfTheBestSet.reduce((acc, shipArr, i)=>{
     index: 0
 });
 console.log("bestArr", bestArr);
+console.log("multipleShipObjects", multipleShipsObjectSets);
 const [fourCellShip, threeCellShipOne, twoCellShipOne, twoCellShipTwo, twoCellShipThree, threeCellShipTwo, oneCellShipOne, oneCellShipTwo, oneCellShipThree, oneCellShipFour] = multipleShipsObjectSets[bestArr.index];
 // Get the index of the array with the most elements
 // console.log("shipAnalysisour", bestOfTheBestSet);
 console.log("We should wait");
 createShipCount = 0;
 randomCoordCount = 0;
-// }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
 let createEnemyShips = [
     [
@@ -1994,12 +1935,45 @@ parcelHelpers.export(exports, "allowForbidClick", ()=>allowForbidClick);
 parcelHelpers.export(exports, "timerClock", ()=>timerClock);
 parcelHelpers.export(exports, "startTimer", ()=>startTimer);
 parcelHelpers.export(exports, "selectCellsAround", ()=>selectCellsAround);
-parcelHelpers.export(exports, "openUsernameForm", ()=>openUsernameForm);
-parcelHelpers.export(exports, "closeUsernameForm", ()=>closeUsernameForm);
+// const toggleUsernameForm = function (fleet, display) {
+//   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
+//   // Shows and hides items when it's required
+//   // (fleetIsMySideMyFleet
+//   //   ? [username1Input, inputUsernameLabel1, submitUsername1]
+//   //   : [username2Input, inputUsernameLabel2, submitUsername2]
+//   // ).forEach((item) => {
+//   //   console.log(item.style.display);
+//   //   item.style.display = display;
+//   // });
+//   const changeDisplayState = function (state, toggleMethod) {
+//     if (fleetIsMySideMyFleet) {
+//       changeUsernameBtn1.style.display = state;
+//       newGameBtn1.style.display = state;
+//       playerUsername1?.classList[toggleMethod]("data");
+//     }
+//     if (!fleetIsMySideMyFleet) {
+//       changeUsernameBtn2.style.display = state;
+//       newGameBtn2.style.display = state;
+//       playerUsername2?.classList[toggleMethod]("data");
+//     }
+//   };
+//   if (display !== "flex") {
+//     changeDisplayState("flex", "add");
+//   }
+//   if (display === "flex") {
+//     changeDisplayState("none", "remove");
+//   }
+// };
+// export const openUsernameForm = function (fleet, display) {
+//   toggleUsernameForm(fleet, display);
+// };
+// export const closeUsernameForm = function (fleet, display) {
+//   toggleUsernameForm(fleet, display);
+// };
 parcelHelpers.export(exports, "sleep", ()=>sleep);
 var _configJs = require("./config.js");
 var _gameStartControlJs = require("./gameStartControl.js");
-var _globalVarsPauseJs = require("./globalVarsPause.js");
+var _globalVarsJs = require("./globalVars.js");
 var _showEndResultsJs = require("./showEndResults.js");
 var _showEndResultsJsDefault = parcelHelpers.interopDefault(_showEndResultsJs);
 let timer;
@@ -2024,11 +1998,11 @@ const getSeaOpacityBack = function() {
     });
 };
 const closeNotificationWindow1 = function() {
-    (0, _globalVarsPauseJs.notificatonWindow1).classList.add("hidden");
+    (0, _globalVarsJs.notificatonWindow1).classList.add("hidden");
 // overlay.classList.add("hidden");
 };
 const closeNotificationWindow2 = function() {
-    (0, _globalVarsPauseJs.notificatonWindow2).classList.add("hidden");
+    (0, _globalVarsJs.notificatonWindow2).classList.add("hidden");
 // overlay.classList.add("hidden");
 };
 const allowForbidClick = function(fleet, state) {
@@ -2053,7 +2027,7 @@ const startTimer = function(fleet, newGame = false) {
         console.log(timer);
         clearInterval(timer);
     }
-    const contraryFleet = fleet === (0, _globalVarsPauseJs.enemySideMyFleet) ? (0, _globalVarsPauseJs.mySideMyFleet) : (0, _globalVarsPauseJs.enemySideEnemyFleet);
+    const contraryFleet = fleet === (0, _globalVarsJs.enemySideMyFleet) ? (0, _globalVarsJs.mySideMyFleet) : (0, _globalVarsJs.enemySideEnemyFleet);
     const timeLeftLabel = fleet.closest(".sea-container").querySelector(".timer-label");
     const timeContraryLeftLabel = contraryFleet.closest(".sea-container").querySelector(".timer-label");
     const labelTimer = fleet.closest(".sea-container").querySelector(".timer-time");
@@ -2064,7 +2038,7 @@ const startTimer = function(fleet, newGame = false) {
         labelContraryTimer.textContent = timerClock(time, labelTimer);
         if (time === 0) {
             console.log((0, _gameStartControlJs.playingCheck).playing, "play", time);
-            const fleetSide = fleet === (0, _globalVarsPauseJs.mySideEnemyFleet) ? (0, _globalVarsPauseJs.enemySideMyFleet) : (0, _globalVarsPauseJs.mySideEnemyFleet);
+            const fleetSide = fleet === (0, _globalVarsJs.mySideEnemyFleet) ? (0, _globalVarsJs.enemySideMyFleet) : (0, _globalVarsJs.mySideEnemyFleet);
             clearInterval(timer);
             timeLeftLabel.style.opacity = "0";
             console.log(fleet, "fleet");
@@ -2080,11 +2054,11 @@ const startTimer = function(fleet, newGame = false) {
 const selectCellsAround = function(cell) {
     const coordSlice01 = cell.slice(0, 1);
     const coordSlice1 = cell.slice(1);
-    const letterAround = (0, _globalVarsPauseJs.letters).indexOf(coordSlice01);
+    const letterAround = (0, _globalVarsJs.letters).indexOf(coordSlice01);
     const previousCell = coordSlice01 + (+coordSlice1 - 1);
     const nextCell = coordSlice01 + (+coordSlice1 + 1);
-    const rightCell = (0, _globalVarsPauseJs.letters)[letterAround + 1] + coordSlice1;
-    const leftCell = (0, _globalVarsPauseJs.letters)[letterAround - 1] + coordSlice1;
+    const rightCell = (0, _globalVarsJs.letters)[letterAround + 1] + coordSlice1;
+    const leftCell = (0, _globalVarsJs.letters)[letterAround - 1] + coordSlice1;
     return {
         coordSlice01,
         coordSlice1,
@@ -2095,42 +2069,6 @@ const selectCellsAround = function(cell) {
         leftCell
     };
 };
-const toggleUsernameForm = function(fleet, display) {
-    const fleetIsMySideMyFleet = fleet === (0, _globalVarsPauseJs.mySideMyFleet);
-    // Shows and hides items when it's required
-    (fleetIsMySideMyFleet ? [
-        (0, _globalVarsPauseJs.username1Input),
-        (0, _globalVarsPauseJs.inputUsernameLabel1),
-        (0, _globalVarsPauseJs.submitUsername1)
-    ] : [
-        (0, _globalVarsPauseJs.username2Input),
-        (0, _globalVarsPauseJs.inputUsernameLabel2),
-        (0, _globalVarsPauseJs.submitUsername2)
-    ]).forEach((item)=>{
-        console.log(item.style.display);
-        item.style.display = display;
-    });
-    const changeDisplayState = function(state, toggleMethod) {
-        if (fleetIsMySideMyFleet) {
-            (0, _globalVarsPauseJs.changeUsernameBtn1).style.display = state;
-            (0, _globalVarsPauseJs.newGameBtn1).style.display = state;
-            (0, _globalVarsPauseJs.playerUsername1)?.classList[toggleMethod]("data");
-        }
-        if (!fleetIsMySideMyFleet) {
-            (0, _globalVarsPauseJs.changeUsernameBtn2).style.display = state;
-            (0, _globalVarsPauseJs.newGameBtn2).style.display = state;
-            (0, _globalVarsPauseJs.playerUsername2)?.classList[toggleMethod]("data");
-        }
-    };
-    if (display !== "flex") changeDisplayState("flex", "add");
-    if (display === "flex") changeDisplayState("none", "remove");
-};
-const openUsernameForm = function(fleet, display) {
-    toggleUsernameForm(fleet, display);
-};
-const closeUsernameForm = function(fleet, display) {
-    toggleUsernameForm(fleet, display);
-};
 function sleep(timeInMilliseconds) {
     return new Promise(function(resolve) {
         setTimeout(function() {
@@ -2139,7 +2077,7 @@ function sleep(timeInMilliseconds) {
     });
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"k5Hzs","./gameStartControl.js":"fXv0K","./globalVarsPause.js":"bAcK9","./showEndResults.js":"2csmh"}],"k5Hzs":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"k5Hzs","./gameStartControl.js":"fXv0K","./showEndResults.js":"2csmh","./globalVars.js":"gb5d6"}],"k5Hzs":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AMOUNT_OF_DESTROYERS", ()=>AMOUNT_OF_DESTROYERS);
@@ -2165,9 +2103,9 @@ const TIME_LENGTHS = {
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fXv0K":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "playingCheck", ()=>playingCheck);
 parcelHelpers.export(exports, "bothFleetsReady", ()=>bothFleetsReady);
 parcelHelpers.export(exports, "newGameAgreement", ()=>newGameAgreement);
+parcelHelpers.export(exports, "playingCheck", ()=>playingCheck);
 parcelHelpers.export(exports, "whoseTurn", ()=>whoseTurn);
 parcelHelpers.export(exports, "gameStartControl", ()=>gameStartControl);
 var _configJs = require("./config.js");
@@ -2193,12 +2131,11 @@ let firstTurn;
 let checkCells;
 const gameStartControl = function(fleet, fleetParts) {
     const fleetIsEnemySideMyFleet = fleet === (0, _globalVarsJs.enemySideMyFleet);
-    const startPlaying = function() {
+    const startPlaying = function(e) {
         playingCheck.playing = false;
         // Reset newGameAgreement
         newGameAgreement.splice(0);
         fleet === (0, _globalVarsJs.mySideEnemyFleet) && (firstTurn = Math.random());
-        // Right now this isn't necessary because the button just disappers after being clicked
         (fleetIsEnemySideMyFleet ? (0, _globalVarsJs.startGameBtn1) : (0, _globalVarsJs.startGameBtn2)).setAttribute("disabled", true);
         (0, _helpersJs.allowForbidClick)(fleet, "none");
         console.log(fleet);
@@ -2469,14 +2406,11 @@ const gameStartControl = function(fleet, fleetParts) {
         flattenedBothSideShips.length === createFleetShips.length * 2 /* + 2 &&
       flattenedBothSideShips.includes("mySideEnemyFleet") &&
       flattenedBothSideShips.includes("enemySideMyFleet") */ ) {
-            [
-                (0, _globalVarsJs.changeUsernameBtn1),
-                (0, _globalVarsJs.changeUsernameBtn2)
-            ].forEach((btn)=>{
-                btn.setAttribute("disabled", true);
-            });
-            (0, _helpersJs.closeUsernameForm)((0, _globalVarsJs.mySideMyFleet), "none");
-            (0, _helpersJs.closeUsernameForm)((0, _globalVarsJs.enemySideEnemyFleet), "none");
+            // [changeUsernameBtn1, changeUsernameBtn2].forEach((btn) => {
+            //   btn.setAttribute("disabled", true);
+            // });
+            // closeUsernameForm(mySideMyFleet, "none");
+            // closeUsernameForm(enemySideEnemyFleet, "none");
             playingCheck.playing = true;
             console.log("Game started \uD83E\uDD70");
             const audio = document.getElementById("halloween");
@@ -2518,8 +2452,7 @@ const gameStartControl = function(fleet, fleetParts) {
             if (firstTurn >= 0.5) defineFirstTurn((0, _globalVarsJs.enemySideMyFleet), (0, _globalVarsJs.mySideEnemyFleet));
         }
         [
-            (0, _globalVarsJs.newGameBtn1),
-            (0, _globalVarsJs.newGameBtn2)
+            (0, _globalVarsJs.newGameBtn1)
         ].forEach((btn)=>{
             btn.removeAttribute("disabled", true);
         });
@@ -2545,6 +2478,7 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, ships) {
             // e.target.addEventListener("click", () => {
             // });
             // console.log(e.target, "target");
+            console.log("shipsNice", ships);
             const addMarkToFleet = function(fleet) {
                 // If the first condition is true this means that the shot missed and reached dropzone containing empty cell
                 if (e.target.classList[0] === "dropzone") {
@@ -2735,9 +2669,21 @@ let surroundingCoords;
 let lastInjuredShip = [];
 // const LAUNCH_X = 90;
 let LAUNCH_Y = window.innerHeight * 0.78;
-let waterSplashLottie;
-let splash;
-let loadedImage;
+// let seaBattleGrid = [
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   // Here will be 10 arrays with 10 elements each, and ater each shot it should updated on the particular position
+// ];
+let seaBattleCells = Array(100).fill(0);
+let destroyedShips = [];
 // Bomb flight duration time
 console.log("Just to push");
 function filterOutNonEmptyCells(array) {
@@ -2918,7 +2864,7 @@ function createFountainSplash(x, y) {
                 if (this.life <= 0) return;
                 const currentSize = this.size * this.life;
                 ctx.globalAlpha = Math.max(0, this.life);
-                ctx.fillStyle = "#6cf";
+                ctx.fillStyle = "#79DAFA";
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, currentSize, 0, Math.PI * 2);
                 ctx.fill();
@@ -2974,6 +2920,18 @@ function computerShotHandler() {
                 ...(0, _globalVarsJs.enemySideMyFleet).querySelectorAll("td")
             ];
             allMyShips = filterOutNonEmptyCells(allMyShips);
+            if (!destroyedShips.includes(4)) allMyShips = allMyShips.filter((shipEl, i)=>{
+                console.log("We hunt for quidruple + haunt \uD83D\uDC18", destroyedShips);
+                return (i + 1) % 4 === 0;
+            });
+            if (destroyedShips.includes(4) && destroyedShips.filter((el)=>el === 3).length < 2) allMyShips = allMyShips.filter((shipEl, i)=>{
+                console.log("We hunt for tripples + haunt \uD83D\uDC18", destroyedShips);
+                return (i + 1) % 3 === 0;
+            });
+            if (destroyedShips.includes(4) && destroyedShips.filter((el)=>el === 3).length === 2 && destroyedShips.filter((el)=>el === 2).length < 3) allMyShips = allMyShips.filter((shipEl, i)=>{
+                console.log("We hunt for doubles + haunt \uD83D\uDC18", destroyedShips);
+                return (i + 1) % 2 === 0;
+            });
             // Backup to use
             let oldShips = allMyShips;
             if (lastDamagingShot) {
@@ -3013,6 +2971,10 @@ function computerShotHandler() {
                 // Deciding whether the current ship is destroyed or not
                 if (allSurroundingsFromFullShip.length && allSurroundingsFromFullShip.filter((coord)=>(0, _globalVarsJs.enemySideMyFleet).querySelector(`.${coord.toUpperCase()}`).classList.contains("miss") || (0, _globalVarsJs.enemySideMyFleet).querySelector(`.${coord.toUpperCase()}`).classList.contains("cell-around") || (0, _globalVarsJs.enemySideMyFleet).querySelector(`.${coord.toUpperCase()}`).nextElementSibling?.classList.contains("injure")).length === allSurroundingsFromFullShip.length) {
                     allMyShips = oldShips;
+                    destroyedShips = [
+                        ...destroyedShips,
+                        lastInjuredShip.length
+                    ];
                     lastInjuredShip = [];
                     lastDamagingShot = "";
                 }
@@ -3021,6 +2983,9 @@ function computerShotHandler() {
             console.log("timeout", timeout);
             if (allMyShips.length === 0) return;
             const randomIndex = Math.floor(Math.random() * allMyShips.length);
+            console.log("randomIndex", randomIndex);
+            seaBattleCells[randomIndex] = 1;
+            console.log("seaBattleBoard", seaBattleCells);
             const randomElement = allMyShips[randomIndex];
             if (!randomElement.querySelector(".ship") && !randomElement.querySelector(".miss") && !randomElement.querySelector(".cell-around")) setTimeout(function() {
                 randomElement.click();
@@ -3031,6 +2996,7 @@ function computerShotHandler() {
                     ...lastInjuredShip,
                     randomElement.querySelector(".ship")
                 ];
+                console.log("lastInjuredShip", lastInjuredShip);
                 console.log("lastDamagingShot is real now", lastDamagingShot);
                 if (lastInjuredShip.length === 1) surroundingCoords = (0, _shipMakeHelpersJs.generateSurroundingFields)({
                     lowerLetters: (0, _globalVarsJs.lowerLetters),
@@ -3062,23 +3028,14 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
             // Checks all ships on the fleet and those which are destroyed will be returned
             if (ship.classList.contains("injure")) return ship;
         });
-        // .filter((ship, i, arr) => {
-        //   if (ship) {
-        //     return ship;
-        //   }
-        // });
-        console.log(fleet);
         const areAllShipsInjured = injuredShips.length === allShips.length;
         const runOutOfTime = noTime ? true : false;
-        console.log("runOUtOftime", runOutOfTime);
         if (!areAllShipsInjured && !runOutOfTime) return;
         // If code execution is at this point - this means the game is finished
         const audio = document.getElementById("halloween");
         audio.currentTime = 0;
         audio.pause();
         clearInterval((0, _helpersJs.timer));
-        console.log(areAllShipsInjured, "areAll");
-        console.log(runOutOfTime, "areAll");
         (0, _gameStartControlJs.playingCheck).playing = false;
         // Composing the result message
         const composeMessage = function(messageEl, fleetSide) {
@@ -3088,29 +3045,29 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
         // Show notification window
         const openNotificationWindow = function() {
             const addNotification = function() {
-                composeMessage((0, _globalVarsPauseJs.resultsMessage1), (0, _globalVarsPauseJs.enemySideMyFleet));
-                composeMessage((0, _globalVarsPauseJs.resultsMessage2), (0, _globalVarsPauseJs.mySideEnemyFleet));
+                composeMessage((0, _globalVarsJs.resultsMessage1), (0, _globalVarsJs.enemySideMyFleet));
+                composeMessage((0, _globalVarsJs.resultsMessage2), (0, _globalVarsJs.mySideEnemyFleet));
             };
-            fleet === (0, _globalVarsPauseJs.mySideEnemyFleet) && addNotification((0, _globalVarsPauseJs.player1));
-            fleet !== (0, _globalVarsPauseJs.mySideEnemyFleet) && addNotification((0, _globalVarsPauseJs.player2));
-            (0, _globalVarsPauseJs.notificatonWindow1).classList.remove("hidden");
-            (0, _globalVarsPauseJs.notificatonWindow2).classList.remove("hidden");
+            fleet === (0, _globalVarsJs.mySideEnemyFleet) && addNotification((0, _globalVarsJs.player1));
+            fleet !== (0, _globalVarsJs.mySideEnemyFleet) && addNotification((0, _globalVarsJs.player2));
+            (0, _globalVarsJs.notificatonWindow1).classList.remove("hidden");
+            (0, _globalVarsJs.notificatonWindow2).classList.remove("hidden");
             // overlay.classList.remove("hidden");
             [
-                (0, _globalVarsPauseJs.mySideEnemyFleet),
-                (0, _globalVarsPauseJs.enemySideMyFleet)
+                (0, _globalVarsJs.mySideEnemyFleet),
+                (0, _globalVarsJs.enemySideMyFleet)
             ].forEach((fleet)=>{
                 fleet.style.pointerEvents = "none";
                 (0, _helpersJs.getSeaOpacityBack)();
             });
         };
         (areAllShipsInjured || runOutOfTime) && openNotificationWindow();
-        (areAllShipsInjured || runOutOfTime) && (0, _globalVarsPauseJs.allTimers).forEach((timerEl)=>{
+        (areAllShipsInjured || runOutOfTime) && (0, _globalVarsJs.allTimers).forEach((timerEl)=>{
             timerEl.style.opacity = "0";
         });
-        (0, _globalVarsPauseJs.btnCloseNotificationWindow1).addEventListener("click", (0, _helpersJs.closeNotificationWindow1));
+        (0, _globalVarsJs.btnCloseNotificationWindow1).addEventListener("click", (0, _helpersJs.closeNotificationWindow1));
         // overlay.addEventListener("click", closeNotificationWindow);
-        (0, _globalVarsPauseJs.btnCloseNotificationWindow2).addEventListener("click", (0, _helpersJs.closeNotificationWindow2));
+        (0, _globalVarsJs.btnCloseNotificationWindow2).addEventListener("click", (0, _helpersJs.closeNotificationWindow2));
     // overlay.addEventListener("click", closeNotificationWindow2);
     // document.addEventListener("keydown", function (e) {
     //   // console.log(e.key);
@@ -3120,265 +3077,11 @@ parcelHelpers.export(exports, "default", ()=>function(fleet, noTime = false) {
     //     closeNotificationWindow();
     // });
     });
-var _globalVarsPauseJs = require("./globalVarsPause.js");
+var _globalVarsJs = require("./globalVars.js");
 var _gameStartControlJs = require("./gameStartControl.js");
 var _helpersJs = require("./helpers.js");
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVarsPause.js":"bAcK9","./gameStartControl.js":"fXv0K","./helpers.js":"hGI1E"}],"bAcK9":[function(require,module,exports) {
-// FLEET ENVIRONMENT
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "bothSideShips", ()=>bothSideShips);
-parcelHelpers.export(exports, "mySideMyFleet", ()=>mySideMyFleet);
-parcelHelpers.export(exports, "mySideEnemyFleet", ()=>mySideEnemyFleet);
-parcelHelpers.export(exports, "enemySideEnemyFleet", ()=>enemySideEnemyFleet);
-parcelHelpers.export(exports, "enemySideMyFleet", ()=>enemySideMyFleet);
-parcelHelpers.export(exports, "seas", ()=>seas);
-parcelHelpers.export(exports, "seaContainers", ()=>seaContainers);
-parcelHelpers.export(exports, "notificatonWindow1", ()=>notificatonWindow1);
-parcelHelpers.export(exports, "notificatonWindow2", ()=>notificatonWindow2);
-parcelHelpers.export(exports, "btnCloseNotificationWindow1", ()=>btnCloseNotificationWindow1);
-parcelHelpers.export(exports, "btnCloseNotificationWindow2", ()=>btnCloseNotificationWindow2);
-parcelHelpers.export(exports, "newGameBtn1", ()=>newGameBtn1);
-parcelHelpers.export(exports, "newGameBtn2", ()=>newGameBtn2);
-parcelHelpers.export(exports, "startGameBtn1", ()=>startGameBtn1);
-parcelHelpers.export(exports, "startGameBtn2", ()=>startGameBtn2);
-parcelHelpers.export(exports, "changeUsernameBtn1", ()=>changeUsernameBtn1);
-parcelHelpers.export(exports, "changeUsernameBtn2", ()=>changeUsernameBtn2);
-parcelHelpers.export(exports, "username1Input", ()=>username1Input);
-parcelHelpers.export(exports, "username2Input", ()=>username2Input);
-parcelHelpers.export(exports, "menuBtnsContainer1", ()=>menuBtnsContainer1);
-parcelHelpers.export(exports, "menuBtnsContainer2", ()=>menuBtnsContainer2);
-parcelHelpers.export(exports, "playerUsername1", ()=>playerUsername1);
-parcelHelpers.export(exports, "playerUsername2", ()=>playerUsername2);
-parcelHelpers.export(exports, "errorMessage1", ()=>errorMessage1);
-parcelHelpers.export(exports, "errorMessage2", ()=>errorMessage2);
-parcelHelpers.export(exports, "inputUsernameLabel2", ()=>inputUsernameLabel2);
-parcelHelpers.export(exports, "submitUsername2", ()=>submitUsername2);
-parcelHelpers.export(exports, "inputUsernameLabel1", ()=>inputUsernameLabel1);
-parcelHelpers.export(exports, "submitUsername1", ()=>submitUsername1);
-parcelHelpers.export(exports, "letters", ()=>letters);
-parcelHelpers.export(exports, "seaFleet", ()=>seaFleet);
-parcelHelpers.export(exports, "allTimers", ()=>allTimers);
-parcelHelpers.export(exports, "waitingForOpponentLabel1", ()=>waitingForOpponentLabel1);
-parcelHelpers.export(exports, "waitingForOpponentLabel2", ()=>waitingForOpponentLabel2);
-parcelHelpers.export(exports, "createMyShips", ()=>createMyShips);
-parcelHelpers.export(exports, "createEnemyShips", ()=>createEnemyShips);
-parcelHelpers.export(exports, "mySideMyShips", ()=>mySideMyShips);
-parcelHelpers.export(exports, "enemySideEnemyShips", ()=>enemySideEnemyShips);
-parcelHelpers.export(exports, "mySideEnemyShips", ()=>mySideEnemyShips);
-parcelHelpers.export(exports, "enemySideMyShips", ()=>enemySideMyShips);
-parcelHelpers.export(exports, "resultsMessage1", ()=>resultsMessage1);
-parcelHelpers.export(exports, "resultsMessage2", ()=>resultsMessage2);
-parcelHelpers.export(exports, "player1", ()=>player1);
-parcelHelpers.export(exports, "player2", ()=>player2);
-const mySideMyFleet = document.querySelector(".my-side--my-fleet");
-const mySideEnemyFleet = document.querySelector(".my-side--enemy-fleet");
-const enemySideEnemyFleet = document.querySelector(".enemy-side--enemy-fleet");
-const enemySideMyFleet = document.querySelector(".enemy-side--my-fleet");
-const seaContainers = document.querySelectorAll(".sea-container");
-const seas = document.querySelectorAll(".sea");
-const letters = [
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J"
-];
-const seaFleet = Array.from({
-    length: 10
-}, (_, i)=>i + 1);
-const startGameBtn1 = document.querySelector(".fleet-1");
-const startGameBtn2 = document.querySelector(".fleet-2");
-const player1 = document.querySelector(".username-1").textContent;
-const player2 = document.querySelector(".username-2").textContent;
-const allTimers = [
-    ...document.querySelectorAll(".timer-label")
-];
-const waitingForOpponentLabel1 = document.querySelector(".waiting-opponent-1");
-const waitingForOpponentLabel2 = document.querySelector(".waiting-opponent-2");
-const errorMessage1 = document.querySelector(".error-message-1");
-const errorMessage2 = document.querySelector(".error-message-2");
-let createMyShips = [
-    [
-        [
-            "d1"
-        ],
-        1
-    ],
-    [
-        [
-            "f1"
-        ],
-        1
-    ],
-    [
-        [
-            "h1"
-        ],
-        1
-    ],
-    [
-        [
-            "j1"
-        ],
-        1
-    ],
-    [
-        [
-            "a5",
-            "b5"
-        ],
-        2
-    ],
-    [
-        [
-            "d5",
-            "e5"
-        ],
-        2
-    ],
-    [
-        [
-            "b3",
-            "c3",
-            "d3"
-        ],
-        3
-    ],
-    [
-        [
-            "c7",
-            "d7",
-            "e7"
-        ],
-        3
-    ],
-    [
-        [
-            "g4",
-            "h4"
-        ],
-        2
-    ],
-    [
-        [
-            "c9",
-            "d9",
-            "e9",
-            "f9"
-        ],
-        4
-    ]
-];
-let createEnemyShips = [
-    [
-        [
-            "a1"
-        ],
-        1
-    ],
-    [
-        [
-            "c1"
-        ],
-        1
-    ],
-    [
-        [
-            "e1"
-        ],
-        1
-    ],
-    [
-        [
-            "a3"
-        ],
-        1
-    ],
-    [
-        [
-            "i5",
-            "j5"
-        ],
-        2
-    ],
-    [
-        [
-            "i7",
-            "j7"
-        ],
-        2
-    ],
-    [
-        [
-            "d4",
-            "e4",
-            "f4",
-            "g4"
-        ],
-        4
-    ],
-    [
-        [
-            "h2",
-            "i2",
-            "j2"
-        ],
-        3
-    ],
-    [
-        [
-            "e9",
-            "f9"
-        ],
-        2
-    ],
-    [
-        [
-            "b5",
-            "b6",
-            "b7"
-        ],
-        3
-    ]
-];
-let mySideMyShips = [];
-let enemySideEnemyShips = [];
-let mySideEnemyShips = [];
-let enemySideMyShips = [];
-let bothSideShips = [];
-// NOTIFICATION WINDOW
-const notificatonWindow1 = document.querySelector(".notification-window.player-1");
-const notificatonWindow2 = document.querySelector(".notification-window.player-2");
-const resultsMessage1 = document.querySelector(".results-message");
-const resultsMessage2 = document.querySelector(".results-message-2");
-const btnCloseNotificationWindow1 = document.querySelector(".close-notification-window");
-const btnCloseNotificationWindow2 = document.querySelector(".close-notification-window-2");
-// const overlay = document.querySelector(".overlay");
-// MENU BUTTONS
-const menuBtnsContainer1 = document.querySelector(".menu-btns-container-1");
-const menuBtnsContainer2 = document.querySelector(".menu-btns-container-2");
-const playerUsername1 = document.querySelector(".player-username-1");
-const playerUsername2 = document.querySelector(".player-username-2");
-const newGameBtn1 = document.querySelector(".new-game-btn.player-1");
-const newGameBtn2 = document.querySelector(".new-game-btn.player-2");
-const changeUsernameBtn1 = document.querySelector(".change-username-btn-1");
-const changeUsernameBtn2 = document.querySelector(".change-username-btn-2");
-// FILL USERNAME FORM
-const username1Input = document.querySelector(".fill-username--player-1");
-const username2Input = document.querySelector(".fill-username--player-2");
-const inputUsernameLabel2 = document.querySelector(".your-name-2");
-const inputUsernameLabel1 = document.querySelector(".your-name-1");
-const submitUsername1 = document.querySelector(".submit-username--fleet-1");
-const submitUsername2 = document.querySelector(".submit-username--fleet-2");
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dx0uc":[function(require,module,exports) {
+},{"./globalVars.js":"gb5d6","./gameStartControl.js":"fXv0K","./helpers.js":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"dx0uc":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "gameControlHandler", ()=>gameControlHandler) // export default function () {
@@ -3397,14 +3100,14 @@ parcelHelpers.export(exports, "gameControlHandler", ()=>gameControlHandler) // e
  //   });
  // }
 ;
-var _globalVarsPauseJs = require("./globalVarsPause.js");
+var _globalVarsJs = require("./globalVars.js");
 var _gameStartControlJs = require("./gameStartControl.js");
 var _helpersJs = require("./helpers.js");
 function gameControlHandler(e, fleet) {
     console.log("fleet in the gameControlHandler", fleet, e);
     if (// Check complition of conditions which define whether the turn should or should not be changed
     e.target.classList.contains("ship") || e.target.textContent !== "" || e.target.querySelector(".ship")?.classList.contains("ship")) return;
-    const turn = (0, _gameStartControlJs.playingCheck).playing && fleet === (0, _globalVarsPauseJs.enemySideMyFleet) ? (0, _globalVarsPauseJs.mySideEnemyFleet) : (0, _globalVarsPauseJs.enemySideMyFleet);
+    const turn = (0, _gameStartControlJs.playingCheck).playing && fleet === (0, _globalVarsJs.enemySideMyFleet) ? (0, _globalVarsJs.mySideEnemyFleet) : (0, _globalVarsJs.enemySideMyFleet);
     (0, _gameStartControlJs.whoseTurn).turn = turn;
     console.log("turn", turn);
     if ((0, _gameStartControlJs.playingCheck).playing) {
@@ -3413,7 +3116,7 @@ function gameControlHandler(e, fleet) {
         (0, _helpersJs.startTimer)(turn);
         /*   fleet.closest(".sea-container").querySelector(".timer-label") && */ fleet.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
         // Selecting part of the fleet which is on your opponent's side
-        const fleetSide = fleet === (0, _globalVarsPauseJs.enemySideMyFleet) ? (0, _globalVarsPauseJs.mySideMyFleet) : (0, _globalVarsPauseJs.enemySideEnemyFleet);
+        const fleetSide = fleet === (0, _globalVarsJs.enemySideMyFleet) ? (0, _globalVarsJs.mySideMyFleet) : (0, _globalVarsJs.enemySideEnemyFleet);
         fleetSide.closest(".sea-container").querySelector(".timer-label").style.opacity = "0";
     }
     // The turn changed and because of this the side which turn it was before will be unavailable for clicks
@@ -3421,7 +3124,7 @@ function gameControlHandler(e, fleet) {
     turn.closest(".sea").style.opacity = "1";
 }
 
-},{"./globalVarsPause.js":"bAcK9","./gameStartControl.js":"fXv0K","./helpers.js":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"iXTJE":[function(require,module,exports) {
+},{"./gameStartControl.js":"fXv0K","./helpers.js":"hGI1E","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars.js":"gb5d6"}],"iXTJE":[function(require,module,exports) {
 var _globalVarsJs = require("./globalVars.js");
 /* <th>${item}</th> */ // Creates fleet cells
 let markup = (0, _globalVarsJs.seaFleet).map((item, i)=>`
@@ -3522,140 +3225,135 @@ parcelHelpers.export(exports, "default", ()=>function(fleet) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "startNewGame", ()=>startNewGame);
-var _configJs = require("./config.js");
-var _gameStartControlJs = require("./gameStartControl.js");
 var _globalVarsJs = require("./globalVars.js");
-var _helpersJs = require("./helpers.js");
-var _placeShipsManuallyJs = require("./placeShipsManually.js");
-var _placeShipsManuallyJsDefault = parcelHelpers.interopDefault(_placeShipsManuallyJs);
-var _makeShipsJs = require("./makeShips.js");
-var _makeShipsJsDefault = parcelHelpers.interopDefault(_makeShipsJs);
 const startNewGame = function(fleet) {
     const fleetIsMySideMyFleet = fleet === (0, _globalVarsJs.mySideMyFleet);
     const definePlayerNumber = fleetIsMySideMyFleet ? 1 : 2;
-    const newGameBtn = fleetIsMySideMyFleet ? (0, _globalVarsJs.newGameBtn1) : (0, _globalVarsJs.newGameBtn2);
-    const changeUsernameBtn = fleetIsMySideMyFleet ? (0, _globalVarsJs.changeUsernameBtn1) : (0, _globalVarsJs.changeUsernameBtn2);
-    changeUsernameBtn.addEventListener("click", function(e) {
-        (0, _helpersJs.openUsernameForm)(fleet, "flex");
-    });
-    const submitBtn = document.querySelector(`.submit-username--fleet-${definePlayerNumber}`);
-    const inputUsername = document.querySelector(`.fill-username--player-${definePlayerNumber}`);
-    const usernameLabel = document.querySelector(`.username-${definePlayerNumber}`);
-    const submitUsernames = function() {
-        // Default player name
-        inputUsername.value = (fleetIsMySideMyFleet ? "First" : "Second") + "-player";
-        submitBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-            const checkUsernameCase = function(input) {
-                return input.value.toLowerCase().slice(0, 1).toUpperCase() + input.value.slice(1).toLowerCase();
-            };
-            const playerUsername = checkUsernameCase(inputUsername).trim();
-            if (playerUsername.length < (0, _configJs.MIN_INPUT_LENGTH)) {
-                console.log("Your username should contains at least 2 letters");
-                return;
-            }
-            if (playerUsername.includes(" ")) {
-                console.log(playerUsername, "username");
-                console.log("Your username should not contain empty spaces");
-                return;
-            }
-            usernameLabel.textContent = "";
-            usernameLabel.insertAdjacentHTML("afterbegin", playerUsername + "'s ships");
-            inputUsername.value = "";
-            console.log(playerUsername);
-            (0, _helpersJs.closeUsernameForm)(fleet, "none");
-        });
-    };
-    submitUsernames();
+    // const newGameBtn = fleetIsMySideMyFleet ? newGameBtn1 : newGameBtn2;
+    const newGameBtn = (0, _globalVarsJs.newGameBtn1);
+    // const changeUsernameBtn = fleetIsMySideMyFleet
+    //   ? changeUsernameBtn1
+    //   : changeUsernameBtn2;
+    // changeUsernameBtn.addEventListener("click", function (e) {
+    //   openUsernameForm(fleet, "flex");
+    // });
+    // const submitBtn = document.querySelector(
+    //   `.submit-username--fleet-${definePlayerNumber}`
+    // );
+    // const inputUsername = document.querySelector(
+    //   `.fill-username--player-${definePlayerNumber}`
+    // );
+    // const usernameLabel = document.querySelector(
+    //   `.username-${definePlayerNumber}`
+    // );
+    // const submitUsernames = function () {
+    //   // Default player name
+    //   inputUsername.value =
+    //     (fleetIsMySideMyFleet ? "First" : "Second") + "-player";
+    //   submitBtn.addEventListener("click", function (e) {
+    //     e.preventDefault();
+    //     const checkUsernameCase = function (input) {
+    //       return (
+    //         input.value.toLowerCase().slice(0, 1).toUpperCase() +
+    //         input.value.slice(1).toLowerCase()
+    //       );
+    //     };
+    //     const playerUsername = checkUsernameCase(inputUsername).trim();
+    //     if (playerUsername.length < MIN_INPUT_LENGTH) {
+    //       console.log("Your username should contains at least 2 letters");
+    //       return;
+    //     }
+    //     if (playerUsername.includes(" ")) {
+    //       console.log(playerUsername, "username");
+    //       console.log("Your username should not contain empty spaces");
+    //       return;
+    //     }
+    //     usernameLabel.textContent = "";
+    //     usernameLabel.insertAdjacentHTML(
+    //       "afterbegin",
+    //       playerUsername + "'s ships"
+    //     );
+    //     inputUsername.value = "";
+    //     console.log(playerUsername);
+    //     closeUsernameForm(fleet, "none");
+    //   });
+    // };
+    // submitUsernames();
     newGameBtn.addEventListener("click", function() {
-        fleetIsMySideMyFleet && !(0, _gameStartControlJs.newGameAgreement).includes("mySideMyFleet") && (0, _gameStartControlJs.newGameAgreement).push("mySideMyFleet");
-        fleet === (0, _globalVarsJs.enemySideEnemyFleet) && !(0, _gameStartControlJs.newGameAgreement).includes("enemySideEnemyFleet") && (0, _gameStartControlJs.newGameAgreement).push("enemySideEnemyFleet");
-        // Defines whether both player pressed "New Game" button or not
-        if ((0, _gameStartControlJs.newGameAgreement).length !== (0, _configJs.NEW_GAME_AGREEMENT_COMPLETE_LENGTH)) return;
-        const refreshFleets = function() {
-            (0, _helpersJs.closeNotificationWindow1)();
-            (0, _helpersJs.closeNotificationWindow2)();
-            (0, _helpersJs.getSeaOpacityBack)();
-            (0, _globalVarsJs.allTimers).forEach((timerEl)=>{
-                timerEl.style.opacity = "0";
-            });
-            (0, _helpersJs.startTimer)(fleet, true);
-            (0, _gameStartControlJs.playingCheck).playing = false;
-            [
-                [
-                    (0, _globalVarsJs.mySideMyFleet),
-                    "auto"
-                ],
-                [
-                    (0, _globalVarsJs.enemySideEnemyFleet),
-                    "auto"
-                ],
-                [
-                    (0, _globalVarsJs.mySideEnemyFleet),
-                    "none"
-                ],
-                [
-                    (0, _globalVarsJs.enemySideMyFleet),
-                    "none"
-                ]
-            ].forEach((item)=>(0, _helpersJs.allowForbidClick)(...item));
-            (0, _globalVarsJs.newGameBtn1).setAttribute("disabled", true);
-            (0, _globalVarsJs.newGameBtn2).setAttribute("disabled", true);
-            const clearAndRefreshFleets = function() {
-                [
-                    ...document.querySelectorAll("td")
-                ].forEach((cell)=>{
-                    cell.querySelector(".ship")?.remove();
-                    cell.querySelector(".miss")?.classList.remove("miss");
-                    cell.removeAttribute("style");
-                    cell.querySelector(".cell-around")?.classList.remove("cell-around");
-                    cell.querySelector(".cell").textContent = "";
-                });
-                (0, _globalVarsJs.mySideMyShips).splice(0);
-                (0, _globalVarsJs.enemySideEnemyShips).splice(0);
-                (0, _globalVarsJs.createMyShips).forEach((ship)=>{
-                    (0, _makeShipsJsDefault.default)(...ship, [
-                        (0, _globalVarsJs.mySideMyFleet),
-                        (0, _globalVarsJs.mySideMyShips),
-                        (0, _globalVarsJs.createMyShips)
-                    ]);
-                });
-                (0, _globalVarsJs.createEnemyShips).forEach((ship)=>{
-                    (0, _makeShipsJsDefault.default)(...ship, [
-                        (0, _globalVarsJs.enemySideEnemyFleet),
-                        (0, _globalVarsJs.enemySideEnemyShips),
-                        (0, _globalVarsJs.createEnemyShips)
-                    ]);
-                });
-                (0, _globalVarsJs.startGameBtn1).removeAttribute("disabled", true);
-                (0, _globalVarsJs.startGameBtn2).removeAttribute("disabled", true);
-                [
-                    (0, _globalVarsJs.changeUsernameBtn1),
-                    (0, _globalVarsJs.changeUsernameBtn2)
-                ].forEach((btn)=>{
-                    btn.removeAttribute("disabled", true);
-                });
-                (0, _globalVarsJs.startGameBtn1).style.display = "";
-                (0, _globalVarsJs.startGameBtn2).style.display = "";
-                (0, _gameStartControlJs.bothFleetsReady).splice(0);
-                (0, _globalVarsJs.bothSideShips).splice(0);
-            };
-            if (fleetIsMySideMyFleet || fleet === (0, _globalVarsJs.enemySideEnemyFleet)) clearAndRefreshFleets();
-            (0, _placeShipsManuallyJsDefault.default)((0, _globalVarsJs.mySideMyFleet), [
-                (0, _globalVarsJs.mySideMyFleet),
-                (0, _globalVarsJs.mySideMyShips),
-                (0, _globalVarsJs.createMyShips)
-            ]);
-            (0, _placeShipsManuallyJsDefault.default)((0, _globalVarsJs.enemySideEnemyFleet), [
-                (0, _globalVarsJs.enemySideEnemyFleet),
-                (0, _globalVarsJs.enemySideEnemyShips),
-                (0, _globalVarsJs.createEnemyShips)
-            ]);
-        };
-        refreshFleets();
+        location.reload();
+    // fleetIsMySideMyFleet &&
+    //   !newGameAgreement.includes("mySideMyFleet") &&
+    //   newGameAgreement.push("mySideMyFleet");
+    // fleet === enemySideEnemyFleet &&
+    //   !newGameAgreement.includes("enemySideEnemyFleet") &&
+    //   newGameAgreement.push("enemySideEnemyFleet");
+    // Defines whether both player pressed "New Game" button or not
+    // if (newGameAgreement.length !== NEW_GAME_AGREEMENT_COMPLETE_LENGTH) return;
+    // const refreshFleets = function () {
+    //   closeNotificationWindow1();
+    //   closeNotificationWindow2();
+    //   getSeaOpacityBack();
+    //   allTimers.forEach((timerEl) => {
+    //     timerEl.style.opacity = "0";
+    //   });
+    //   startTimer(fleet, true);
+    //   playingCheck.playing = false;
+    //   [
+    //     [mySideMyFleet, "auto"],
+    //     [enemySideEnemyFleet, "auto"],
+    //     [mySideEnemyFleet, "none"],
+    //     [enemySideMyFleet, "none"],
+    //   ].forEach((item) => allowForbidClick(...item));
+    //   newGameBtn1.setAttribute("disabled", true);
+    //   newGameBtn2.setAttribute("disabled", true);
+    //   const clearAndRefreshFleets = function () {
+    //     [...document.querySelectorAll("td")].forEach((cell) => {
+    //       cell.querySelector(".ship")?.remove();
+    //       cell.querySelector(".miss")?.classList.remove("miss");
+    //       cell.removeAttribute("style");
+    //       cell.querySelector(".cell-around")?.classList.remove("cell-around");
+    //       cell.querySelector(".cell").textContent = "";
+    //     });
+    //     mySideMyShips.splice(0);
+    //     enemySideEnemyShips.splice(0);
+    //     createMyShips.forEach((ship) => {
+    //       createShip(...ship, [mySideMyFleet, mySideMyShips, createMyShips]);
+    //     });
+    //     createEnemyShips.forEach((ship) => {
+    //       createShip(...ship, [
+    //         enemySideEnemyFleet,
+    //         enemySideEnemyShips,
+    //         createEnemyShips,
+    //       ]);
+    //     });
+    //     startGameBtn1.removeAttribute("disabled", true);
+    //     startGameBtn2.removeAttribute("disabled", true);
+    //     [changeUsernameBtn1, changeUsernameBtn2].forEach((btn) => {
+    //       btn.removeAttribute("disabled", true);
+    //     });
+    //     startGameBtn1.style.display = "";
+    //     startGameBtn2.style.display = "";
+    //     bothFleetsReady.splice(0);
+    //     bothSideShips.splice(0);
+    //   };
+    //   if (fleetIsMySideMyFleet || fleet === enemySideEnemyFleet) {
+    //     clearAndRefreshFleets();
+    //   }
+    //   placeShipsManually(mySideMyFleet, [
+    //     mySideMyFleet,
+    //     mySideMyShips,
+    //     createMyShips,
+    //   ]);
+    //   placeShipsManually(enemySideEnemyFleet, [
+    //     enemySideEnemyFleet,
+    //     enemySideEnemyShips,
+    //     createEnemyShips,
+    //   ]);
+    // };
+    // refreshFleets();
     });
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"k5Hzs","./gameStartControl.js":"fXv0K","./globalVars.js":"gb5d6","./helpers.js":"hGI1E","./placeShipsManually.js":"3iktl","./makeShips.js":"8mnMH"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars.js":"gb5d6"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
 //# sourceMappingURL=index.e37f48ea.js.map

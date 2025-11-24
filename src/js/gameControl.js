@@ -3,7 +3,7 @@ import {
   mySideEnemyFleet,
   enemySideMyFleet,
   enemySideEnemyFleet,
-} from "./globalVarsPause.js";
+} from "./globalVars.js";
 
 import { playingCheck, whoseTurn } from "./gameStartControl.js";
 

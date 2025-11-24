@@ -5,30 +5,26 @@ import {
 } from "./config.js";
 
 import {
-  mySideMyFleet,
-  enemySideEnemyFleet,
-  mySideEnemyFleet,
-  enemySideMyFleet,
-  enemySideMyShips,
-  mySideEnemyShips,
   bothSideShips,
   createEnemyShips,
-  newGameBtn2,
+  enemySideEnemyFleet,
+  enemySideMyFleet,
+  enemySideMyShips,
+  errorMessage1,
+  errorMessage2,
+  mySideEnemyFleet,
+  mySideEnemyShips,
+  mySideMyFleet,
   newGameBtn1,
   startGameBtn1,
   startGameBtn2,
   waitingForOpponentLabel1,
   waitingForOpponentLabel2,
-  changeUsernameBtn1,
-  changeUsernameBtn2,
-  errorMessage1,
-  errorMessage2,
 } from "./globalVars.js";
 
 import {
   allowForbidClick,
   buildShipBorder,
-  closeUsernameForm,
   getSeaOpacityBack,
   selectCellsAround,
   startTimer,
@@ -54,12 +50,12 @@ let firstTurn;
 // Helps to define whether all ships are placed in the right way or not
 let checkCells;
 
-export { playingCheck, bothFleetsReady, newGameAgreement, whoseTurn };
+export { bothFleetsReady, newGameAgreement, playingCheck, whoseTurn };
 
 export const gameStartControl = function (fleet, fleetParts) {
   const fleetIsEnemySideMyFleet = fleet === enemySideMyFleet;
 
-  const startPlaying = function () {
+  const startPlaying = function (e) {
     playingCheck.playing = false;
 
     // Reset newGameAgreement
@@ -67,7 +63,6 @@ export const gameStartControl = function (fleet, fleetParts) {
 
     fleet === mySideEnemyFleet && (firstTurn = Math.random());
 
-    // Right now this isn't necessary because the button just disappers after being clicked
     (fleetIsEnemySideMyFleet ? startGameBtn1 : startGameBtn2).setAttribute(
       "disabled",
       true
@@ -407,13 +402,13 @@ export const gameStartControl = function (fleet, fleetParts) {
       flattenedBothSideShips.includes("mySideEnemyFleet") &&
       flattenedBothSideShips.includes("enemySideMyFleet") */
     ) {
-      [changeUsernameBtn1, changeUsernameBtn2].forEach((btn) => {
-        btn.setAttribute("disabled", true);
-      });
+      // [changeUsernameBtn1, changeUsernameBtn2].forEach((btn) => {
+      //   btn.setAttribute("disabled", true);
+      // });
 
-      closeUsernameForm(mySideMyFleet, "none");
+      // closeUsernameForm(mySideMyFleet, "none");
 
-      closeUsernameForm(enemySideEnemyFleet, "none");
+      // closeUsernameForm(enemySideEnemyFleet, "none");
 
       playingCheck.playing = true;
       console.log("Game started 🥰");
@@ -479,7 +474,7 @@ export const gameStartControl = function (fleet, fleetParts) {
       }
     }
 
-    [newGameBtn1, newGameBtn2].forEach((btn) => {
+    [newGameBtn1].forEach((btn) => {
       btn.removeAttribute("disabled", true);
     });
   };

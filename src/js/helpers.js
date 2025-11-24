@@ -3,26 +3,14 @@ import { SECONDS_IN_MINUTE, TIME_LENGTHS } from "./config.js";
 import { playingCheck } from "./gameStartControl.js";
 
 import {
-  changeUsernameBtn1,
-  changeUsernameBtn2,
   enemySideEnemyFleet,
   enemySideMyFleet,
-  inputUsernameLabel1,
-  inputUsernameLabel2,
   letters,
   mySideEnemyFleet,
   mySideMyFleet,
-  newGameBtn1,
-  newGameBtn2,
   notificatonWindow1,
   notificatonWindow2,
-  playerUsername1,
-  playerUsername2,
-  submitUsername1,
-  submitUsername2,
-  username1Input,
-  username2Input,
-} from "./globalVarsPause.js";
+} from "./globalVars.js";
 
 import showEndResults from "./showEndResults.js";
 
@@ -179,50 +167,50 @@ export const selectCellsAround = function (cell) {
   };
 };
 
-const toggleUsernameForm = function (fleet, display) {
-  const fleetIsMySideMyFleet = fleet === mySideMyFleet;
+// const toggleUsernameForm = function (fleet, display) {
+//   const fleetIsMySideMyFleet = fleet === mySideMyFleet;
 
-  // Shows and hides items when it's required
-  (fleetIsMySideMyFleet
-    ? [username1Input, inputUsernameLabel1, submitUsername1]
-    : [username2Input, inputUsernameLabel2, submitUsername2]
-  ).forEach((item) => {
-    console.log(item.style.display);
-    item.style.display = display;
-  });
+//   // Shows and hides items when it's required
+//   // (fleetIsMySideMyFleet
+//   //   ? [username1Input, inputUsernameLabel1, submitUsername1]
+//   //   : [username2Input, inputUsernameLabel2, submitUsername2]
+//   // ).forEach((item) => {
+//   //   console.log(item.style.display);
+//   //   item.style.display = display;
+//   // });
 
-  const changeDisplayState = function (state, toggleMethod) {
-    if (fleetIsMySideMyFleet) {
-      changeUsernameBtn1.style.display = state;
-      newGameBtn1.style.display = state;
+//   const changeDisplayState = function (state, toggleMethod) {
+//     if (fleetIsMySideMyFleet) {
+//       changeUsernameBtn1.style.display = state;
+//       newGameBtn1.style.display = state;
 
-      playerUsername1?.classList[toggleMethod]("data");
-    }
+//       playerUsername1?.classList[toggleMethod]("data");
+//     }
 
-    if (!fleetIsMySideMyFleet) {
-      changeUsernameBtn2.style.display = state;
-      newGameBtn2.style.display = state;
+//     if (!fleetIsMySideMyFleet) {
+//       changeUsernameBtn2.style.display = state;
+//       newGameBtn2.style.display = state;
 
-      playerUsername2?.classList[toggleMethod]("data");
-    }
-  };
+//       playerUsername2?.classList[toggleMethod]("data");
+//     }
+//   };
 
-  if (display !== "flex") {
-    changeDisplayState("flex", "add");
-  }
+//   if (display !== "flex") {
+//     changeDisplayState("flex", "add");
+//   }
 
-  if (display === "flex") {
-    changeDisplayState("none", "remove");
-  }
-};
+//   if (display === "flex") {
+//     changeDisplayState("none", "remove");
+//   }
+// };
 
-export const openUsernameForm = function (fleet, display) {
-  toggleUsernameForm(fleet, display);
-};
+// export const openUsernameForm = function (fleet, display) {
+//   toggleUsernameForm(fleet, display);
+// };
 
-export const closeUsernameForm = function (fleet, display) {
-  toggleUsernameForm(fleet, display);
-};
+// export const closeUsernameForm = function (fleet, display) {
+//   toggleUsernameForm(fleet, display);
+// };
 
 export function sleep(timeInMilliseconds) {
   return new Promise(function (resolve) {

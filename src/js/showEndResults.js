@@ -11,7 +11,7 @@ import {
   player1,
   player2,
   // overlay,
-} from "./globalVarsPause.js";
+} from "./globalVars.js";
 
 import { playingCheck } from "./gameStartControl.js";
 
@@ -31,19 +31,10 @@ export default function (fleet, noTime = false) {
       return ship;
     }
   });
-  // .filter((ship, i, arr) => {
-  //   if (ship) {
-  //     return ship;
-  //   }
-  // });
-
-  console.log(fleet);
 
   const areAllShipsInjured = injuredShips.length === allShips.length;
 
   const runOutOfTime = noTime ? true : false;
-
-  console.log("runOUtOftime", runOutOfTime);
 
   if (!areAllShipsInjured && !runOutOfTime) {
     return;
@@ -55,8 +46,6 @@ export default function (fleet, noTime = false) {
   audio.pause();
 
   clearInterval(timer);
-  console.log(areAllShipsInjured, "areAll");
-  console.log(runOutOfTime, "areAll");
   playingCheck.playing = false;
 
   // Composing the result message

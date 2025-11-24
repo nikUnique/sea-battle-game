@@ -662,67 +662,6 @@ function createShip({ randomRange, randomLetterRangeProp, size }) {
   }
 }
 
-// const [fourCellShip] = createShip?.({
-//   randomRange: [4, 7],
-//   randomLetterRangeProp: ["d", "g"],
-//   size: 4,
-// });
-
-// const [threeCellShipOne] = createShip?.({
-//   randomRange: [3, 8],
-//   randomLetterRangeProp: ["c", "h"],
-//   size: 3,
-// });
-
-// const [twoCellShipOne] = createShip?.({
-//   randomRange: [2, 9],
-//   randomLetterRangeProp: ["b", "i"],
-//   size: 2,
-// });
-
-// const [twoCellShipTwo] = createShip?.({
-//   randomRange: [2, 9],
-//   randomLetterRangeProp: ["b", "i"],
-//   size: 2,
-// });
-
-// const [twoCellShipThree] = createShip?.({
-//   randomRange: [2, 9],
-//   randomLetterRangeProp: ["b", "i"],
-//   size: 2,
-// });
-
-// const [threeCellShipTwo] = createShip?.({
-//   randomRange: [3, 8],
-//   randomLetterRangeProp: ["c", "h"],
-//   size: 3,
-// });
-
-// const [oneCellShipOne] = createShip?.({
-//   randomRange: [1, 10],
-//   randomLetterRangeProp: ["a", "j"],
-//   size: 1,
-// });
-// const [oneCellShipTwo] = createShip?.({
-//   randomRange: [1, 10],
-//   randomLetterRangeProp: ["a", "j"],
-//   size: 1,
-// });
-// const [oneCellShipThree] = createShip?.({
-//   randomRange: [1, 10],
-//   randomLetterRangeProp: ["a", "j"],
-//   size: 1,
-// });
-// const [oneCellShipFour] = createShip?.({
-//   randomRange: [1, 10],
-//   randomLetterRangeProp: ["a", "j"],
-//   size: 1,
-// });
-
-// console.log("Enemy fleet finished creating");
-
-// multipleShipsSets = [...multipleShipsSets, readyEnemyShips];
-
 function createMultipleShipsSets() {
   let fourCellShip,
     threeCellShipOne,
@@ -812,8 +751,8 @@ function createMultipleShipsSets() {
   ];
 
   if (multipleShipsSets.length < 30) {
-    console.log("multipelShipSetsOur", multipleShipsSets);
-    console.log("multipleShipsSets in a loopour", multipleShipsSets.length);
+    // console.log("multipelShipSetsOur", multipleShipsSets);
+    // console.log("multipleShipsSets in a loopour", multipleShipsSets.length);
     createMultipleShipsSets();
   }
 
@@ -833,33 +772,28 @@ function createMultipleShipsSets() {
 
 createMultipleShipsSets();
 
-// const sizeOfTheBestSet = multipleShipsSets.reduce((acc, shipArray, i) => {
-//   const filteredArr = shipArray.filter((coord) => {
-//     return (
-//       "a,j".indexOf(coord.slice(0, 1)) >= 0 ||
-//       "1,10".indexOf(coord.slice(1)) >= 0
-//     );
-//   });
+// console.log("multipleInstancesour", multipleShipsSets);
 
-//   console.log("filteredArrour", filteredArr, shipArray, i, acc);
+// const muiltipleSetsWithoutSingleCoords = filteredWithoutSingleShips.filter((coordArray, i) => {
 
-//   if (filteredArr.length > acc.length) {
-//     console.log("iour", i);
+// })
 
-//     return shipArray;
-//   }
+const muiltipleSetsWithoutSingleCoords = multipleShipsObjectSets
+  .map((shipObjArr, i) => {
+    return shipObjArr.filter((coordsArr) => {
+      return coordsArr.length > 2;
+    });
+  })
+  .map((shipObjArr, i) => {
+    return shipObjArr.flat();
+  });
 
-//   if (filteredArr.length <= acc.length) {
-//     console.log("iour", i);
-//     return acc;
-//   }
+// console.log(
+//   "muiltipleSetsWithoutSingleCoords",
+//   muiltipleSetsWithoutSingleCoords
+// );
 
-//   // return acc;
-// }, []);
-
-console.log("multipleInstancesour", multipleShipsSets);
-
-const sizeOfTheBestSet = multipleShipsSets.map((shipArr) => {
+const sizeOfTheBestSet = muiltipleSetsWithoutSingleCoords.map((shipArr, i) => {
   return shipArr.filter((coord) => {
     return (
       "a,j".indexOf(coord.slice(0, 1)) >= 0 ||
@@ -894,6 +828,7 @@ const bestArr = sizeOfTheBestSet.reduce(
 );
 
 console.log("bestArr", bestArr);
+console.log("multipleShipObjects", multipleShipsObjectSets);
 
 const [
   fourCellShip,
@@ -917,7 +852,6 @@ console.log("We should wait");
 createShipCount = 0;
 randomCoordCount = 0;
 
-// }
 // Make it flat and check whether we have a new coord there or not, and if yes then we regenerate a random number again and stuff again, top and bottom do all coords, and right and left do only the side coords
 let createEnemyShips = [
   [oneCellShipOne, oneCellShipOne.length],
