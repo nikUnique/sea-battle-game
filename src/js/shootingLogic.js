@@ -215,6 +215,8 @@ async function createWaterSplashWebm(x, y) {
 
     splash.alt = "Water splash animation";
     splash.className = "lottie-water-splash";
+    splash.style.width = 100;
+    splash.style.height = 100;
     splash.style.left = x + "px";
     splash.style.top = y + "px";
     splash.style.display = "";

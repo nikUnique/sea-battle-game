@@ -590,6 +590,7 @@ var _gameStartControlJs = require("./gameStartControl.js");
 var _shootingLogicJs = require("./shootingLogic.js");
 var _shootingLogicJsDefault = parcelHelpers.interopDefault(_shootingLogicJs);
 var _startNewGameJs = require("./startNewGame.js");
+var _disableLoggingJs = require("./disableLogging.js");
 /**************************/ /* CREATE FLEET */ /**************************/ const createFleet = function(fleetParts) {
     const fleet = fleetParts[0];
     const newShipsCoords = fleetParts[2];
@@ -687,7 +688,7 @@ var _startNewGameJs = require("./startNewGame.js");
  // The app is finished in relation to features. All functionalities and features are 100% complete(at least till the moment I find a bug or two 😄). Now it's time of big refactoring
  // All code is refactored and right now I am writing comments for my code
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars.js":"gb5d6","./makeShips.js":"8mnMH","./fleetEnvironment.js":"iXTJE","./placeShipsManually.js":"3iktl","./gameStartControl.js":"fXv0K","./shootingLogic.js":"6WpIw","./startNewGame.js":"hGRP7"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars.js":"gb5d6","./makeShips.js":"8mnMH","./fleetEnvironment.js":"iXTJE","./placeShipsManually.js":"3iktl","./gameStartControl.js":"fXv0K","./shootingLogic.js":"6WpIw","./startNewGame.js":"hGRP7","./disableLogging.js":"j7Dz2"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -2817,6 +2818,8 @@ async function createWaterSplashWebm(x, y) {
         const splash = document.querySelector("#water-splash-webm");
         splash.alt = "Water splash animation";
         splash.className = "lottie-water-splash";
+        splash.style.width = 100;
+        splash.style.height = 100;
         splash.style.left = x + "px";
         splash.style.top = y + "px";
         splash.style.display = "";
@@ -3354,6 +3357,18 @@ const startNewGame = function(fleet) {
     });
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars.js":"gb5d6"}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./globalVars.js":"gb5d6"}],"j7Dz2":[function(require,module,exports) {
+if (location.hostname !== "localhost" && location.hostname !== "127.0.0.1") [
+    "log",
+    "info",
+    "debug",
+    "table",
+    "dir",
+    "trace"
+].forEach((method)=>{
+    console[method] = ()=>{};
+});
+
+},{}]},["f0HGD","aenu9"], "aenu9", "parcelRequire3129")
 
 //# sourceMappingURL=index.e37f48ea.js.map

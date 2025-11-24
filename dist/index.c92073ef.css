@@ -540,6 +540,8 @@ button:disabled {
 
 .lottie-water-splash {
   z-index: 1000;
+  width: 100px;
+  height: 100px;
   position: absolute;
   transform: translate(-50%, -50%);
 }

@@ -20,6 +20,7 @@ import { gameStartControl } from "./gameStartControl.js";
 
 import shootingLogic from "./shootingLogic.js";
 import { startNewGame } from "./startNewGame.js";
+import "./disableLogging.js";
 
 /**************************/
 /* CREATE FLEET */
